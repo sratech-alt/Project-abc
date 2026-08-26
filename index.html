@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sabiora Technologies — Custom Software, Web & Mobile Development</title>
+  <meta name="description"
+    content="Sabiora Technologies is a software development company based in Kathmandu, Nepal, helping businesses, startups, and organizations turn ideas into reliable, scalable digital products.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: 'var(--color-bg)',
+              surface: 'var(--color-surface)',
+              primary: '#0C385B',
+              secondary: '#0F1A2D',
+              accent: 'var(--color-accent)',
+              muted: 'var(--color-text-muted)',
+              border: 'var(--color-border)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/LogoSecondary.jpeg">
+
+  <!-- Custom CSS & Font Styles -->
+  <link rel="stylesheet" href="index.css">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+
+<body class="bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
+
+  <!-- ==================== HEADER & NAVIGATION ==================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 header-glass bg-transparent">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group" aria-label="Sabiora Technologies Home">
+        <img src="assets/LogoHeader.png" alt="Sabiora Technologies Logo"
+          class="h-10 w-auto max-h-10 object-contain rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-200" />
+        <span class="font-heading font-bold text-xl tracking-tight text-[var(--color-primary)]">
+          Sabiora<span class="text-[var(--color-primary)]/80"> Technologies</span>
+        </span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--color-primary)]">
+        <a href="#about" class="hover:text-[var(--color-primary-light)] transition-colors">About</a>
+        <a href="#services" class="hover:text-[var(--color-primary-light)] transition-colors">Services</a>
+        <a href="#projects" class="hover:text-[var(--color-primary-light)] transition-colors">Projects</a>
+        <a href="#process" class="hover:text-[var(--color-primary-light)] transition-colors">Process</a>
+        <a href="#why-us" class="hover:text-[var(--color-primary-light)] transition-colors">Why Us</a>
+        <a href="#team" class="hover:text-[var(--color-primary-light)] transition-colors">Team</a>
+        <a href="#testimonials" class="hover:text-[var(--color-primary-light)] transition-colors">Testimonials</a>
+      </nav>
+
+      <!-- Desktop Contact CTA -->
+      <div class="hidden md:flex items-center">
+        <a href="#contact"
+          class="bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-light)] text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all duration-200">
+          Get in Touch
+        </a>
+      </div>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button id="mobile-menu-btn"
+        class="md:hidden p-2 rounded-lg text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 transition-colors focus:outline-none"
+        aria-label="Toggle navigation menu" aria-expanded="false">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu"
+      class="hidden md:hidden border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-6 shadow-lg text-[var(--color-primary)]">
+      <nav class="flex flex-col gap-4 text-base font-medium">
+        <a href="#about" class="py-1 text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">About</a>
+        <a href="#services"
+          class="py-1 text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Services</a>
+        <a href="#projects"
+          class="py-1 text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Projects</a>
+        <a href="#process" class="py-1 text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Process</a>
+        <a href="#why-us" class="py-1 text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Why Us</a>
+        <a href="#team" class="py-1 text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Team</a>
+        <a href="#testimonials"
+          class="py-1 text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Testimonials</a>
+        <a href="#contact"
+          class="bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-light)] text-center py-3 rounded-xl font-semibold mt-2 transition-colors">Get
+          in Touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pt-20">
+
+    <!-- ==================== 1. HERO SECTION ==================== -->
+    <section id="hero"
+      class="relative min-h-[90vh] flex items-center justify-center py-20 px-6 lg:px-12 overflow-hidden">
+      <!-- Background Ambient Glow -->
+      <div
+        class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--color-accent-light)] rounded-full blur-3xl opacity-60 pointer-events-none">
+      </div>
+
+      <div class="max-w-5xl mx-auto text-center relative z-10">
+
+        <h1
+          class="text-4xl sm:text-6xl lg:text-7xl font-bold font-heading text-[var(--color-primary)] leading-[1.1] mb-8 reveal-on-scroll delay-100">
+          Technology That Turns Ideas Into <span class="italic font-normal text-[var(--color-accent)]">Digital
+            Products</span>
+        </h1>
+
+        <p
+          class="text-lg sm:text-xl text-[var(--color-text-muted)] max-w-3xl mx-auto font-normal leading-relaxed mb-6 reveal-on-scroll delay-200">
+          <strong class="font-semibold text-[var(--color-primary)]">Sabiora Technologies</strong> is a software
+          development company based in Kathmandu, Nepal, helping businesses, startups, and organizations turn ideas and
+          business requirements into reliable, scalable digital products.
+        </p>
+
+        <p
+          class="text-base sm:text-lg text-[var(--color-text-muted)] max-w-3xl mx-auto font-normal leading-relaxed mb-10 reveal-on-scroll delay-200">
+          We specialize in <em class="italic text-[var(--color-primary)]">web applications, mobile applications,
+            websites, e-commerce platforms, and custom business software</em>. From initial concept and UI/UX design to
+          development, deployment, and ongoing support, we help our clients build technology that solves real business
+          problems and supports long-term growth.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal-on-scroll delay-300">
+          <a href="#services"
+            class="w-full sm:w-auto btn-primary px-8 py-4 rounded-full font-semibold text-base shadow-md flex items-center justify-center gap-3">
+            Explore Services
+            <i data-lucide="arrow-down" class="w-5 h-5"></i>
+          </a>
+          <a href="#contact" class="w-full sm:w-auto btn-outline px-8 py-4 rounded-full font-semibold text-base">
+            Let's Talk
+          </a>
+        </div>
+
+        <!-- Trust Stats Bar -->
+        <div
+          class="mt-16 sm:mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 border-t border-[var(--color-border)] reveal-on-scroll delay-400">
+          <div>
+            <div class="font-heading font-bold text-3xl sm:text-4xl text-[var(--color-primary)]">8+</div>
+            <div class="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium mt-1">Core Tech Disciplines</div>
+          </div>
+          <div>
+            <div class="font-heading font-bold text-3xl sm:text-4xl text-[var(--color-accent)]">100%</div>
+            <div class="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium mt-1">Custom Built Software</div>
+          </div>
+          <div>
+            <div class="font-heading font-bold text-3xl sm:text-4xl text-[var(--color-primary)]">End-to-End</div>
+            <div class="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium mt-1">Concept to Support</div>
+          </div>
+          <div>
+            <div class="font-heading font-bold text-3xl sm:text-4xl text-[var(--color-primary)]">Kathmandu</div>
+            <div class="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium mt-1">Based in Nepal</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. ABOUT SECTION ==================== -->
+    <section id="about" class="py-24 px-6 lg:px-12 bg-[var(--color-bg-alt)] border-y border-[var(--color-border)]">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+          <!-- Text Column -->
+          <div class="lg:col-span-7 space-y-6 reveal-on-scroll">
+            <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">About Sabiora
+              Technologies</span>
+            <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] leading-tight">
+              Software Development Company Based in Kathmandu, Nepal
+            </h2>
+
+            <p class="text-[var(--color-text-muted)] text-base sm:text-lg leading-relaxed">
+              <strong class="font-semibold text-[var(--color-primary)]">Sabiora Technologies</strong> is a software
+              development company based in Kathmandu, Nepal, helping businesses, startups, and organizations turn ideas
+              and business requirements into reliable, scalable digital products.
+            </p>
+            <p class="text-[var(--color-text-muted)] text-base sm:text-lg leading-relaxed">
+              We specialize in <em class="italic text-[var(--color-primary)]">web applications, mobile applications,
+                websites, e-commerce platforms, and custom business software</em>. From initial concept and UI/UX design
+              to development, deployment, and ongoing support, we help our clients build technology that solves real
+              business problems and supports long-term growth.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+              <div class="bg-[var(--color-surface)] p-6 rounded-2xl border border-[var(--color-border)]">
+                <h3 class="font-heading font-bold text-lg text-[var(--color-primary)] mb-2">Business-Focused</h3>
+                <p class="text-sm text-[var(--color-text-muted)]">We build technology designed around your specific
+                  goals and real business problems.</p>
+              </div>
+              <div class="bg-[var(--color-surface)] p-6 rounded-2xl border border-[var(--color-border)]">
+                <h3 class="font-heading font-bold text-lg text-[var(--color-primary)] mb-2">End-to-End Execution</h3>
+                <p class="text-sm text-[var(--color-text-muted)]">From planning and UI/UX design to cloud deployment and
+                  ongoing maintenance.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Graphic / Visual Column -->
+          <div class="lg:col-span-5 reveal-on-scroll delay-200">
+            <div
+              class="relative rounded-3xl overflow-hidden shadow-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-8">
+              <div class="space-y-6">
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 rounded-full bg-[var(--color-accent-light)] text-[var(--color-primary)] font-bold flex items-center justify-center">
+                    <i data-lucide="rocket" class="w-6 h-6 text-[var(--color-primary)]"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-heading font-bold text-lg text-[var(--color-primary)]">Scalable Architecture</h4>
+                    <p class="text-xs text-[var(--color-text-muted)]">Built to grow with your business</p>
+                  </div>
+                </div>
+                <div class="h-px bg-[var(--color-border)]"></div>
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 rounded-full bg-[var(--color-accent-light)] text-[var(--color-primary)] font-bold flex items-center justify-center">
+                    <i data-lucide="cpu" class="w-6 h-6 text-[var(--color-primary)]"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-heading font-bold text-lg text-[var(--color-primary)]">Custom Systems</h4>
+                    <p class="text-xs text-[var(--color-text-muted)]">Tailored to your actual processes</p>
+                  </div>
+                </div>
+                <div class="h-px bg-[var(--color-border)]"></div>
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 rounded-full bg-[var(--color-accent-light)] text-[var(--color-primary)] font-bold flex items-center justify-center">
+                    <i data-lucide="handshake" class="w-6 h-6 text-[var(--color-primary)]"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-heading font-bold text-lg text-[var(--color-primary)]">Long-Term Partnership</h4>
+                    <p class="text-xs text-[var(--color-text-muted)]">Ongoing support and evolution</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. SERVICES SECTION ==================== -->
+    <section id="services" class="py-24 px-6 lg:px-12">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+          <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">Our Services</span>
+          <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] mt-3 mb-4">
+            End-to-End Digital Product Capabilities
+          </h2>
+          <p class="text-[var(--color-text-muted)] text-base sm:text-lg">
+            From initial concept and UI/UX design to development, deployment, and ongoing support, we build technology
+            that solves real business problems.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+
+          <!-- Service Card 1 -->
+          <div
+            class="reveal-on-scroll delay-100 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="smartphone" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">1. Mobile App Development</h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                We design and develop modern mobile applications for businesses, startups, and organizations across
+                Android and iOS. Focus on intuitive, reliable, secure experiences built to scale.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Android & iOS applications</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Cross-platform mobile apps</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Enterprise & business apps</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>E-commerce & marketplace apps</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Booking & appointment apps</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>On-demand service apps</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>API & 3rd-party integrations</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Maintenance & support</li>
+            </ul>
+          </div>
+
+          <!-- Service Card 2 -->
+          <div
+            class="reveal-on-scroll delay-200 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="globe" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">2. Website Development</h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                We build modern, responsive, and high-performance websites that help businesses establish a professional
+                digital presence aligned with your goals.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Business & corporate sites</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Custom websites & landing pages</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>E-commerce & WordPress sites</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Booking & reservation sites</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Educational & institutional sites</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Content management systems</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Redesign & modernization</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Maintenance & security</li>
+            </ul>
+          </div>
+
+          <!-- Service Card 3 -->
+          <div
+            class="reveal-on-scroll delay-300 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="laptop" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">3. Web Apps & Custom Software
+              </h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                We develop custom software around the way your business actually works — designed around your specific
+                processes, users, and requirements.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Business management systems</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>CRM & HR management systems</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Inventory management systems</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Booking & reservation platforms</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Dashboards & admin portals</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>SaaS applications</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Workflow & business automation</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Custom internal business tools</li>
+            </ul>
+          </div>
+
+          <!-- Service Card 4 -->
+          <div
+            class="reveal-on-scroll delay-400 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">4. E-Commerce Solutions</h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                We help businesses sell products and services online through secure and scalable e-commerce solutions
+                tailored to specific requirements.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Online store development</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Product & inventory management</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Shopping cart & checkout</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Payment gateway integration</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Order & customer accounts</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Delivery integrations</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Notifications & communication</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>E-commerce admin & reporting</li>
+            </ul>
+          </div>
+
+          <!-- Service Card 5 -->
+          <div
+            class="reveal-on-scroll delay-100 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="palette" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">5. UI/UX Design</h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                Good software should not only work well — it should also be easy and enjoyable to use. We design clear,
+                intuitive, and consistent digital experiences.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>UI design & UX planning</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>User flows & wireframes</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Interactive prototypes</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Mobile application design</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Website design</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Design systems</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Responsive interface design</li>
+            </ul>
+          </div>
+
+          <!-- Service Card 6 -->
+          <div
+            class="reveal-on-scroll delay-200 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="layers" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">6. API & System Integration
+              </h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                We develop APIs and integrations that allow applications, platforms, and external services to
+                communicate securely and efficiently.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>REST API development</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Third-party API integration</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Payment gateway integration</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Authentication & authorization</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>SMS & email integrations</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Cloud service integration</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Business system integration</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Data & service integrations</li>
+            </ul>
+          </div>
+
+          <!-- Service Card 7 -->
+          <div
+            class="reveal-on-scroll delay-300 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="cloud" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">7. Cloud & DevOps</h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                We help businesses deploy and operate their applications on reliable cloud infrastructure, making
+                systems easier to deploy, maintain, and scale.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Cloud application deployment</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Server & infrastructure config</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Docker & containerization</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>CI/CD pipeline setup</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Deployment automation</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Domain & SSL configuration</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Infrastructure management</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Monitoring, backups & support</li>
+            </ul>
+          </div>
+
+          <!-- Service Card 8 -->
+          <div
+            class="reveal-on-scroll delay-400 bg-[var(--color-card-bg)] border border-[var(--color-border)] p-6 md:p-8 rounded-2xl card-hover-effect flex flex-col justify-between">
+            <div>
+              <div
+                class="w-12 h-12 rounded-2xl bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center mb-6 font-bold text-xl">
+                <i data-lucide="wrench" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">8. Maintenance & Consulting
+              </h3>
+              <p class="text-[var(--color-text-muted)] text-xs leading-relaxed mb-6">
+                Building and launching software is only the beginning. We provide ongoing technical support to keep
+                digital products secure, reliable, and up to date.
+              </p>
+            </div>
+            <ul
+              class="text-xs text-[var(--color-primary-light)] space-y-1.5 font-medium border-t border-[var(--color-border)] pt-4">
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Application & site maintenance</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Bug fixing & troubleshooting</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Security updates</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Performance improvements</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Feature enhancements</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Infrastructure support</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>Technical consultation</li>
+              <li class="flex items-center gap-1.5"><i data-lucide="check"
+                  class="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0"></i>System modernization</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. PORTFOLIO / PROJECTS SECTION (Array-Driven) ==================== -->
+    <section id="projects" class="py-24 px-6 lg:px-12 bg-[var(--color-bg-alt)] border-t border-[var(--color-border)]">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal-on-scroll">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">Selected Works</span>
+            <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] mt-3">
+              Featured Products & Case Studies
+            </h2>
+          </div>
+          <p class="text-[var(--color-text-muted)] max-w-md text-sm mt-4 md:mt-0">
+            A showcase of web applications, mobile apps, and custom business software built for our partners.
+          </p>
+        </div>
+
+        <!-- ARRAY-DRIVEN CONTAINER — Populated by js/render.js -> renderProjects() -->
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. PROCESS SECTION (From Idea to Production) ==================== -->
+    <section id="process" class="py-24 px-6 lg:px-12">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+          <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">Software Lifecycle</span>
+          <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] mt-3 mb-4">
+            From Idea to Production
+          </h2>
+          <p class="text-[var(--color-text-muted)] text-base sm:text-lg mb-6">
+            We can support the complete software development journey — from understanding your idea and designing the
+            user experience to development, deployment, and ongoing maintenance.
+          </p>
+          <div
+            class="inline-block bg-[var(--color-surface)] border border-[var(--color-accent-border)] text-[var(--color-accent)] px-6 py-2 rounded-full font-heading font-semibold text-sm sm:text-base tracking-wide">
+            Plan → Design → Develop → Deploy → Improve
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <!-- Step 1: Plan -->
+          <div
+            class="reveal-on-scroll delay-100 relative bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl text-center">
+            <span class="text-3xl font-bold font-heading text-[var(--color-accent)] block mb-2">01</span>
+            <h3 class="text-lg font-bold font-heading text-[var(--color-primary)] mb-2">Plan</h3>
+            <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+              Analyze business requirements, define scope, user needs, and product architecture.
+            </p>
+          </div>
+
+          <!-- Step 2: Design -->
+          <div
+            class="reveal-on-scroll delay-200 relative bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl text-center">
+            <span class="text-3xl font-bold font-heading text-[var(--color-accent)] block mb-2">02</span>
+            <h3 class="text-lg font-bold font-heading text-[var(--color-primary)] mb-2">Design</h3>
+            <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+              Craft intuitive user flows, responsive UI/UX, wireframes, and interactive prototypes.
+            </p>
+          </div>
+
+          <!-- Step 3: Develop -->
+          <div
+            class="reveal-on-scroll delay-300 relative bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl text-center">
+            <span class="text-3xl font-bold font-heading text-[var(--color-accent)] block mb-2">03</span>
+            <h3 class="text-lg font-bold font-heading text-[var(--color-primary)] mb-2">Develop</h3>
+            <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+              Engineer scalable frontend, backend, APIs, and custom software systems.
+            </p>
+          </div>
+
+          <!-- Step 4: Deploy -->
+          <div
+            class="reveal-on-scroll delay-400 relative bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl text-center">
+            <span class="text-3xl font-bold font-heading text-[var(--color-accent)] block mb-2">04</span>
+            <h3 class="text-lg font-bold font-heading text-[var(--color-primary)] mb-2">Deploy</h3>
+            <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+              Configure cloud infrastructure, Docker, CI/CD pipelines, SSL, and launch.
+            </p>
+          </div>
+
+          <!-- Step 5: Improve -->
+          <div
+            class="reveal-on-scroll delay-500 relative bg-[var(--color-surface)] border border-[var(--color-border)] p-6 rounded-2xl text-center">
+            <span class="text-3xl font-bold font-heading text-[var(--color-accent)] block mb-2">05</span>
+            <h3 class="text-lg font-bold font-heading text-[var(--color-primary)] mb-2">Improve</h3>
+            <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+              Provide ongoing maintenance, security updates, monitoring, and feature upgrades.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. WHY WORK WITH SABIORA TECHNOLOGIES ==================== -->
+    <section id="why-us" class="py-24 px-6 lg:px-12 bg-[var(--color-bg-alt)] border-y border-[var(--color-border)]">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+          <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">Our Advantage</span>
+          <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] mt-3 mb-4">
+            Why Work With Sabiora Technologies?
+          </h2>
+          <p class="text-[var(--color-text-muted)] text-base sm:text-lg">
+            We combine technical excellence with a business-first mindset to build software that drives long-term
+            success.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          <!-- Pillar 1 -->
+          <div
+            class="reveal-on-scroll delay-100 bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-2xl card-hover-effect">
+            <div
+              class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center mb-5 text-lg">
+              <i data-lucide="target" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">Business-Focused Development
+            </h3>
+            <p class="text-[var(--color-text-muted)] text-sm leading-relaxed">
+              We don't build technology simply for the sake of technology. We focus on understanding the problem, the
+              users, and the business objectives behind every project.
+            </p>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div
+            class="reveal-on-scroll delay-200 bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-2xl card-hover-effect">
+            <div
+              class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center mb-5 text-lg">
+              <i data-lucide="wrench" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">Custom Solutions</h3>
+            <p class="text-[var(--color-text-muted)] text-sm leading-relaxed">
+              Every business is different. We build solutions around your requirements rather than forcing your
+              processes into a one-size-fits-all system.
+            </p>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div
+            class="reveal-on-scroll delay-300 bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-2xl card-hover-effect">
+            <div
+              class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center mb-5 text-lg">
+              <i data-lucide="trending-up" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">Scalable Technology</h3>
+            <p class="text-[var(--color-text-muted)] text-sm leading-relaxed">
+              We develop applications with maintainability, performance, security, and future growth in mind.
+            </p>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div
+            class="reveal-on-scroll delay-400 bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-2xl card-hover-effect">
+            <div
+              class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center mb-5 text-lg">
+              <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">End-to-End Support</h3>
+            <p class="text-[var(--color-text-muted)] text-sm leading-relaxed">
+              From the first idea to production deployment and future improvements, we can support your product
+              throughout its lifecycle.
+            </p>
+          </div>
+
+          <!-- Pillar 5 -->
+          <div
+            class="reveal-on-scroll delay-500 bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-2xl card-hover-effect lg:col-span-2">
+            <div
+              class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center mb-5 text-lg">
+              <i data-lucide="handshake" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-[var(--color-primary)] mb-3">Long-Term Partnership</h3>
+            <p class="text-[var(--color-text-muted)] text-sm leading-relaxed">
+              We aim to build lasting relationships with our clients, not simply deliver a project and walk away. We
+              help keep your technology running smoothly as your business evolves.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6b. TEAM SECTION (Array-Driven) ==================== -->
+    <section id="team" class="py-24 px-6 lg:px-12 bg-[var(--color-bg-alt)] border-t border-[var(--color-border)]">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+          <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">The Strategists &
+            Craftsmen</span>
+          <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] mt-3 mb-4">
+            Meet Our Leadership Team
+          </h2>
+          <p class="text-[var(--color-text-muted)] text-base sm:text-lg">
+            A dedicated team of software engineers, architects, designers, and strategists committed to technical
+            excellence.
+          </p>
+        </div>
+
+        <!-- ARRAY-DRIVEN CONTAINER — Populated by js/render.js -> renderTeam() -->
+        <div id="team-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. TESTIMONIALS SECTION (Array-Driven) ==================== -->
+    <section id="testimonials" class="py-24 px-6 lg:px-12">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+          <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">Client
+            Endorsements</span>
+          <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] mt-3 mb-4">
+            What Our Partners Say
+          </h2>
+          <p class="text-[var(--color-text-muted)] text-base sm:text-lg">
+            Direct feedback from businesses and organization leaders who have built and scaled with Sabiora
+            Technologies.
+          </p>
+        </div>
+
+        <!-- ARRAY-DRIVEN CONTAINER — Populated by js/render.js -> renderTestimonials() -->
+        <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 8. CONTACT SECTION (Wired to EmailJS) ==================== -->
+    <section id="contact" class="py-24 px-6 lg:px-12 bg-[var(--color-bg-alt)] border-t border-[var(--color-border)]">
+      <div class="max-w-5xl mx-auto">
+        <div
+          class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl p-8 sm:p-12 lg:p-16 shadow-xl reveal-on-scroll">
+
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">Get In Touch</span>
+            <h2 class="text-3xl sm:text-5xl font-bold font-heading text-[var(--color-primary)] mt-3 mb-4">
+              Let's Build Something That Matters
+            </h2>
+            <p class="text-[var(--color-text-muted)] text-base sm:text-lg">
+              Have an idea, a business problem, or an existing system that needs improvement? <em
+                class="italic text-[var(--color-primary)]">Let's talk about how technology can help your business
+                grow.</em>
+            </p>
+          </div>
+
+          <!-- Dynamic Status Notification Box -->
+          <div id="form-status" class="hidden mb-8"></div>
+
+          <!-- Direct Company Contact Info Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10 text-left">
+            <div
+              class="bg-[var(--color-bg)] border border-[var(--color-border)] p-3.5 sm:p-4 rounded-2xl flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center text-base shrink-0">
+                <i data-lucide="briefcase" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <span
+                  class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--color-primary-light)]">Sales
+                  Inquiries</span>
+                <a href="mailto:sales@sabioratechnologies.com"
+                  class="text-[11px] sm:text-xs xl:text-sm font-bold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors block break-all">sales@sabioratechnologies.com</a>
+              </div>
+            </div>
+            <div
+              class="bg-[var(--color-bg)] border border-[var(--color-border)] p-3.5 sm:p-4 rounded-2xl flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center text-base shrink-0">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <span
+                  class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--color-primary-light)]">General
+                  Contact</span>
+                <a href="mailto:contact@sabioratechnologies.com"
+                  class="text-[11px] sm:text-xs xl:text-sm font-bold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors block break-all">contact@sabioratechnologies.com</a>
+              </div>
+            </div>
+            <div
+              class="bg-[var(--color-bg)] border border-[var(--color-border)] p-3.5 sm:p-4 rounded-2xl flex items-center gap-3 sm:col-span-2 lg:col-span-1">
+              <div
+                class="w-10 h-10 rounded-xl bg-[var(--color-accent-light)] text-[var(--color-accent)] font-bold flex items-center justify-center text-base shrink-0">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <span
+                  class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[var(--color-primary-light)]">Office
+                  Address</span>
+                <span
+                  class="text-[11px] sm:text-xs xl:text-sm font-bold text-[var(--color-primary)] block break-words">Kathmandu,
+                  Nepal 44600</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form Markup -->
+          <form id="contact-form" class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label for="user-name"
+                  class="block text-xs font-bold uppercase tracking-wider text-[var(--color-primary)] mb-2">
+                  Your Name <span class="text-[var(--color-accent)]">*</span>
+                </label>
+                <input type="text" id="user-name" name="user_name" required placeholder="e.g. Sarah Jenkins"
+                  class="w-full px-4 py-3.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm" />
+              </div>
+
+              <div>
+                <label for="user-email"
+                  class="block text-xs font-bold uppercase tracking-wider text-[var(--color-primary)] mb-2">
+                  Email Address <span class="text-[var(--color-accent)]">*</span>
+                </label>
+                <input type="email" id="user-email" name="user_email" required placeholder="sarah@company.com"
+                  class="w-full px-4 py-3.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm" />
+              </div>
+            </div>
+
+            <div>
+              <label for="user-subject"
+                class="block text-xs font-bold uppercase tracking-wider text-[var(--color-primary)] mb-2">
+                Project Type / Subject
+              </label>
+              <input type="text" id="user-subject" name="user_subject"
+                placeholder="e.g. Mobile App, Custom Business Software, Web App"
+                class="w-full px-4 py-3.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm" />
+            </div>
+
+            <div>
+              <label for="user-message"
+                class="block text-xs font-bold uppercase tracking-wider text-[var(--color-primary)] mb-2">
+                Project Overview <span class="text-[var(--color-accent)]">*</span>
+              </label>
+              <textarea id="user-message" name="user_message" rows="5" required
+                placeholder="Tell us about your idea, business problem, or existing system..."
+                class="w-full px-4 py-3.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm resize-y"></textarea>
+            </div>
+
+            <div class="text-center pt-4">
+              <button type="submit" id="submit-btn"
+                class="btn-accent w-full sm:w-auto px-10 py-4 rounded-full font-bold text-base shadow-md cursor-pointer inline-flex items-center justify-center gap-2">
+                <span>Send Message</span>
+                <i data-lucide="send" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer
+    class="bg-[var(--color-secondary)] text-white pt-16 pb-12 px-6 lg:px-12 border-t border-[var(--color-primary-light)]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-white/10">
+
+        <div class="md:col-span-5 space-y-4">
+          <a href="#" class="block w-full group" aria-label="Sabiora Technologies Home">
+            <img src="assets/LogoPrimary.jpeg" alt="Sabiora Technologies Primary Logo"
+              class="w-full max-w-md h-auto object-contain rounded-2xl bg-white p-2.5 shadow-md group-hover:opacity-95 transition-opacity" />
+          </a>
+          <p class="text-sm text-stone-400 max-w-sm leading-relaxed pt-1">
+            Sabiora Technologies is a software development company based in Kathmandu, Nepal, helping businesses,
+            startups, and organizations turn ideas into reliable, scalable digital products.
+          </p>
+        </div>
+
+        <div class="md:col-span-3 space-y-3">
+          <h4 class="font-heading font-bold text-sm uppercase tracking-wider text-stone-300">Navigation</h4>
+          <ul class="space-y-2 text-sm text-stone-400 font-medium">
+            <li><a href="#about" class="hover:text-[var(--color-accent)] transition-colors">About Us</a></li>
+            <li><a href="#services" class="hover:text-[var(--color-accent)] transition-colors">Services</a></li>
+            <li><a href="#projects" class="hover:text-[var(--color-accent)] transition-colors">Featured Works</a></li>
+            <li><a href="#process" class="hover:text-[var(--color-accent)] transition-colors">From Idea to
+                Production</a></li>
+            <li><a href="#why-us" class="hover:text-[var(--color-accent)] transition-colors">Why Choose Us</a></li>
+            <li><a href="#team" class="hover:text-[var(--color-accent)] transition-colors">Leadership Team</a></li>
+            <li><a href="#contact" class="hover:text-[var(--color-accent)] transition-colors">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-4 space-y-4">
+          <h4 class="font-heading font-bold text-sm uppercase tracking-wider text-stone-300">Connect With Us</h4>
+          <!-- ARRAY-DRIVEN CONTAINER — Populated by js/render.js -> renderSocials() -->
+          <div id="socials-links" class="flex items-center gap-3">
+            <!-- Rendered dynamically -->
+          </div>
+          <div class="space-y-1 text-xs text-stone-400 pt-2">
+            <p><strong>Sales:</strong> <a href="mailto:sales@sabioratechnologies.com"
+                class="text-stone-400 hover:underline">sales@sabioratechnologies.com</a></p>
+            <p><strong>General:</strong> <a href="mailto:contact@sabioratechnologies.com"
+                class="text-stone-400 hover:underline">contact@sabioratechnologies.com</a></p>
+            <p class="text-stone-400 font-medium">Kathmandu, Nepal 44600</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-4">
+        <p>© 2026 Sabiora Technologies. Kathmandu, Nepal. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/contact.js"></script>
+</body>
+
+</html>

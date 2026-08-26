@@ -1,0 +1,186 @@
+/* index.css — Sabiora Design System & Custom Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color Palette — Primary: #0C385B, Secondary: #0F1A2D */
+  --color-bg: #F8FAFC;
+  --color-bg-alt: #F1F5F9;
+  --color-surface: #FFFFFF;
+  --color-surface-translucent: rgba(255, 255, 255, 0.88);
+  --color-card-bg: #FFFFFF;
+  
+  --color-primary: #0C385B;
+  --color-primary-light: #1A5276;
+  --color-secondary: #0F1A2D;
+  --color-secondary-light: #1E2D4A;
+  --color-text: #0F1A2D;
+  --color-text-muted: #475569;
+  --color-text-dim: #64748B;
+
+  --color-accent: #0C385B;
+  --color-accent-hover: #0F1A2D;
+  --color-accent-light: #EBF3FA;
+  --color-accent-border: #CBD5E1;
+
+  --color-border: #E2E8F0;
+  --color-border-hover: #CBD5E1;
+
+  /* Typography */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* Shadows & Glassmorphism */
+  --shadow-sm: 0 2px 8px rgba(12, 56, 91, 0.04);
+  --shadow-md: 0 8px 24px rgba(12, 56, 91, 0.08);
+  --shadow-lg: 0 16px 36px rgba(12, 56, 91, 0.12);
+  --shadow-hover: 0 20px 40px rgba(12, 56, 91, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+body {
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1C9BE;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Header Backdrop Glassmorphism */
+.header-glass {
+  background-color: transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.header-scrolled {
+  box-shadow: 0 4px 20px rgba(12, 56, 91, 0.08);
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Utility Animations for Scroll Reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger Delay Helpers */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+
+/* Custom Component Hover & Badge Styles */
+.card-hover-effect {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--color-accent-border);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200, 109, 81, 0.25);
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: #FFFFFF;
+  transition: all 0.25s ease;
+}
+
+.btn-accent:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200, 109, 81, 0.3);
+}
+
+.btn-outline {
+  border: 1.5px solid var(--color-border-hover);
+  color: var(--color-primary);
+  background-color: transparent;
+  transition: all 0.25s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background-color: var(--color-accent-light);
+  transform: translateY(-2px);
+}
+
+.badge-accent {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-border);
+}
+
+/* Mobile Menu Animation */
+#mobile-menu {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#mobile-menu.hidden {
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+#mobile-menu:not(.hidden) {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
