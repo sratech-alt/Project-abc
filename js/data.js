@@ -68,8 +68,8 @@ const team = [
     image: "assets/Co-Founder2.jpeg",
   },
   {
-    id: "Abhinab-Khatri-KC",
-    name: "Abhinab Khatri K.C",
+    id: "Biman-Lakhey",
+    name: "Biman Lakhey",
     role: "Co-Founder",
     motto: "We believe great products are built around great experiences",
     bio: "We turn product ideas into intuitive, reliable apps with a focus on thoughtful interactions, clean architecture, and the little details that make a great experience feel natural.",
