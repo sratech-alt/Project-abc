@@ -67,6 +67,14 @@ const team = [
     bio: "Focused on business development, strategic partnerships, and driving client success by aligning custom software solutions with real business objectives.",
     image: "assets/Co-Founder2.jpeg",
   },
+  {
+    id: "Abhinab-Khatri-KC",
+    name: "Abhinab Khatri K.C",
+    role: "Co-Founder",
+    motto: "We believe great products are built around great experiences",
+    bio: "We turn product ideas into intuitive, reliable apps with a focus on thoughtful interactions, clean architecture, and the little details that make a great experience feel natural.",
+    image: "assets/Co-Founder3.jpeg",
+  },
 ];
 
 const testimonials = [
