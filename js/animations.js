@@ -1,6 +1,7 @@
 /**
  * animations.js — Sabiora Scroll Reveal & Interactive UI Behavior
  * Uses IntersectionObserver for high-performance scroll triggers.
+ * Added Comment to make change for commiting
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     revealElements.forEach(el => revealObserver.observe(el));
-    
+
     // MutationObserver to observe dynamically rendered items from render.js
     const dynamicContainers = ['projects-grid', 'team-grid', 'testimonials-grid'];
     dynamicContainers.forEach(id => {
