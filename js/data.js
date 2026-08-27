@@ -112,7 +112,7 @@ const socials = [
   },
   {
     name: "Dribbble",
-    url: "https://dribbble.com",
+    url: "https://dribbble.com/sabiora-technologies",
     icon: "dribbble"
   },
   {

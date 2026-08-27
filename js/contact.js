@@ -5,9 +5,9 @@
 
 // EmailJS Credentials Placeholders — Clearly marked per architecture.md guidelines
 const EMAILJS_CONFIG = {
-  PUBLIC_KEY: 'YOUR_PUBLIC_KEY',   // Replace with client's EmailJS Public Key
-  SERVICE_ID: 'YOUR_SERVICE_ID',   // Replace with client's EmailJS Service ID
-  TEMPLATE_ID: 'YOUR_TEMPLATE_ID'  // Replace with client's EmailJS Template ID
+  PUBLIC_KEY: 'XZAyPwORZAYZgR1uJ',   // Replace with client's EmailJS Public Key
+  SERVICE_ID: 'service_3qoli6n',   // Replace with client's EmailJS Service ID
+  TEMPLATE_ID: 'template_rg2ojlr'  // Replace with client's EmailJS Template ID
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,15 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Check if placeholders are still present
       if (
-        EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY' || 
-        EMAILJS_CONFIG.SERVICE_ID === 'YOUR_SERVICE_ID' || 
+        EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY' ||
+        EMAILJS_CONFIG.SERVICE_ID === 'YOUR_SERVICE_ID' ||
         EMAILJS_CONFIG.TEMPLATE_ID === 'YOUR_TEMPLATE_ID'
       ) {
         // Simulated response during placeholder/dev mode
         setTimeout(() => {
           setButtonLoading(false);
           showStatus(
-            '<strong>Demo Mode Active:</strong> Form validated successfully! Replace <code>YOUR_SERVICE_ID</code>, <code>YOUR_TEMPLATE_ID</code>, and <code>YOUR_PUBLIC_KEY</code> in <code>js/contact.js</code> to enable live EmailJS delivery.', 
+            '<strong>Demo Mode Active:</strong> Form validated successfully! Replace <code>YOUR_SERVICE_ID</code>, <code>YOUR_TEMPLATE_ID</code>, and <code>YOUR_PUBLIC_KEY</code> in <code>js/contact.js</code> to enable live EmailJS delivery.',
             'success'
           );
           contactForm.reset();
@@ -64,10 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Live EmailJS Call
       try {
-        const response = await emailjs.sendForm(
+        const response = await emailjs.send(
           EMAILJS_CONFIG.SERVICE_ID,
           EMAILJS_CONFIG.TEMPLATE_ID,
-          contactForm
+          {
+            name: name,
+            email: email,
+            title: subject || 'General Inquiry',
+            message: message,
+            time: new Date().toLocaleString()
+          }
         );
 
         if (response.status === 200) {
