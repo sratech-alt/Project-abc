@@ -26,11 +26,22 @@ function renderProjects(projectList = projects, containerId = 'projects-grid') {
   projectList.forEach((project, index) => {
     const delayClass = `delay-${((index % 4) + 1) * 100}`;
     const card = document.createElement('article');
-    card.className = `reveal-on-scroll ${delayClass} bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl overflow-hidden card-hover-effect flex flex-col h-full`;
+    card.className = `reveal-on-scroll ${delayClass} project-card-splash bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl overflow-hidden card-hover-effect flex flex-col h-full`;
 
     const tagsMarkup = (project.tags || [])
       .map(tag => `<span class="badge-accent text-xs font-medium px-3 py-1 rounded-full">${tag}</span>`)
       .join('');
+
+    const linksMarkup = (project.links && project.links.length > 0) ? `
+        <div class="flex flex-wrap gap-2 pt-4 mt-4 border-t border-[var(--color-border)] relative z-10">
+          ${project.links.map(l => `
+            <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="store-link-btn">
+              ${l.label}
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+          `).join('')}
+        </div>
+      ` : '';
 
     card.innerHTML = `
       <div class="relative overflow-hidden group aspect-[16/10] bg-[var(--color-bg-alt)]">
@@ -47,7 +58,7 @@ function renderProjects(projectList = projects, containerId = 'projects-grid') {
           </span>
         </div>
       </div>
-      <div class="p-6 md:p-8 flex flex-col flex-grow">
+      <div class="p-6 md:p-8 flex flex-col flex-grow relative z-10">
         <div class="flex items-center justify-between text-xs text-[var(--color-text-dim)] uppercase tracking-wider font-semibold mb-2">
           <span>${project.category}</span>
           <span>${project.year}</span>
@@ -61,6 +72,7 @@ function renderProjects(projectList = projects, containerId = 'projects-grid') {
         <div class="flex flex-wrap gap-2 pt-4 border-t border-[var(--color-border)]">
           ${tagsMarkup}
         </div>
+        ${linksMarkup}
       </div>
     `;
 
@@ -126,7 +138,7 @@ function renderTeam(teamList = team, containerId = 'team-grid') {
   teamList.forEach((member, index) => {
     const delayClass = `delay-${((index % 4) + 1) * 100}`;
     const card = document.createElement('div');
-    card.className = `reveal-on-scroll ${delayClass} bg-[var(--color-surface)] border border-[var(--color-border)] p-6 sm:p-8 rounded-3xl shadow-lg flex flex-col justify-between card-hover-effect`;
+    card.className = `reveal-on-scroll ${delayClass} bg-[var(--color-surface)] border border-[var(--color-border)] p-6 sm:p-8 rounded-3xl flex flex-col justify-between card-hover-effect`;
 
     const socialLinks = member.socials && Object.keys(member.socials).length > 0 ? Object.entries(member.socials).map(([platform, link]) => `
       <a href="${link}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-[var(--color-bg-alt)] hover:bg-[var(--color-accent-light)] hover:text-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-muted)] transition-colors" aria-label="${member.name} ${platform}">
@@ -220,12 +232,10 @@ function renderTestimonials(testimonialList = testimonials, containerId = 'testi
         </p>
       </div>
       <div class="flex items-center gap-4 pt-6 border-t border-[var(--color-border)]">
-        <img 
-          src="${item.image}" 
-          alt="${item.author}" 
-          class="w-12 h-12 rounded-full object-cover border border-[var(--color-border)]"
-          loading="lazy"
-        />
+        <div
+          class="w-12 h-12 rounded-full bg-[var(--color-accent-light)] text-[var(--color-primary)] font-heading font-bold text-lg flex items-center justify-center border border-[var(--color-border)] shrink-0">
+          ${(item.author || '').trim().charAt(0).toUpperCase()}
+        </div>
         <div>
           <h4 class="text-base font-bold font-heading text-[var(--color-primary)]">
             ${item.author}

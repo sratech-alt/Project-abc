@@ -34,6 +34,8 @@ A static, single-page site. No build step required to run it (a lightweight dev 
 - All color values are defined once as CSS custom properties in `index.css` (`:root { --color-primary; --color-accent; --color-text; --color-text-muted; }`).
 - Tailwind classes reference these via arbitrary value syntax (`bg-[var(--color-primary)]`) or via `tailwind.config.js` `theme.extend.colors` mapped to the same variables.
 - Never hardcode a hex value directly in HTML/JS. If a new color is needed, add it as a variable first.
+- Dark mode: an `html[data-theme="dark"]` block in `index.css` overrides the same variable set with dark-theme values. No `dark:` Tailwind variants are used — because every color already routes through a CSS variable, flipping the `data-theme` attribute re-themes the whole page automatically. A small inline script in `<head>` sets the attribute before first paint (reading `localStorage['sabiora-theme']`, falling back to `prefers-color-scheme`) to avoid a flash of the wrong theme. Toggle buttons (`[data-theme-toggle]`, in the desktop and mobile header) flip the attribute and persist the choice; handled in `animations.js`.
+- `--color-secondary` is the one variable that intentionally does NOT invert in dark mode (footer stays a dark band in both themes) — keep this in mind if adding new footer-only colors.
 
 ## Animation Layer
 

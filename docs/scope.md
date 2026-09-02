@@ -13,7 +13,7 @@ Give the agency a fast, editable, credible web presence that converts visitors i
 - Single HTML page, scroll-based navigation (no routing)
 - Sections: Hero, About, Services, Portfolio/Projects, Process/Why Us, Team, Testimonials, Contact
 - Tailwind CSS for styling, mobile-first responsive layout
-- Theming via CSS custom properties (`--color-primary`, `--color-accent`, etc.) defined in `index.css`
+- Theming via CSS custom properties (`--color-primary`, `--color-accent`, etc.) defined in `index.css`, including a user-toggleable light/dark theme (see `audit.md` — 2026-09-01)
 - Content arrays in a dedicated data file (`data.js` or similar): `projects[]`, `team[]`, `testimonials[]`, `socials[]`
 - Light scroll-reveal animations and hover states (cards, buttons) — no heavy motion libraries
 - Contact form markup + JS handler wired for EmailJS (service/template IDs added later by the developer)

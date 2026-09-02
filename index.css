@@ -3,28 +3,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Color Palette — Primary: #0C385B, Secondary: #0F1A2D */
-  --color-bg: #F8FAFC;
-  --color-bg-alt: #F1F5F9;
+  /* Color Palette — Light Theme (blue-tinted, derived from brand blue #0C385B) */
+  color-scheme: light;
+
+  --color-bg: #EEF4FA;
+  --color-bg-alt: #E4EDF6;
   --color-surface: #FFFFFF;
   --color-surface-translucent: rgba(255, 255, 255, 0.88);
   --color-card-bg: #FFFFFF;
-  
+
   --color-primary: #0C385B;
   --color-primary-light: #1A5276;
   --color-secondary: #0F1A2D;
   --color-secondary-light: #1E2D4A;
   --color-text: #0F1A2D;
-  --color-text-muted: #475569;
+  --color-text-muted: #48607A;
   --color-text-dim: #64748B;
 
   --color-accent: #0C385B;
   --color-accent-hover: #0F1A2D;
-  --color-accent-light: #EBF3FA;
-  --color-accent-border: #CBD5E1;
+  --color-accent-light: #E4EDF6;
+  --color-accent-border: #C7D6E5;
 
-  --color-border: #E2E8F0;
-  --color-border-hover: #CBD5E1;
+  --color-border: #D8E3EF;
+  --color-border-hover: #C1D2E2;
 
   /* Typography */
   --font-heading: 'Space Grotesk', sans-serif;
@@ -32,14 +34,46 @@
 
   /* Shadows & Glassmorphism */
   --shadow-sm: 0 2px 8px rgba(12, 56, 91, 0.04);
-  --shadow-md: 0 8px 24px rgba(12, 56, 91, 0.08);
-  --shadow-lg: 0 16px 36px rgba(12, 56, 91, 0.12);
-  --shadow-hover: 0 20px 40px rgba(12, 56, 91, 0.12);
+  --shadow-md: 0 4px 14px rgba(12, 56, 91, 0.07);
+  --shadow-lg: 0 8px 20px rgba(12, 56, 91, 0.08);
+  --shadow-hover: 0 10px 22px rgba(12, 56, 91, 0.10);
 
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-full: 9999px;
+}
+
+/* Color Palette — Dark Theme */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0A1826;
+  --color-bg-alt: #0F2136;
+  --color-surface: #14273D;
+  --color-surface-translucent: rgba(20, 39, 61, 0.9);
+  --color-card-bg: #14273D;
+
+  --color-primary: #E7F1FA;
+  --color-primary-light: #7FC1F0;
+  --color-secondary: #071019;
+  --color-secondary-light: #12233A;
+  --color-text: #E5EDF5;
+  --color-text-muted: #9FB3C8;
+  --color-text-dim: #7C93AC;
+
+  --color-accent: #2A7DC0;
+  --color-accent-hover: #3E8FD0;
+  --color-accent-light: #16314B;
+  --color-accent-border: #2A4A66;
+
+  --color-border: #1E3A54;
+  --color-border-hover: #2E547A;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.22);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.24);
+  --shadow-hover: 0 10px 22px rgba(0, 0, 0, 0.28);
 }
 
 /* Base Styles */
@@ -53,12 +87,19 @@ html {
 body {
   overflow-x: hidden;
   line-height: 1.6;
+  background-color: var(--color-bg);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-heading);
   color: var(--color-primary);
   letter-spacing: -0.02em;
+}
+
+/* Smooth theme transition on key surfaces */
+header, section, .card-hover-effect, .btn-primary, .btn-accent, .btn-outline, .badge-accent {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 /* Custom Scrollbar */
@@ -71,7 +112,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D1C9BE;
+  background: var(--color-border-hover);
   border-radius: 5px;
 }
 
@@ -82,15 +123,15 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 /* Header Backdrop Glassmorphism */
 .header-glass {
   background-color: transparent;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
 }
 
 .header-scrolled {
-  box-shadow: 0 4px 20px rgba(12, 56, 91, 0.08);
-  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface-translucent);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -119,21 +160,21 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .card-hover-effect:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
   border-color: var(--color-accent-border);
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
   color: #FFFFFF;
   transition: all 0.25s ease;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-accent);
+  background-color: var(--color-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(200, 109, 81, 0.25);
+  box-shadow: var(--shadow-hover);
 }
 
 .btn-accent {
@@ -145,7 +186,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .btn-accent:hover {
   background-color: var(--color-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(200, 109, 81, 0.3);
+  box-shadow: var(--shadow-hover);
 }
 
 .btn-outline {
@@ -183,4 +224,391 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   display: block;
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Theme Toggle Icon Swap */
+.icon-sun {
+  display: none;
+}
+
+.icon-moon {
+  display: inline;
+}
+
+html[data-theme="dark"] .icon-sun {
+  display: inline;
+}
+
+html[data-theme="dark"] .icon-moon {
+  display: none;
+}
+
+/* ==================== Navigation Active State ==================== */
+/* Applies to both desktop and mobile nav links. JS toggles .is-active
+   based on which section is currently in view (see animations.js).
+   Desktop: clean animated underline (no background highlight).
+   Mobile drawer: a left accent bar, since items stack vertically. */
+.nav-link {
+  position: relative;
+  padding: 0.5rem 0.35rem;
+  color: inherit;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0.35rem;
+  right: 0.35rem;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(0.55);
+}
+
+.nav-link.is-active {
+  color: var(--color-accent);
+}
+
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Mobile drawer: a left accent bar reads naturally for a vertical list. */
+#mobile-menu .nav-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+}
+
+#mobile-menu .nav-link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  width: 2.5px;
+  height: auto;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#mobile-menu .nav-link:hover::after {
+  transform: scaleY(0.5);
+}
+
+#mobile-menu .nav-link.is-active::after {
+  transform: scaleY(1);
+}
+
+/* ==================== Services Dropdown ==================== */
+[data-dropdown] {
+  position: relative;
+}
+
+[data-dropdown-trigger] {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  transition: color 0.25s ease;
+}
+
+[data-dropdown-trigger]:hover {
+  color: var(--color-primary-light);
+}
+
+[data-dropdown-chevron] {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-dropdown-chevron].is-rotated {
+  transform: rotate(180deg);
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  min-width: 250px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 60;
+}
+
+.dropdown-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.dropdown-divider {
+  height: 1px;
+  margin: 0.35rem 0.5rem;
+  background-color: var(--color-border);
+}
+
+/* ==================== Focus States (Accessibility) ==================== */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==================== Footer Wave Divider (Brand Motif) ==================== */
+.footer-wave-wrap {
+  position: relative;
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  line-height: 0;
+  background-color: var(--color-bg-alt);
+}
+
+.footer-wave-wrap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .footer-wave-wrap {
+    height: 76px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-wave-wrap {
+    height: 56px;
+  }
+}
+
+/* Subtle brand-motif wave under the Hero section */
+.hero-wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 64px;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .hero-wave {
+    height: 36px;
+  }
+}
+
+/* ==================== Navbar Wave Edge ==================== */
+/* A hairline organic edge that fades in only once the header has a solid
+   backing (scrolled state) — a quiet echo of the site's wave motif rather
+   than a flat, mechanical border. */
+.header-wave-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.header-scrolled .header-wave-edge {
+  opacity: 1;
+}
+
+/* ==================== Reusable Section Wave Divider ==================== */
+/* Drop between two sections to replace a flat border with a soft curved
+   seam. Background-color is set inline per instance to match the section
+   above; the SVG fill/stroke is set per instance to vary the shape. */
+.section-wave {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.section-wave svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 640px) {
+  .section-wave {
+    height: 32px;
+  }
+}
+
+/* ==================== Project Card Organic Splash ==================== */
+/* A very faint brand-colored blob in the corner of each project card —
+   an organic counterpoint to the card's straight edges, quiet at rest and
+   just slightly more present on hover. */
+.project-card-splash {
+  position: relative;
+}
+
+.project-card-splash::after {
+  content: '';
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  right: -70px;
+  bottom: -70px;
+  border-radius: 42% 58% 60% 40% / 45% 40% 60% 55%;
+  background-color: var(--color-accent);
+  opacity: 0.045;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 0;
+}
+
+.project-card-splash:hover::after {
+  opacity: 0.09;
+  transform: scale(1);
+}
+
+/* ==================== Store / External Link Buttons ==================== */
+.store-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-bg);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.store-link-btn:hover {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+  border-color: var(--color-accent-border);
+}
+
+/* ==================== Header Contact Pill ==================== */
+.header-contact-pill {
+  gap: 0.65rem;
+  padding: 0.35rem 1rem 0.35rem 0.35rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.header-contact-pill:hover {
+  border-color: var(--color-accent-border);
+  background-color: var(--color-accent-light);
+}
+
+.header-contact-pill-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.header-contact-pill:hover .header-contact-pill-icon {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+/* ==================== Hero Floating Icon Accents ==================== */
+.hero-float-icon {
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  box-shadow: var(--shadow-sm);
+  animation: hero-float 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hero-float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ==================== Reduced Motion Support ==================== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .card-hover-effect:hover,
+  .btn-primary:hover,
+  .btn-accent:hover,
+  .btn-outline:hover {
+    transform: none !important;
+  }
 }

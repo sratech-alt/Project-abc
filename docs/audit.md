@@ -41,4 +41,11 @@ Running log of every change to requirements, scope, coding style, or quality sta
 **Supersedes:** N/A
 **Impact:** `architecture.md` theming section, `develop.md` styling conventions.
 
+### 2026-09-01 — Light/dark theme toggle added to scope
+
+**Changed:** Added a user-toggleable light/dark theme (persisted via localStorage, defaulting to OS preference on first visit) as an in-scope feature. All colors continue to route through the CSS custom properties in `index.css`; dark mode is implemented purely as an `html[data-theme="dark"]` override block, no per-element `dark:` utility classes needed.
+**Reason:** Client request. Also surfaced during this pass: the light palette wasn't visibly blue-tinted despite the brand being blue, and two leftover off-brand colors existed (a beige scrollbar thumb, terracotta-tinted button hover shadows) from an earlier design iteration — both fixed to derive from the brand blue.
+**Supersedes:** N/A
+**Impact:** `index.css` (full palette rewrite + dark block), `index.html` (theme toggle buttons, anti-flash inline script, tailwind config brand colors de-hardcoded), `js/animations.js` (toggle click handling). `scope.md` and `architecture.md` updated to reflect theming now includes a dark variant.
+
 <!-- Add new entries above this line, most recent at the bottom of the log or top — pick one convention and stay consistent. -->

@@ -69,7 +69,7 @@ function runTests() {
   // Test 2: renderProjects renders single project
   renderProjects([projects[0]], 'projects-grid');
   assert.strictEqual(projectsContainer.children.length, 1);
-  assert.ok(projectsContainer.children[0].innerHTML.includes('Aura Health Platform'));
+  assert.ok(projectsContainer.children[0].innerHTML.includes(projects[0].title));
   console.log('  ✓ renderProjects: Single item render passed');
 
   // Test 3: renderProjects renders multiple projects

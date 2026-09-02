@@ -102,4 +102,155 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // 5. Theme Toggle (Light / Dark)
+  const themeToggleButtons = document.querySelectorAll('[data-theme-toggle]');
+  if (themeToggleButtons.length > 0) {
+    themeToggleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try {
+          localStorage.setItem('sabiora-theme', next);
+        } catch (e) {
+          /* localStorage unavailable — theme still applies for this session */
+        }
+      });
+    });
+  }
+
+  // 6. Active Navigation State (scroll-spy)
+  // Tracks which section is currently in view and highlights the matching
+  // nav link (desktop + mobile) — animated underline, styled in index.css
+  // via .nav-link / .nav-link.is-active.
+  initNavScrollSpy();
+
+  // 7. Services Dropdown (desktop nav)
+  initServicesDropdown();
 });
+
+function initNavScrollSpy() {
+  const navSectionIds = ['about', 'services', 'projects', 'why-us', 'team', 'testimonials'];
+  const sections = navSectionIds.map(id => document.getElementById(id)).filter(Boolean);
+  const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+
+  if (sections.length === 0 || navLinks.length === 0) return;
+
+  function setActiveNav(id) {
+    navLinks.forEach(link => {
+      link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
+    });
+  }
+
+  // Suppress scroll-spy updates briefly after a manual nav click so the
+  // clicked item doesn't flicker to a different section mid-scroll.
+  let manualOverrideId = null;
+  let manualOverrideTimeout = null;
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const id = (link.getAttribute('href') || '').replace('#', '');
+      if (!navSectionIds.includes(id)) return;
+      manualOverrideId = id;
+      setActiveNav(id);
+      clearTimeout(manualOverrideTimeout);
+      manualOverrideTimeout = setTimeout(() => {
+        manualOverrideId = null;
+      }, 900);
+    });
+  });
+
+  // Page loaded at a hash URL — reflect it immediately, before any scrolling.
+  const initialId = (window.location.hash || '').replace('#', '');
+  if (navSectionIds.includes(initialId)) {
+    setActiveNav(initialId);
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    setActiveNav(navSectionIds[0]);
+    return;
+  }
+
+  let currentActive = initialId && navSectionIds.includes(initialId) ? initialId : null;
+
+  const navObserver = new IntersectionObserver((entries) => {
+    if (manualOverrideId) return;
+
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        currentActive = entry.target.id;
+      }
+    });
+
+    if (currentActive) setActiveNav(currentActive);
+  }, {
+    root: null,
+    // A thin horizontal band near the vertical center of the viewport —
+    // whichever section crosses it is considered "current".
+    rootMargin: '-45% 0px -50% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(section => navObserver.observe(section));
+
+  // Keep the last nav section highlighted once the user scrolls past it
+  // into the Contact section / footer, rather than clearing the active state.
+  window.addEventListener('scroll', () => {
+    if (manualOverrideId) return;
+    const scrolledToBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    if (scrolledToBottom) {
+      setActiveNav(navSectionIds[navSectionIds.length - 1]);
+    }
+  }, { passive: true });
+}
+
+/**
+ * Services dropdown — click-toggled (not hover-only, so it works the same
+ * with touch and keyboard), closes on outside click, Escape, or item select.
+ */
+function initServicesDropdown() {
+  document.querySelectorAll('[data-dropdown]').forEach(wrapper => {
+    const trigger = wrapper.querySelector('[data-dropdown-trigger]');
+    const panel = wrapper.querySelector('[data-dropdown-panel]');
+    const chevron = wrapper.querySelector('[data-dropdown-chevron]');
+    if (!trigger || !panel) return;
+
+    function openPanel() {
+      panel.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+      if (chevron) chevron.classList.add('is-rotated');
+    }
+
+    function closePanel() {
+      panel.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      if (chevron) chevron.classList.remove('is-rotated');
+    }
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = panel.classList.contains('is-open');
+      if (isOpen) {
+        closePanel();
+      } else {
+        openPanel();
+      }
+    });
+
+    panel.querySelectorAll('a').forEach(item => {
+      item.addEventListener('click', closePanel);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!wrapper.contains(e.target)) closePanel();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.classList.contains('is-open')) {
+        closePanel();
+        trigger.focus();
+      }
+    });
+  });
+}
