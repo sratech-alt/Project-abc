@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initNavScrollSpy() {
-  const navSectionIds = ['about', 'services', 'projects', 'why-us', 'team', 'testimonials'];
+  const navSectionIds = ['about', 'services', 'projects', 'why-us', 'testimonials'];
   const sections = navSectionIds.map(id => document.getElementById(id)).filter(Boolean);
   const navLinks = Array.from(document.querySelectorAll('.nav-link'));
 

@@ -243,6 +243,23 @@ html[data-theme="dark"] .icon-moon {
   display: none;
 }
 
+/* ==================== Brand Logo (Light / Dark swap) ==================== */
+[data-logo-light] {
+  display: inline-block;
+}
+
+[data-logo-dark] {
+  display: none;
+}
+
+html[data-theme="dark"] [data-logo-light] {
+  display: none;
+}
+
+html[data-theme="dark"] [data-logo-dark] {
+  display: inline-block;
+}
+
 /* ==================== Navigation Active State ==================== */
 /* Applies to both desktop and mobile nav links. JS toggles .is-active
    based on which section is currently in view (see animations.js).

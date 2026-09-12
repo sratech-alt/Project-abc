@@ -4,14 +4,15 @@
 <head>
   <meta charset="UTF-8">
 
-  <!-- Apply saved/preferred theme before first paint to avoid a flash of the wrong theme -->
+  <!-- Website theme default is always LIGHT, regardless of the visitor's system/OS
+       color scheme. It only switches to dark if the person explicitly clicks the
+       toggle — that choice is then remembered (via localStorage) for future visits.
+       Applied before first paint to avoid a flash of the wrong theme. -->
   <script>
     (function () {
       try {
         var stored = localStorage.getItem('sabiora-theme');
-        var theme = (stored === 'light' || stored === 'dark')
-                ? stored
-                : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var theme = (stored === 'light' || stored === 'dark') ? stored : 'light';
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'light');
@@ -45,8 +46,12 @@
     }
   </script>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/logo_transparent.png">
+  <!-- Favicon — follows the OS/browser's system color scheme (prefers-color-scheme),
+       independent of the in-app theme toggle. Fallback first for browsers that don't
+       support media-matched favicons, then the light/dark variants. -->
+  <link rel="icon" type="image/png" href="assets/favicon-light.png">
+  <link rel="icon" type="image/png" href="assets/favicon-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" href="assets/favicon-dark.png" media="(prefers-color-scheme: dark)">
 
   <!-- Custom CSS & Font Styles -->
   <link rel="stylesheet" href="index.css">
@@ -71,8 +76,10 @@
 
     <!-- Brand Logo -->
     <a href="#" class="flex items-center gap-3 group" aria-label="Sabiora Technologies Home">
-      <img src="assets/logo_transparent.png" alt="Sabiora Technologies Logo"
-           class="h-10 w-auto max-h-10 object-contain rounded-xl group-hover:scale-105 transition-transform duration-200" />
+      <img src="assets/logo-mark-color.png" alt="Sabiora Technologies Logo" data-logo-light
+           class="h-10 w-auto max-h-10 object-contain group-hover:scale-105 transition-transform duration-200" />
+      <img src="assets/logo-mark-white.png" alt="Sabiora Technologies Logo" data-logo-dark
+           class="h-10 w-auto max-h-10 object-contain group-hover:scale-105 transition-transform duration-200" />
       <span class="font-heading font-bold text-xl tracking-tight text-[var(--color-primary)]">
           Sabiora<span class="text-[var(--color-primary)]/80"> Technologies</span>
         </span>
@@ -104,7 +111,7 @@
 
       <a href="#projects" class="nav-link hover:text-[var(--color-primary-light)]">Projects</a>
       <a href="#why-us" class="nav-link hover:text-[var(--color-primary-light)]">Why Us</a>
-      <a href="#team" class="nav-link hover:text-[var(--color-primary-light)]">Team</a>
+      <!-- Team nav link disabled along with the Team section — see comment block above -->
       <a href="#testimonials" class="nav-link hover:text-[var(--color-primary-light)]">Testimonials</a>
     </nav>
 
@@ -153,7 +160,7 @@
          class="nav-link text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Projects</a>
       <a href="#why-us"
          class="nav-link text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Why Us</a>
-      <a href="#team" class="nav-link text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Team</a>
+      <!-- Team nav link disabled along with the Team section -->
       <a href="#testimonials"
          class="nav-link text-[var(--color-primary)] hover:text-[var(--color-primary-light)]">Testimonials</a>
       <a href="#contact"
@@ -716,8 +723,11 @@
     </div>
   </section>
 
-  <!-- Organic seam into Team — same background shade either side, so a
-       thin stitched line stands in for the flat border -->
+  <!-- ==================== TEAM SECTION — TEMPORARILY DISABLED ====================
+       Commented out for now (incl. the wave seams on either side of it) so the
+       page flows directly from "Why Us" to "Testimonials". To bring it back,
+       just remove this comment wrapper.
+
   <div class="section-wave" style="background-color: var(--color-bg-alt); height: 40px;" aria-hidden="true">
     <svg viewBox="0 0 1440 40" preserveAspectRatio="none">
       <path d="M0,20 C260,2 420,38 700,18 C980,-2 1180,34 1440,14" fill="none" stroke="var(--color-border)"
@@ -725,7 +735,6 @@
     </svg>
   </div>
 
-  <!-- ==================== 6b. TEAM SECTION (Array-Driven) ==================== -->
   <section id="team" class="py-24 px-6 lg:px-12 bg-[var(--color-bg-alt)]">
     <div class="max-w-7xl mx-auto">
       <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
@@ -740,19 +749,18 @@
         </p>
       </div>
 
-      <!-- ARRAY-DRIVEN CONTAINER — Populated by js/render.js -> renderTeam() -->
       <div id="team-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-        <!-- Rendered dynamically -->
       </div>
     </div>
   </section>
 
-  <!-- Organic seam out of Team — alt background fades back to the base bg -->
   <div class="section-wave" style="background-color: var(--color-bg-alt);" aria-hidden="true">
     <svg viewBox="0 0 1440 56" preserveAspectRatio="none">
       <path d="M0,40 C260,10 460,45 700,22 C960,-2 1160,42 1440,16 L1440,56 L0,56 Z" fill="var(--color-bg)" />
     </svg>
   </div>
+
+  ==================== END TEAM SECTION ==================== -->
 
   <!-- ==================== 7. TESTIMONIALS SECTION (Array-Driven) ==================== -->
   <section id="testimonials" class="py-24 px-6 lg:px-12">
@@ -940,8 +948,8 @@
 
       <div class="md:col-span-5 space-y-5">
         <a href="#" class="inline-block group" aria-label="Sabiora Technologies Home">
-          <img src="assets/LogoPrimary.jpeg" alt="Sabiora Technologies Primary Logo"
-               class="w-full max-w-[210px] h-auto object-contain rounded-xl bg-white p-2 shadow-md group-hover:opacity-95 transition-opacity" />
+          <img src="assets/logo-full-white.png" alt="Sabiora Technologies Primary Logo"
+               class="w-full max-w-[210px] h-auto object-contain group-hover:opacity-95 transition-opacity" />
         </a>
         <p class="text-sm text-stone-400 max-w-sm leading-relaxed">
           Sabiora Technologies is a software development company based in Kathmandu, Nepal, helping businesses,
@@ -987,6 +995,7 @@
               Why Us
             </a>
           </li>
+          <!-- Team footer link disabled along with the Team section
           <li>
             <a href="#team" class="inline-flex items-center gap-2 hover:text-white transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -995,6 +1004,7 @@
               Team
             </a>
           </li>
+          -->
           <li>
             <a href="#testimonials" class="inline-flex items-center gap-2 hover:text-white transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
