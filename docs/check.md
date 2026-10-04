@@ -5,7 +5,7 @@ Run through this before marking any change complete. This checks _conformance_ t
 ## Scope conformance
 
 - [ ] Does this change fall within `scope.md`? If not, was it added to scope via an `audit.md` entry first?
-- [ ] Does it avoid introducing anything explicitly listed as out-of-scope (blog, multi-language, pricing page, backend, extra routes, light theme)?
+- [ ] Does it avoid introducing anything explicitly listed as out-of-scope (request-time rendering, admin UI, database writes from the site, multi-language, pricing page, light theme)?
 - [ ] Does it add a dependency? If so, is there an `audit.md` entry for it?
 
 ## Architecture conformance
@@ -16,12 +16,15 @@ Run through this before marking any change complete. This checks _conformance_ t
 - [ ] Are all colours design tokens — zero raw hex values and zero default-palette classes in components?
 - [ ] Is the responsive approach mobile-first (base classes = phone, breakpoints layer up)?
 - [ ] Does the site still export statically (`npm run build` produces `out/` with no errors)?
+- [ ] Is the database touched only at build time, only through `lib/content.ts`, and only for reading?
+- [ ] Is any database change in `supabase/schema.sql`, with Row Level Security on and a published-rows-only read policy?
+- [ ] No secret key, database password or `.env` file committed?
 
 ## Content conformance
 
 - [ ] Is everything on the page true? No invented quotes, metrics, client names or logos.
 - [ ] Are testimonials shown only when `verified: true`?
-- [ ] Does every link, button and hover cue lead somewhere real (no `href="#"`)?
+- [ ] Does every link, button and hover cue lead somewhere real (no `href="#"`)? Are section links written `/#section`?
 - [ ] Are external links (socials, store pages) confirmed to load?
 
 ## Code style conformance

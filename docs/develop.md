@@ -16,6 +16,24 @@ How to build any new feature or change for this project so it stays consistent w
 - The code shown in the hero window → `lib/code-samples.ts`.
 - A new or changed image → put the original in `assets/`, add it to `scripts/optimize-images.mjs`, run `npm run images`, and record the printed width/height in `lib/data.ts`.
 
+## Publishing a blog post or a job (no code changes)
+
+1. Open the Supabase dashboard → Table Editor → `posts` or `jobs` → Insert row.
+2. Fill in `slug` (lowercase letters, numbers and single hyphens; it becomes the address), `title`, and the body in Markdown (`content_md` / `description_md`). For a post, `excerpt` is the summary shown in lists and search results. For a job, set `employment_type` to one of `FULL_TIME`, `PART_TIME`, `CONTRACTOR`, `INTERN`.
+3. Leave `published` off while drafting. Turn it on to publish. `published_at` / `posted_at` in the future schedules it; a job with `closes_at` in the past disappears.
+4. For a cover image: Storage → `media` → upload → copy the public URL into `cover_image_url`, and describe the image in `cover_image_alt`.
+5. The live site updates on the next build. The database webhook triggers one automatically; you can also use "Trigger deploy" in Netlify.
+6. To preview before publishing, run `npm run dev` — it reads the database on every page load, but only shows published rows.
+
+Markdown notes: start section headings at `##`. Raw HTML is not supported and will be shown as text. Images must be `https://` URLs.
+
+## Changing the database
+
+1. Log the change in `audit.md` first if it adds a table or a new kind of content.
+2. Edit `supabase/schema.sql` — keep it re-runnable (`create table if not exists`, `drop policy if exists`). Every table must enable Row Level Security and allow only `select` of published rows to `anon`.
+3. Run the file in the Supabase SQL editor.
+4. Add the loader and row-to-type mapping in `lib/content.ts`, with tests in `lib/content.test.ts`.
+
 ## Adding a new content-driven section
 
 1. Add the type and the array to `lib/data.ts`. Keep keys consistent with existing arrays (lowerCamelCase; always `image`, never `img`/`photo`).
@@ -32,6 +50,8 @@ Write it as a server component with its copy inline. If the copy is a placeholde
 - Everything published must be true. No invented testimonials, metrics, client names or logos. A testimonial is only shown when `verified: true`; set that only for a real quote the client agreed to.
 - A project's `highlight` is a fact about the project (what it does, where it's live), not a made-up performance figure.
 - Never render a link, button or hover cue that leads nowhere. No `href="#"`.
+- Links to home-page sections are written `/#section`, never `#section`, so they work from the blog and careers pages too.
+- Never put a secret in the repo. The only Supabase credentials the site uses are the project URL and the publishable key.
 
 ## Styling conventions
 

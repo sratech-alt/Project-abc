@@ -16,6 +16,10 @@ Work outward from the symptom to the layer responsible, using `architecture.md` 
 - A colour or class that "does nothing" → it is probably not a design token. Only tokens declared in `@theme` generate utilities (see `architecture.md` — Theming).
 - Content missing/wrong → check the relevant array in `lib/data.ts` (or `lib/site.ts`) first, then the component that maps it.
 - A section missing entirely → check its guard: Testimonials renders nothing until an entry has `verified: true`.
+- A post or job not showing → in Supabase, is `published` on, is the date in the past (and `closes_at` not passed)? Has the site been rebuilt since? Is the slug lowercase-with-hyphens (rows with a bad slug are skipped, with a `[content]` warning in the build log)?
+- "Blog"/"Careers" missing from the navigation → expected when there is no published content of that kind.
+- Build fails with `ContentUnavailableError` → Supabase was unreachable or refused the key after several tries. Check the project is not paused, then re-run the deploy. The live site is unaffected: the previous deploy stays up.
+- Markdown looks wrong → raw HTML is shown as text on purpose; links must start with `https://`, `/`, `#`, `mailto:` or `tel:`.
 - Animation glitch → `components/ui/Reveal.tsx` for scroll reveals, the keyframes in `app/globals.css` for CSS animation. Check behaviour with reduced motion on.
 - "Hydration" warning in the console → a client component rendered something different on the server than in the browser (dates, random values, `window` access during render).
 - Form not submitting → `components/Contact.tsx` and `lib/validation.ts`; check the EmailJS IDs in `lib/site.ts`, the allowed-domain setting in the EmailJS dashboard, and the browser's network tab for the request to `api.emailjs.com`.

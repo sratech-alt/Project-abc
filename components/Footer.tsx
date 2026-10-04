@@ -2,13 +2,15 @@ import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react';
 import Image from 'next/image';
 import { FooterWave } from '@/components/FooterWave';
 import { SocialIcon } from '@/components/ui/SocialIcon';
+import type { PageLink } from '@/lib/content';
 import { socials } from '@/lib/data';
 import { navLinks, site } from '@/lib/site';
 
 const headingClass = 'font-mono text-xs font-medium tracking-[0.18em] text-fg uppercase';
 const linkClass = 'py-1.5 text-[0.95rem] text-muted transition-colors hover:text-accent';
 
-export function Footer() {
+/** `pageLinks`: content pages (Blog, Careers) that currently have something to show. */
+export function Footer({ pageLinks = [] }: { pageLinks?: PageLink[] }) {
   const year = new Date().getFullYear();
 
   return (
@@ -19,7 +21,7 @@ export function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_1.3fr_0.9fr] lg:gap-12">
           {/* Company */}
           <div>
-            <a href="#top" className="inline-block" aria-label={`${site.name} — back to top`}>
+            <a href="/#top" className="inline-block" aria-label={`${site.name} — home`}>
               <Image src="/images/logo-full.webp" alt={`${site.name} logo`} width={560} height={142} className="h-auto w-48" />
             </a>
             <p className="mt-5 max-w-sm text-[0.95rem] leading-relaxed text-muted">
@@ -34,7 +36,14 @@ export function Footer() {
             <ul className="mt-3.5">
               {navLinks.map((link) => (
                 <li key={link.id}>
-                  <a href={`#${link.id}`} className={`${linkClass} inline-block`}>
+                  <a href={`/#${link.id}`} className={`${linkClass} inline-block`}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+              {pageLinks.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className={`${linkClass} inline-block`}>
                     {link.label}
                   </a>
                 </li>

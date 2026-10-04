@@ -2,7 +2,7 @@
 
 ## Overview
 
-A single-page site built with Next.js (App Router), React and TypeScript, and exported to static files. `npm run build` writes the finished site to `out/`; that folder is all that gets deployed. There is no server and no backend. Content and presentation are deliberately separated so content edits (new project, new testimonial) never require touching component markup.
+A site built with Next.js (App Router), React and TypeScript, and exported to static files. `npm run build` writes the finished site to `out/`; that folder is all that gets deployed. There is no server. Blog and careers content lives in a Supabase database that is read during the build (see "Content backend" below); visitors' browsers never talk to it. Content and presentation are deliberately separated so content edits (new project, new testimonial) never require touching component markup.
 
 ## Commands
 
@@ -21,7 +21,9 @@ A single-page site built with Next.js (App Router), React and TypeScript, and ex
 /
 ├── app/
 │   ├── layout.tsx        # <html>, fonts, metadata/SEO, structured data, global providers
-│   ├── page.tsx          # The one page — lists the sections in scroll order
+│   ├── page.tsx          # The home page — lists the sections in scroll order
+│   ├── blog/page.tsx, blog/[slug]/page.tsx         # Article list and one page per published post
+│   ├── careers/page.tsx, careers/[slug]/page.tsx   # Open roles and one page per role
 │   ├── not-found.tsx     # → /404.html, served by the host for unknown addresses
 │   ├── globals.css       # Design tokens (@theme) + the few styles utilities can't express
 │   ├── robots.ts         # → /robots.txt
@@ -30,18 +32,24 @@ A single-page site built with Next.js (App Router), React and TypeScript, and ex
 │   ├── Navbar.tsx  Hero.tsx  CodeTerminal.tsx  About.tsx  Services.tsx
 │   ├── TechStack.tsx  Projects.tsx  WhyUs.tsx  Testimonials.tsx  Contact.tsx  Footer.tsx
 │   ├── FooterWave.tsx              # The layered brand wave that leads into the footer
+│   ├── SiteShell.tsx  PageHeader.tsx  Prose.tsx   # Shared page frame, content-page header, Markdown output
 │   ├── MotionProvider.tsx          # Framer Motion setup (LazyMotion + reduced motion)
 │   ├── services/visuals.tsx        # CSS-drawn illustrations for the services bento grid
 │   └── ui/                         # Reveal, SectionHeading, SocialIcon, SpotlightTracker
 ├── lib/
-│   ├── data.ts           # ALL repeatable content arrays
-│   ├── site.ts           # Company facts, nav links, EmailJS config
+│   ├── data.ts           # Home-page content arrays
+│   ├── site.ts           # Company facts, nav links, EmailJS and Supabase config
+│   ├── supabase.ts       # Build-time reader for Supabase's Data API (plain fetch, with retries)
+│   ├── content.ts        # Posts and jobs: loading, mapping rows to types, page links
+│   ├── markdown.ts       # Markdown → safe HTML
+│   ├── static-params.ts  # Placeholder route for empty content tables
 │   ├── code-samples.ts   # The three files shown in the hero code window
 │   ├── highlight.ts      # Tiny syntax highlighter for the code window
 │   ├── validation.ts     # Contact form rules (pure functions)
 │   ├── cn.ts             # Class-name joiner
 │   └── *.test.ts         # Unit tests, next to the code they test
-├── public/               # Deployed as-is: optimized images, favicons, og.png
+├── supabase/schema.sql   # The database: tables, access rules, storage bucket
+├── public/               # Deployed as-is: optimized images, favicons, og.png, search-engine verification files
 ├── assets/               # ORIGINAL images. Never deployed. Source for `npm run images`
 ├── scripts/optimize-images.mjs
 ├── netlify.toml          # Build command, publish dir, cache/security headers
@@ -60,6 +68,19 @@ Components are server components by default — they render to HTML at build tim
 3. The services bento grid derives its layout from each service's `span` (1, 2 or 3 of 3 desktop columns). Spans must tile into full rows — a unit test enforces this.
 4. Projects: the first three `featured: true` entries get full cards; everything else is listed under "Also shipped". `platform: 'web' | 'mobile'` decides how the image is framed (browser frame vs. portrait poster).
 5. Testimonials: only entries with `verified: true` render; with none, the section is omitted entirely.
+
+## Content backend (Supabase)
+
+- **What it holds:** `posts` (blog) and `jobs` (careers). The full definition is `supabase/schema.sql`; change the database by editing that file and running it in the Supabase SQL editor. It is safe to re-run.
+- **How the site reads it:** `lib/supabase.ts` calls Supabase's Data API with `fetch` during `npm run build`. There is no Supabase SDK and nothing runs in the visitor's browser. `lib/content.ts` turns rows into `Post` and `Job` objects; pages import only from there.
+- **Access:** the project URL and publishable key in `lib/site.ts` are public by design. Row Level Security is on for every table, and the only policies allow reading rows that are published (and, for jobs, not yet closed). Nothing can be written with the public key. The secret key and database password are never used and must never be committed.
+- **Editing content:** in the Supabase dashboard's table editor. A row goes live when `published` is true and its date has passed — **and the site has been rebuilt**.
+- **Rebuilds:** content is baked in at build time, so a change appears after the next deploy. A Supabase database webhook calls a Netlify build hook whenever `posts` or `jobs` change. A post scheduled for a future date needs a build after that date.
+- **Failure behaviour:** a table that doesn't exist yet counts as "no content" and the build succeeds. A network error or 5xx is retried; if it persists, or the key is rejected, the build **fails** and Netlify keeps serving the previous deploy. The site never publishes with its content silently missing.
+- **Markdown:** rendered by `lib/markdown.ts` at build time. Raw HTML is escaped, links and images are limited to safe addresses, `#` headings become `<h2>`, and code blocks and tables are keyboard-scrollable.
+- **Navigation follows content:** `getPageLinks()` returns "Blog" and "Careers" only when there is at least one published post or open role. The header, mobile menu, footer and sitemap all use it. With the two extra links the desktop pill navigation starts at 1280px instead of 1024px.
+- **Empty tables and static export:** a static export refuses to build a `[slug]` route with zero pages, so `lib/static-params.ts` pads an empty list with one reserved slug (`_empty`) that renders the 404 page.
+- **Images:** cover images are full `https://` URLs, normally files in the public `media` storage bucket.
 
 ## Theming
 
@@ -83,7 +104,8 @@ Components are server components by default — they render to HTML at build tim
 
 ## Navigation
 
-- Plain `<a href="#section">` links. `scroll-padding-top` on `<html>` keeps targets clear of the fixed header; smooth scrolling is CSS. There is no JS scroll handling, so the URL hash, the back button and keyboard focus all behave natively.
+- Plain `<a href="/#section">` links, so they work from every page; on the home page the browser treats them as an in-page jump. `scroll-padding-top` on `<html>` keeps targets clear of the fixed header; smooth scrolling is CSS. There is no JS scroll handling, so the URL hash, the back button and keyboard focus all behave natively.
+- Every page is wrapped in `<SiteShell>`, which renders the header, `<main>` and footer and passes them the current content-page links.
 - The header highlights the current section with one `IntersectionObserver` in `Navbar.tsx`.
 - While the mobile menu is open, `<main>` and `<footer>` are `inert` and page scrolling is locked; `scrollbar-gutter: stable` on `<html>` stops the layout shifting when scrolling is locked.
 - `navLinks` in `lib/site.ts` drives the header, mobile menu and footer. Every id must match a `<section id>` (unit-tested).
@@ -114,4 +136,4 @@ Netlify, configured by `netlify.toml`: build command `npm run build`, publish di
 
 ## Non-Goals (see scope.md)
 
-No routing, no backend, no request-time rendering, no state-management library, no light theme. If any of these become necessary, `scope.md` and this file must be updated together, with the change logged in `audit.md`.
+No request-time rendering, no writes to the database from the site, no admin UI, no state-management library, no light theme. If any of these become necessary, `scope.md` and this file must be updated together, with the change logged in `audit.md`.

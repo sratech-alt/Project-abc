@@ -4,7 +4,7 @@ Read this file first. It combines everything in `/docs` into one map — the ind
 
 ## Project Summary
 
-**Sabiora** — a single-page portfolio/marketing website for Sabiora Technologies. Built with Next.js (App Router), React, TypeScript and Tailwind CSS v4, and exported as a static site (`npm run build` → `out/`). Mobile-first, dark-only, no backend. Content that repeats (projects, services, tech stack, team, testimonials, social links) is driven by typed arrays in `lib/data.ts` so it can be edited without touching markup. Every colour is a design token in `app/globals.css`; Tailwind's default palette is switched off. The contact form sends through EmailJS. The stack changed on 2026-10-04 — see `audit.md`.
+**Sabiora** — the marketing website for Sabiora Technologies: a scroll-navigation home page plus blog and careers pages. Built with Next.js (App Router), React, TypeScript and Tailwind CSS v4, and exported as a static site (`npm run build` → `out/`). Mobile-first, dark-only, no server. Home-page content (projects, services, tech stack, team, testimonials, social links) is driven by typed arrays in `lib/data.ts`; blog posts and job listings live in a Supabase database that is read at build time (`supabase/schema.sql`, `lib/content.ts`). Every colour is a design token in `app/globals.css`; Tailwind's default palette is switched off. The contact form sends through EmailJS. The stack changed on 2026-10-04 — see `audit.md`.
 
 Quick start: `npm install`, then `npm run dev`. Before finishing any change: `npm run typecheck && npm test && npm run build`.
 
@@ -42,15 +42,18 @@ Quick start: `npm install`, then `npm run dev`. Before finishing any change: `np
 
 ## Core Constraints (from scope.md — always true unless formally revised)
 
-- Single-page, scroll-based navigation — no routing, no extra pages
+- Pages: the home page (scroll navigation), `/blog`, `/blog/[slug]`, `/careers`, `/careers/[slug]`. New routes need an `audit.md` entry
 - Next.js + React + TypeScript, statically exported — it must always build to plain files in `out/` with no server
+- Supabase is read at build time only, with the public key only, through `lib/content.ts`. The site never writes to it. No secret key or database password in the repo, ever
+- Database changes go in `supabase/schema.sql`; every table has Row Level Security with a published-rows-only read policy
 - Mobile-first responsive design; no horizontal scroll from 320px up
-- All repeatable content is array-driven from `lib/data.ts` (`projects`, `services`, `stack`, `reasons`, `team`, `testimonials`, `socials`)
+- Home-page repeatable content is array-driven from `lib/data.ts` (`projects`, `services`, `stack`, `reasons`, `team`, `testimonials`, `socials`); posts and jobs come from Supabase
+- Section links are written `/#section` so they work from every page
 - All colors are design tokens in `app/globals.css` — never hardcoded hex values or default-palette classes (unit-tested)
 - Dark theme only — no light theme, no toggle
 - Motion stays light: `<Reveal>` for scroll reveals (Framer Motion via `m.*`), CSS for everything else; reduced motion and no-JS must still work
 - Content must be true — no invented testimonials, metrics or client names; no links or buttons that lead nowhere
-- Out of scope: blog, multi-language, pricing page, backend, new dependencies, extra routes — unless scope is formally revised via `audit.md`
+- Out of scope: request-time rendering, an admin UI or logins, database writes from the site, multi-language, pricing page, new dependencies, new routes or tables — unless scope is formally revised via `audit.md`
 
 ## Golden Rule
 

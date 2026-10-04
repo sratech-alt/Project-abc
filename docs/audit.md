@@ -84,4 +84,28 @@ Also: `backdrop-filter` is reserved for elements that sit over moving or varied 
 **Supersedes:** N/A (refines the Animation rules introduced earlier the same day).
 **Impact:** `architecture.md` (Animation Layer), `develop.md` (Animations), `check.md` (Animation conformance), `app/globals.css` keyframes.
 
+### 2026-10-04 — Scope revised: Supabase content backend, blog and careers pages
+
+**Changed:** Three things that were out of scope are now in scope.
+
+1. _Backend:_ a Supabase project holds editable content. The site reads it **at build time only**, through Supabase's Data API with the public (publishable) key. The deployed site is still static files with no server; visitors' browsers never talk to Supabase.
+2. _Blog / CMS-driven content:_ a blog (`posts` table) and careers listings (`jobs` table). Content is written in Markdown by developers in Supabase's table editor. There is no admin screen and no editor login on the site.
+3. _Routing:_ the site is no longer a single page. New routes: `/blog`, `/blog/[slug]`, `/careers`, `/careers/[slug]`. The home page remains the scroll-navigation page it was.
+
+New dependency: `marked` (Markdown to HTML, run at build time; adds no JavaScript to the pages).
+
+New standards:
+
+- **Database access is read-only and public-content-only.** Row Level Security is on for every table. The only policies allow anonymous `select` of rows where `published` is true and `published_at`/`posted_at` is not in the future. The secret (service-role) key and the database password are never used by the site and never committed.
+- **Schema changes go through `supabase/schema.sql`.** That file is the record of the database; change it there and run it in the Supabase SQL editor, rather than editing tables by hand.
+- **A missing table is not an error; an unreachable database is.** If a table doesn't exist yet the build treats it as "no content". Any other failure (network, 5xx, bad key) fails the build, so a Supabase outage can never publish a site with the blog wiped — Netlify keeps serving the last good deploy.
+- **Navigation follows content.** "Blog" and "Careers" appear in the header, footer and sitemap only when there is at least one published post or open role. The pages themselves always exist.
+- **Markdown from the database is rendered with raw HTML escaped.**
+- **Careers takes applications by email.** No CV uploads and no applicant data stored. If uploads are added later, a privacy policy must come with them.
+
+Still out of scope: request-time rendering, user accounts or logins on the site, an admin UI, comments, moving `projects`/`services`/`stack` to the database (planned as a later step, to be logged when it starts).
+**Reason:** Owner decision to add a blog and careers section and to make site content editable without a code change, with developers as the only editors for now.
+**Supersedes:** The "single page, no routing", "no backend" and "no blog / CMS" constraints from 2026-08-23 and the 2026-10-04 redesign entry.
+**Impact:** `scope.md`, `architecture.md`, `develop.md`, `check.md`, `test.md`, `debug.md`, `Agents.md`; new `supabase/schema.sql`, `lib/supabase.ts`, `lib/content.ts`, `lib/markdown.ts`, `app/blog/*`, `app/careers/*`; `Navbar`/`Footer` links become `/#section` so they work from every page; `app/sitemap.ts` lists the new pages. Publishing content needs a rebuild: a Netlify build hook called by a Supabase database webhook (set up in the two dashboards).
+
 <!-- Add new entries above this line. Convention: chronological, most recent at the bottom. -->

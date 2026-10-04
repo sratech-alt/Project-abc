@@ -346,6 +346,102 @@
     animation: var(--animate-flow);
   }
 
+  /* Long-form text rendered from Markdown (blog posts, job descriptions). */
+  .prose {
+    @apply text-[1.05rem] leading-[1.8] text-muted;
+  }
+
+  .prose > * + * {
+    margin-top: 1.25em;
+  }
+
+  .prose h2 {
+    @apply text-2xl leading-tight font-bold tracking-tight text-fg sm:text-[1.75rem];
+    margin-top: 2.2em;
+  }
+
+  .prose h3 {
+    @apply text-xl leading-snug font-semibold tracking-tight text-fg;
+    margin-top: 1.8em;
+  }
+
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    @apply text-base font-semibold text-fg;
+    margin-top: 1.6em;
+  }
+
+  .prose strong {
+    @apply font-semibold text-fg;
+  }
+
+  .prose a {
+    @apply text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent;
+    overflow-wrap: anywhere;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4em;
+  }
+
+  .prose ul {
+    list-style: disc;
+  }
+
+  .prose ol {
+    list-style: decimal;
+  }
+
+  .prose li + li {
+    margin-top: 0.45em;
+  }
+
+  .prose li::marker {
+    color: var(--color-accent);
+  }
+
+  .prose blockquote {
+    @apply border-l-2 border-accent/60 pl-5 text-fg italic;
+  }
+
+  .prose :not(pre) > code {
+    @apply rounded-md border border-line bg-panel px-1.5 py-0.5 font-mono text-[0.875em] text-syn-type;
+    overflow-wrap: anywhere;
+  }
+
+  .prose pre {
+    @apply overflow-x-auto rounded-xl border border-line-strong/70 bg-raised p-4 font-mono text-sm leading-[1.7] text-syn-plain;
+  }
+
+  .prose img {
+    @apply h-auto max-w-full rounded-xl border border-line;
+  }
+
+  .prose hr {
+    @apply border-line;
+    margin-block: 2.4em;
+  }
+
+  .prose .table-scroll {
+    overflow-x: auto;
+  }
+
+  .prose table {
+    @apply w-full text-[0.95rem];
+    border-collapse: collapse;
+  }
+
+  .prose th,
+  .prose td {
+    @apply border border-line px-3 py-2 text-left;
+  }
+
+  .prose th {
+    @apply bg-panel font-semibold text-fg;
+  }
+
   .marquee-mask {
     mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
   }

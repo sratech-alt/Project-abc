@@ -43,6 +43,17 @@ export const navLinks = [
 ] as const;
 
 /**
+ * Supabase project that holds the blog and careers content (read at build time — see lib/supabase.ts).
+ * Both values are public by design: the publishable key can only do what Row Level Security allows,
+ * which is reading published rows. The secret key and database password must never appear in this repo.
+ * Environment variables override the defaults, e.g. to build against a different project.
+ */
+export const supabaseConfig = {
+  url: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'https://xxlbubkzrwlmacfuebgq.supabase.co',
+  publishableKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? 'sb_publishable_WnF-oPvGaCTKS8ry5F6C0Q_KESV2iTi',
+} as const;
+
+/**
  * EmailJS credentials. These are live values, not placeholders. EmailJS public keys are meant to
  * ship in client code; restrict the allowed domain in the EmailJS dashboard to limit abuse.
  * The template receives: name, email, title, message, time.
