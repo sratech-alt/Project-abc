@@ -54,6 +54,53 @@ If someone with no context on this project read only this file top to bottom, th
 
 ## Change Log
 
+### 2026-10-04 — Post-Redesign Audit Fixes, Performance Pass, Footer Wave Restored
+**What:** A second audit of the redesigned build (axe accessibility engine, Lighthouse, and browser checks at sizes and states not covered the first time), the fixes it led to, and the footer wave.
+
+- _Mobile menu:_ keyboard focus could Tab out of the open menu into the covered page. `<main>` and `<footer>` are now `inert` while the menu is open.
+- _404 page:_ was the framework default with no way back. Added a branded `app/not-found.tsx` with a link to the homepage (exported as `404.html`).
+- _Performance:_ twelve decorative animations ran on the main thread indefinitely (dashed connector lines animated `background-position`, the pipeline dot animated `left`, API lines animated `stroke-dashoffset`, the cursor animated `visibility`). They now animate only `transform`/`opacity`; the API lines animate on card hover only. The headline and intro slide in without ever being invisible (`animate-rise`), so the main content paints immediately. Removed `backdrop-filter` blur where it had no visible effect (code window, glass buttons, contact form). Lighthouse main-thread work fell from 9.2 s to about 4.3 s; mobile Performance went from 77 to 81–92 (it varies between runs), desktop is 98.
+- _Tried and reverted:_ `content-visibility: auto` on below-the-fold sections. It cut rendering work but made anchor links land in the wrong place on the first jump (a deep link to `#contact` landed thousands of pixels off), so it was removed.
+- _Scroll lock:_ `scrollbar-gutter: stable` so the page no longer shifts sideways when the menu or a case-study dialog locks scrolling. The hero headline was reduced slightly at 1024px to fit the column this leaves.
+- _Code window:_ auto-rotation now stops as soon as the pointer or keyboard focus enters it, not only on click.
+- _LinkedIn link:_ `socials[]` now points to the company page (`linkedin.com/company/sabioratech/`, supplied by the owner) instead of the personal-profile `/in/` address. The Instagram link was likewise corrected to `instagram.com/sabioratech/`. Both also update the `sameAs` list in the structured data.
+- _Footer wave:_ the layered wave from the original site is back above the footer (`components/FooterWave.tsx`), using the original curves recoloured with the new tokens — indigo and cyan swells, a glowing tracing line, and a front wave in the footer's colour. The footer is now solid `raised` so the wave resolves into it. The two swells and the tracing line drift slowly sideways at different speeds (`animate-wave`); each is its own element animated with `transform` only, and the front wave stays still.
+
+Results on the final build: axe reports 0 violations (desktop, phone, dialog open); Lighthouse Accessibility 100, Best Practices 100, SEO 100, layout shift 0; no horizontal overflow from 320px to 2560px or in landscape; the form's success and failure paths both verified with the EmailJS request answered locally (no message was sent).
+**Why:** Owner asked whether the redesigned site had any issues, and asked for the previous footer wave to be brought back in the new theme.
+**Files touched:** `app/not-found.tsx` (new), `components/FooterWave.tsx` (new), `app/globals.css`, `components/Navbar.tsx`, `components/Hero.tsx`, `components/CodeTerminal.tsx`, `components/Contact.tsx`, `components/Footer.tsx`, `components/services/visuals.tsx`, `docs/*`.
+**Related:** audit.md — 2026-10-04 "Looping animations must be compositor-only"; test.md — manual checklist extended (404 page, menu focus, Lighthouse/axe).
+
+### 2026-10-04 — Full Redesign on Next.js (Dark Theme) + Site Audit Fixes
+**What:** Rebuilt the whole site as a Next.js (App Router) + React + TypeScript + Tailwind v4 project, statically exported to `out/`. The old `index.html`, `index.css` and `js/` are removed (they remain in git history on `main`).
+
+_New design:_ dark slate canvas with cyan/indigo accents, dot-grid and ambient glows, glass cards with a cursor-following highlight. Sections: floating-pill header with availability status and "Book a Discovery Call"; hero with a tabbed, syntax-highlighted code window (`Architecture.ts`, `SpringBootService.java`, `Deploy.yml`) and a metrics bar; About as a short statement plus an at-a-glance spec sheet; Services as a bento grid of all 8 services, each with a CSS-drawn illustration; Tech Stack with an infinite ticker and a category selector; Projects as three featured case-study cards plus an "Also shipped" row, each opening a case-study dialog; Why Sabiora (5 cards); Testimonials (hidden until real quotes exist); a combined CTA + contact form; a 4-column footer.
+
+_Audit findings fixed along the way:_
+- Template testimonials shown as real → entries flagged `verified: false`; the section renders only verified quotes.
+- "Built for our partners" copy contradicted the project data → replaced with "Products we've designed, engineered and shipped"; project badges are facts, not invented metrics.
+- Dead Privacy/Terms links (`href="#"`) → removed; a plain note under the form says how submitted details are used. A unit test now fails on any `href="#"`.
+- Dribbble link (404, icon rendered as a blob) → removed from `socials[]`.
+- Form result message appeared ~840px above the button on phones → now directly under the submit button, in an `aria-live` region.
+- No contact link in the desktop header → "Book a Discovery Call" in the header at every width from 640px, and in the mobile menu.
+- Mobile-app screenshots cropped to 29% → shown as portrait posters.
+- "View Project Details" led nowhere and had no backing gradient → "View case study" opens a real dialog; store buttons only appear when a store URL exists.
+- Card fade-in broken / hover lag from shared transition delays → reveals and hovers are now separate mechanisms.
+- Hero stat overflow ("Kathmandu" clipped) and floating icons overlapping the headline → metrics bar rebuilt, verified from 320px up.
+- Low-contrast footer tagline, dark-mode accent text, 10px labels → every text colour passes WCAG AA (0 failures across ~290 text elements, measured).
+- Lost focus rings → one global `:focus-visible` style; skip link added; heading levels no longer skip.
+- Tailwind Play CDN and unpinned `lucide@latest` in production → compiled CSS (10 KB) and tree-shaken icons; no third-party requests at page load.
+- Oversized images (≈1.8 MB) → 149 KB total, with width/height on every image.
+- Hero text invisible until JS ran → hero entrance is CSS; scroll-reveal content is shown by a `<noscript>` rule when JS is off.
+- No social/search metadata → Open Graph + Twitter card, canonical, JSON-LD, theme-color, `robots.txt`, `sitemap.xml`, `og.png`.
+- No spam protection on the form → honeypot, minimum fill time, EmailJS SDK rate limit and headless block.
+- JS smooth-scroll handler that swallowed the URL hash → native anchors with `scroll-padding-top`.
+
+_Still needs the owner:_ real testimonials; confirm the LinkedIn URL (it is a personal-profile `/in/` address, not a `/company/` page) and that the X and Instagram profiles are the right ones; restrict the allowed domain for the EmailJS key in the EmailJS dashboard; send one real form submission after deploy (delivery was not tested — automated runs block the request on purpose); a proper privacy policy if one is wanted; confirm Netlify builds from the repo (it must run `npm run build` and publish `out/`, per `netlify.toml`).
+**Why:** Owner request for a complete, dark, technical redesign on a specified stack, plus "fix the issues found" from the same-day audit.
+**Files touched:** removed `index.html`, `index.css`, `js/*`; added `app/*`, `components/*`, `lib/*`, `public/*`, `scripts/optimize-images.mjs`, `package.json`, `package-lock.json`, `next.config.mjs`, `postcss.config.mjs`, `tsconfig.json`, `vitest.config.mts`, `netlify.toml`, `.gitignore`; rewrote `docs/scope.md`, `docs/architecture.md`, `docs/develop.md`, `docs/check.md`, `docs/test.md`; updated `docs/debug.md`, `docs/audit.md`, `Agents.md`.
+**Related:** audit.md — 2026-10-04 scope revision (framework, build step, animation library, dark-only theme, content-honesty rules); test.md — new Vitest suite (40 tests: form validation, data integrity, dead-link and colour-token guards, highlighter), old `js/render.test.js` retired with the code it tested. Verified in headless Chrome at 320/375/768/1024/1280/1440px: no horizontal overflow, no console errors, menu/dialog/filter/form interactions, keyboard focus, reduced motion, JavaScript disabled.
+
 ### 2026-09-01 — Light/Dark Theme, About Section Simplified to Prose, Color Cleanup
 **What:** (1) About section: removed the card/widget-based "Technologies We Work With" panel and the "Full-Stack Engineering" / "Production-Grade Systems" boxes entirely — that information is now a plain paragraph in the About copy instead of a separate visual component. (2) Added a full light/dark theme system: rewrote `index.css` with a dark-mode variable block (`html[data-theme="dark"]`), an inline anti-flash theme script in `<head>`, and toggle buttons in the desktop and mobile header (sun/moon icons swapped via CSS, click handling in `animations.js`), persisted to `localStorage` and defaulting to OS preference. (3) Color audit: the light theme background was barely blue-tinted despite the brand being blue — retinted `--color-bg`/`--color-bg-alt`/borders using the brand blue's hue. Also found and fixed two leftover off-brand colors from an earlier design pass: a beige scrollbar thumb (`#D1C9BE`) and terracotta-tinted button hover shadows (`rgba(200,109,81,...)`) — both now derive from the brand blue. Also de-hardcoded two stray hex values in the Tailwind config that bypassed the CSS-variable system. Decoupled the "Get in Touch" CTA buttons and `.btn-primary` from `--color-primary` (now use `--color-accent`) so that variable is free to become a light color for heading text in dark mode without breaking button backgrounds.
 **Why:** User reported the previous About section edit didn't actually address the feedback — the card/widget layout was still there, just reworded; asked for the same info as plain page content instead. Also requested dark/light theme support and asked that the light theme background be visibly blue to match the brand, and asked for a general color check.

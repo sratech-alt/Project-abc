@@ -1,0 +1,378 @@
+/* globals.css — Sabiora design tokens and the few styles Tailwind utilities can't express. */
+
+@import 'tailwindcss';
+
+/*
+ * Design tokens. `--color-*: initial` removes Tailwind's default palette, so the tokens below are
+ * the ONLY colours that exist: `bg-zinc-900` or a raw hex in a class produces no CSS at all.
+ * To use a new colour, add a token here first.
+ */
+@theme static {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Surfaces */
+  --color-canvas: #0b0f17;
+  --color-raised: #0e141f;
+  --color-panel: #131a27;
+  --color-line: #222b3a;
+  --color-line-strong: #34405a;
+
+  /* Text — all three pass WCAG AA on canvas and panel */
+  --color-fg: #f4f7fb;
+  --color-muted: #a3adbf;
+  --color-faint: #8490a4;
+
+  /* Accents. `iris` is for fills and glows only; use `iris-soft` for text. */
+  --color-accent: #22d3ee;
+  --color-accent-strong: #00f2fe;
+  --color-iris: #6366f1;
+  --color-iris-soft: #a5b4fc;
+
+  /* Status */
+  --color-ok: #34d399;
+  --color-warn: #fbbf24;
+  --color-err: #fb7185;
+
+  /* Code syntax */
+  --color-syn-plain: #d5dbe6;
+  --color-syn-punct: #8e9ab0;
+  --color-syn-comment: #7b879c;
+  --color-syn-keyword: #c4b5fd;
+  --color-syn-string: #86efac;
+  --color-syn-type: #67e8f9;
+  --color-syn-func: #93c5fd;
+  --color-syn-anno: #fcd34d;
+  --color-syn-number: #fdba74;
+  --color-syn-key: #7dd3fc;
+
+  /* Terminal window dots */
+  --color-dot-red: #ff5f57;
+  --color-dot-yellow: #febc2e;
+  --color-dot-green: #28c840;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-rise: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-flow: flow 0.9s linear infinite;
+  --animate-travel: travel 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  --animate-blink: blink 1.1s steps(1, end) infinite;
+  --animate-code-in: code-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-dialog-in: dialog-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-wave: wave-drift 12s ease-in-out infinite alternate;
+  --animate-dash: dash 1.1s linear infinite;
+
+  @keyframes wave-drift {
+    from {
+      transform: translate3d(-3%, 0, 0);
+    }
+    to {
+      transform: translate3d(3%, 5px, 0);
+    }
+  }
+  --animate-ping: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -16;
+    }
+  }
+
+  @keyframes ping {
+    75%,
+    100% {
+      transform: scale(2.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(14px);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  /* The looping animations below only change transform/opacity, so they run off the main thread. */
+  @keyframes flow {
+    to {
+      transform: translateX(12px);
+    }
+  }
+
+  @keyframes travel {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    10%,
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes code-in {
+    from {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    /* Anchor targets clear the fixed header without any JS offset maths. */
+    scroll-padding-top: 5.5rem;
+    /* Keep the scrollbar's space reserved so the page doesn't jump sideways when a dialog or the menu locks scrolling. */
+    scrollbar-gutter: stable;
+    background-color: var(--color-canvas);
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    color: var(--color-fg);
+  }
+
+  /* One focus style for every interactive element. Never remove it with outline utilities. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-canvas);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border-radius: 9999px;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  /* Section label: monospace, with a short leading rule. */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-mono text-xs font-medium tracking-[0.18em] text-accent uppercase;
+  }
+
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-6 bg-accent/60;
+  }
+
+  .text-gradient {
+    background-image: linear-gradient(100deg, var(--color-accent-strong) 5%, var(--color-iris-soft) 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-[transform,box-shadow,background-color,border-color,color] duration-200;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    @apply bg-accent text-canvas;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-accent-strong) 55%, transparent),
+      0 10px 34px -10px color-mix(in oklab, var(--color-accent-strong) 70%, transparent);
+  }
+
+  .btn-primary:hover {
+    @apply bg-accent-strong;
+    box-shadow:
+      0 0 0 1px var(--color-accent-strong),
+      0 14px 44px -8px color-mix(in oklab, var(--color-accent-strong) 85%, transparent);
+  }
+
+  .btn-glass {
+    @apply border border-line-strong/80 bg-panel/70 text-fg;
+  }
+
+  .btn-glass:hover {
+    @apply border-accent/60 bg-panel text-fg;
+    box-shadow: 0 10px 34px -14px color-mix(in oklab, var(--color-accent) 60%, transparent);
+  }
+
+  /* Glass card with an accent border glow and a cursor-following highlight (see SpotlightTracker). */
+  .card {
+    @apply relative isolate rounded-2xl border border-line/90 bg-panel/55;
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      440px circle at var(--mx, 50%) var(--my, 0%),
+      color-mix(in oklab, var(--color-accent) 11%, transparent),
+      transparent 62%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    .card:hover {
+      border-color: color-mix(in oklab, var(--color-accent) 45%, var(--color-line));
+      box-shadow: 0 24px 60px -36px color-mix(in oklab, var(--color-accent) 55%, transparent);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line-strong/70 bg-canvas/50 px-2.5 py-1 text-xs font-medium text-muted;
+  }
+
+  /* Decorative backgrounds */
+  .bg-dots {
+    background-image: radial-gradient(color-mix(in oklab, var(--color-line-strong) 85%, transparent) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .glow {
+    position: absolute;
+    pointer-events: none;
+    background: radial-gradient(closest-side, var(--glow-color, var(--color-accent)), transparent);
+    opacity: var(--glow-opacity, 0.14);
+  }
+
+  /* Animated dashed connector used by the pipeline / checkout / API visuals. */
+  .flow-line {
+    position: relative;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* The dashes sit on a strip one dash wider than the line and slide by exactly one dash. */
+  .flow-line::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 -12px;
+    background-image: linear-gradient(90deg, color-mix(in oklab, var(--color-accent) 80%, transparent) 50%, transparent 50%);
+    background-size: 12px 1px;
+    animation: var(--animate-flow);
+  }
+
+  .marquee-mask {
+    mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  }
+}
+
+/* Motion is decoration. Honour the OS setting everywhere, including JS-free animations. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .marquee-track {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100% !important;
+  }
+
+  .marquee-track > [aria-hidden='true'] {
+    display: none;
+  }
+}

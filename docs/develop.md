@@ -7,40 +7,66 @@ How to build any new feature or change for this project so it stays consistent w
 1. Read `scope.md` — is this change actually in scope? If not, log it in `audit.md` first and get it explicitly approved into scope before writing code.
 2. Read `architecture.md` — where does this feature fit in the existing structure? Don't invent a new pattern if an existing one already covers it.
 3. Check `audit.md` for any recent decisions that affect this area.
+4. Run `npm install` once, then `npm run dev` to work locally.
 
-## Adding a new content-driven section (like Projects/Team/Testimonials)
+## Editing content (no code changes)
 
-1. Add the data shape to `js/data.js` as a new array of plain objects. Keep object keys consistent with existing arrays' style (lowerCamelCase, same key names across similar arrays — e.g., always `image`, never mix `img`/`photo`/`image`).
-2. Add a render function in `js/render.js` that maps the array to DOM nodes. Follow the pattern of the existing render functions — same function naming convention (`renderProjects`, `renderTeam`, etc.), same "find container → clear it → map and append" structure.
-3. Add the empty container element in `index.html` in the correct section order (see `architecture.md` section order).
-4. Style with Tailwind utility classes only. Don't add custom CSS unless Tailwind genuinely can't express it — if you do, it goes in `index.css`, documented with a comment explaining why.
+- Projects, services, tech stack, "why us" reasons, testimonials, team, socials, hero metrics → `lib/data.ts`.
+- Company name, emails, address, nav links, the availability line next to the logo → `lib/site.ts`.
+- The code shown in the hero window → `lib/code-samples.ts`.
+- A new or changed image → put the original in `assets/`, add it to `scripts/optimize-images.mjs`, run `npm run images`, and record the printed width/height in `lib/data.ts`.
 
-## Adding a static section (text-only, non-repeating)
+## Adding a new content-driven section
 
-1. Write directly in `index.html` inside the appropriate `<section>`.
-2. Use placeholder copy in the agreed tone until real copy is supplied — mark placeholder text clearly (e.g., an HTML comment `<!-- PLACEHOLDER COPY -->` above it) so it's easy to find and replace later.
+1. Add the type and the array to `lib/data.ts`. Keep keys consistent with existing arrays (lowerCamelCase; always `image`, never `img`/`photo`).
+2. Add a component in `components/` that maps the array to markup. Follow the existing sections: `<section id="…" aria-labelledby="…-title">`, a `<SectionHeading>`, content wrapped in `<Reveal>`, cards using the `.card` class with `data-spotlight`.
+3. Add it to `app/page.tsx` in scroll order. If it should be in the navigation, add it to `navLinks` in `lib/site.ts`.
+4. Keep it a server component unless it needs state or event handlers.
+
+## Adding a static section
+
+Write it as a server component with its copy inline. If the copy is a placeholder, mark it with a `{/* PLACEHOLDER COPY */}` comment so it is easy to find — and do not ship placeholder claims (quotes, numbers, client names) as if they were real.
+
+## Content rules
+
+- Everything published must be true. No invented testimonials, metrics, client names or logos. A testimonial is only shown when `verified: true`; set that only for a real quote the client agreed to.
+- A project's `highlight` is a fact about the project (what it does, where it's live), not a made-up performance figure.
+- Never render a link, button or hover cue that leads nowhere. No `href="#"`.
 
 ## Styling conventions
 
-- Tailwind utility-first. Avoid custom classes unless reused 3+ times, in which case extract with `@apply` in `index.css`.
-- All colors via CSS variables (see `architecture.md` theming section) — never a raw hex code in a class.
-- Mobile-first: write the unprefixed (mobile) classes first, then layer `sm:`/`md:`/`lg:` on top.
+- Tailwind utility-first. Extract a class into `@layer components` in `app/globals.css` only when it's reused 3+ times or can't be expressed with utilities (the existing ones: `.btn`, `.card`, `.chip`, `.eyebrow`, `.glow`, `.flow-line`).
+- Colours come from design tokens only: `bg-canvas`, `bg-panel`, `border-line`, `text-fg`, `text-muted`, `text-faint`, `text-accent`, `text-iris-soft`, `text-ok`/`warn`/`err`. Need a new colour? Add a `--color-*` token to `@theme` first. Raw hex values and default-palette classes (`bg-zinc-900`) do not work and fail the unit tests.
+- Body copy is at least `text-[0.95rem]`; 12px (`text-xs`) is for labels and chips only.
+- Mobile-first: write the unprefixed (phone) classes first, then layer `sm:`/`md:`/`lg:`/`xl:`.
+- Use `cn()` from `lib/cn.ts` for conditional classes.
 
-## JS conventions
+## TypeScript / React conventions
 
-- Plain JS, no framework. Prefer small, named functions over large inline scripts.
-- One responsibility per file (`render.js` renders, `animations.js` animates, `contact.js` handles the form) — don't mix concerns into one file as the project grows.
-- No global variables beyond what's necessary to wire modules together; prefer function parameters/returns.
+- TypeScript strict mode; no `any`.
+- One component per file, named exports, file name matches the component.
+- Pure logic (validation, tokenizing, layout maths) lives in `lib/` so it can be unit-tested without a DOM.
+- Import with the `@/` alias (`@/lib/data`, `@/components/ui/Reveal`).
 
 ## Animations
 
-- Use `IntersectionObserver` for scroll reveals — reuse the existing observer setup in `animations.js`, don't create a new one per section.
-- Hover states are CSS-only.
-- Keep it light — if a new feature seems to need a heavy animation library, stop and check `scope.md`/`audit.md` first.
+- Scroll reveal → `<Reveal>` (optionally with `delay` for staggering). Don't create new `IntersectionObserver`s for reveals.
+- Framer Motion → `m.*` components only (the provider uses `LazyMotion strict`).
+- Above-the-fold or decorative loops → CSS keyframes in `globals.css`, exposed as `animate-*` utilities.
+- A looping animation may animate only `transform` and `opacity`. Never loop `left`/`top`, `background-position`, `stroke-dashoffset`, `visibility`, sizes or colours — move a wider strip with `transform` instead (see `.flow-line`), or run the effect on hover.
+- The largest text on screen at load (the hero headline) must not start at `opacity: 0`.
+- Hover effects are CSS-only. Keep motion light and make sure it still reads correctly with reduced motion on.
+
+## Accessibility
+
+- Every section has a heading; heading levels don't skip (`h1` → `h2` → `h3` → `h4`).
+- Interactive elements are real `<a>`/`<button>` elements, at least 24×24px, with a visible focus ring (never remove the outline).
+- Decorative graphics get `aria-hidden="true"`; meaningful images get real `alt` text; icon-only controls get an `aria-label`.
+- Status messages go in an `aria-live` region next to the control that triggered them.
 
 ## When you're done
 
-- Run through `check.md` before considering the feature complete.
-- Write or update tests per `test.md`.
+- Run `npm run typecheck`, `npm test` and `npm run build`.
+- Run through `check.md`, then the manual checklist in `test.md`.
 - Log the change in `document.md`.
 - If the change altered a standard or convention (not just added content), log it in `audit.md` too.

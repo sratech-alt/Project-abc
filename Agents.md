@@ -4,7 +4,9 @@ Read this file first. It combines everything in `/docs` into one map — the ind
 
 ## Project Summary
 
-**Sabiora** — a single-page portfolio/marketing website for an agency. Built with plain HTML, Tailwind CSS, and plain JavaScript. Mobile-first, no framework, no backend. Content that repeats (projects, team, testimonials, social links) is driven by JS arrays in `data.js` so it can be edited without touching markup. Theming (beige primary, accent TBD) is controlled via CSS custom properties in `index.css`. Contact form is wired for EmailJS.
+**Sabiora** — a single-page portfolio/marketing website for Sabiora Technologies. Built with Next.js (App Router), React, TypeScript and Tailwind CSS v4, and exported as a static site (`npm run build` → `out/`). Mobile-first, dark-only, no backend. Content that repeats (projects, services, tech stack, team, testimonials, social links) is driven by typed arrays in `lib/data.ts` so it can be edited without touching markup. Every colour is a design token in `app/globals.css`; Tailwind's default palette is switched off. The contact form sends through EmailJS. The stack changed on 2026-10-04 — see `audit.md`.
+
+Quick start: `npm install`, then `npm run dev`. Before finishing any change: `npm run typecheck && npm test && npm run build`.
 
 ## The Doc Set, In Order Of Use
 
@@ -40,13 +42,15 @@ Read this file first. It combines everything in `/docs` into one map — the ind
 
 ## Core Constraints (from scope.md — always true unless formally revised)
 
-- Single-page, scroll-based navigation — no routing
-- Plain HTML/CSS/JS — no framework, no required build step
-- Mobile-first responsive design
-- All repeatable content is array-driven (`projects`, `team`, `testimonials`, `socials`)
-- All colors via CSS custom properties — never hardcoded hex values
-- Light animations only (scroll reveal + CSS hover) — no animation library
-- Out of scope: blog, multi-language, pricing page, backend, framework adoption — unless scope is formally revised via `audit.md`
+- Single-page, scroll-based navigation — no routing, no extra pages
+- Next.js + React + TypeScript, statically exported — it must always build to plain files in `out/` with no server
+- Mobile-first responsive design; no horizontal scroll from 320px up
+- All repeatable content is array-driven from `lib/data.ts` (`projects`, `services`, `stack`, `reasons`, `team`, `testimonials`, `socials`)
+- All colors are design tokens in `app/globals.css` — never hardcoded hex values or default-palette classes (unit-tested)
+- Dark theme only — no light theme, no toggle
+- Motion stays light: `<Reveal>` for scroll reveals (Framer Motion via `m.*`), CSS for everything else; reduced motion and no-JS must still work
+- Content must be true — no invented testimonials, metrics or client names; no links or buttons that lead nowhere
+- Out of scope: blog, multi-language, pricing page, backend, new dependencies, extra routes — unless scope is formally revised via `audit.md`
 
 ## Golden Rule
 

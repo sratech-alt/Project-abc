@@ -5,33 +5,49 @@ Run through this before marking any change complete. This checks _conformance_ t
 ## Scope conformance
 
 - [ ] Does this change fall within `scope.md`? If not, was it added to scope via an `audit.md` entry first?
-- [ ] Does it avoid introducing anything explicitly listed as out-of-scope (blog, multi-language, pricing page, framework, backend)?
+- [ ] Does it avoid introducing anything explicitly listed as out-of-scope (blog, multi-language, pricing page, backend, extra routes, light theme)?
+- [ ] Does it add a dependency? If so, is there an `audit.md` entry for it?
 
 ## Architecture conformance
 
 - [ ] Does the file live in the correct location per `architecture.md`'s file structure?
-- [ ] If it's repeatable content (project, team member, testimonial, social link), is it array-driven from `data.js` rather than hardcoded in `index.html`?
-- [ ] If it's a static section, is it plain markup in `index.html` with no unnecessary JS?
-- [ ] Are all colors referenced via CSS custom properties — zero raw hex values in HTML/JS/Tailwind classes?
-- [ ] Is the responsive approach mobile-first (base classes = mobile, breakpoints layer up)?
+- [ ] If it's repeatable content, is it driven from an array in `lib/data.ts` rather than hardcoded in a component?
+- [ ] Is the component a server component unless it genuinely needs `'use client'`?
+- [ ] Are all colours design tokens — zero raw hex values and zero default-palette classes in components?
+- [ ] Is the responsive approach mobile-first (base classes = phone, breakpoints layer up)?
+- [ ] Does the site still export statically (`npm run build` produces `out/` with no errors)?
+
+## Content conformance
+
+- [ ] Is everything on the page true? No invented quotes, metrics, client names or logos.
+- [ ] Are testimonials shown only when `verified: true`?
+- [ ] Does every link, button and hover cue lead somewhere real (no `href="#"`)?
+- [ ] Are external links (socials, store pages) confirmed to load?
 
 ## Code style conformance
 
-- [ ] Does new JS follow the single-responsibility file split (`render.js` / `animations.js` / `contact.js`)?
-- [ ] Are function and data-key naming conventions consistent with existing code (see `develop.md`)?
-- [ ] Are Tailwind utility classes used instead of new custom CSS, unless justified and documented?
-- [ ] Any placeholder content (copy, EmailJS IDs, images) clearly marked as placeholder?
+- [ ] TypeScript strict, no `any`; one component per file; pure logic in `lib/`.
+- [ ] Are naming conventions consistent with existing code (see `develop.md`)?
+- [ ] Are Tailwind utilities used instead of new custom CSS, unless justified and documented?
 
 ## Animation conformance
 
-- [ ] Scroll reveals use the existing `IntersectionObserver` setup, not a new one?
-- [ ] Hover effects are CSS-only, no unnecessary JS listeners?
-- [ ] No new animation dependency introduced without an `audit.md` entry?
+- [ ] Scroll reveals use `<Reveal>`, not a new observer?
+- [ ] Framer Motion used via `m.*` only; above-the-fold motion is CSS, not JS?
+- [ ] Does every looping animation change only `transform`/`opacity`?
+- [ ] Does it still look right with reduced motion on, and with JavaScript off?
+
+## Accessibility conformance
+
+- [ ] Heading levels in order; every interactive element reachable by keyboard with a visible focus ring?
+- [ ] Text contrast at least WCAG AA; tap targets at least 24×24px?
+- [ ] Images have meaningful `alt` (or `alt=""`/`aria-hidden` if decorative)?
 
 ## Regression check
 
 - [ ] Does this change break any existing section's layout, spacing, or responsiveness?
-- [ ] Does it still load without a build step (or with only the agreed build step, if one was formally adopted)?
+- [ ] No horizontal scroll at 320, 375, 768, 1024 and 1280px?
+- [ ] `npm run typecheck`, `npm test` and `npm run build` all pass?
 
 ## Outcome
 
