@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpRight, CircleAlert, CircleCheck, LoaderCircle, Mail, MapPin, Send, type LucideIcon } from 'lucide-react';
+import { ArrowUpRight, CircleAlert, CircleCheck, LoaderCircle, Mail, MapPin, Phone, Send, type LucideIcon } from 'lucide-react';
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { Reveal } from '@/components/ui/Reveal';
 import { cn } from '@/lib/cn';
@@ -201,6 +201,9 @@ export function Contact() {
                   </ContactRow>
                   <ContactRow icon={Mail} label="General contact" href={`mailto:${site.emails.general}`}>
                     <Email address={site.emails.general} />
+                  </ContactRow>
+                  <ContactRow icon={Phone} label="Phone" href={`tel:${site.phone.e164}`}>
+                    {site.phone.display}
                   </ContactRow>
                   <ContactRow icon={MapPin} label="Office">
                     {site.address}

@@ -7,7 +7,8 @@ export const site = {
   name: 'Sabiora Technologies',
   shortName: 'Sabiora',
   url: 'https://sabioratechnologies.com',
-  title: 'Sabiora Technologies — Custom Software, Web & Mobile Development in Kathmandu',
+  /** Keep to 60 characters or fewer — search results cut longer titles off. */
+  title: 'Sabiora Technologies — Software Company in Kathmandu, Nepal',
   description:
     'Sabiora Technologies is a software development studio in Kathmandu, Nepal. We engineer full-stack web apps, mobile apps and custom software — from architecture and UI/UX to deployment and scaling.',
   city: 'Kathmandu',
@@ -15,6 +16,12 @@ export const site = {
   countryCode: 'NP',
   postalCode: '44600',
   address: 'Kathmandu, Nepal 44600',
+  phone: {
+    /** As shown on the page. */
+    display: '+977 9764397139',
+    /** For tel: links and structured data — the same digits with no spaces. */
+    e164: '+9779764397139',
+  },
   emails: {
     sales: 'sales@sabioratechnologies.com',
     general: 'contact@sabioratechnologies.com',

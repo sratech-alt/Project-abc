@@ -7,7 +7,7 @@ export function About() {
     <section id="about" aria-labelledby="about-title" className="relative py-16 sm:py-20 lg:py-24">
       <div className="container-page grid items-start gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
         <Reveal>
-          <SectionHeading id="about-title" eyebrow="About Sabiora" title="One Kathmandu team that owns the whole stack." />
+          <SectionHeading id="about-title" eyebrow="About Sabiora" title="A full-stack software development company in Kathmandu, Nepal." />
           <div className="mt-6 max-w-xl space-y-5 text-base leading-relaxed text-muted sm:text-lg">
             <p>
               <strong className="font-semibold text-fg">Sabiora Technologies</strong> is a software development company

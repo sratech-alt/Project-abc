@@ -54,6 +54,12 @@ If someone with no context on this project read only this file top to bottom, th
 
 ## Change Log
 
+### 2026-10-04 — SEO: Shorter Title, Key Phrase in a Heading, Phone Number
+**What:** (1) Page title shortened from 77 to 59 characters — "Sabiora Technologies — Software Company in Kathmandu, Nepal" — so search results no longer cut it off; a unit test keeps it at 60 or under. (2) The About heading now reads "A full-stack software development company in Kathmandu, Nepal.", putting the phrase people search for back into a heading (it had been in body text only since the redesign). (3) Added the company phone number (+977 9764397139) to the contact section, the footer and the structured data (`telephone`), stored once in `lib/site.ts`.
+**Why:** Owner asked what more could be done for SEO after the site was submitted to Google Search Console and Bing, and supplied the phone number. The site is now verified in both (Bing via `public/BingSiteAuth.xml`, Google via a DNS record), with the sitemap submitted.
+**Files touched:** lib/site.ts, components/About.tsx, components/Contact.tsx, components/Footer.tsx, app/layout.tsx, lib/data.test.ts, docs/document.md
+**Related:** test.md — two new unit tests (title length, phone format). No standards changed.
+
 ### 2026-10-04 — Post-Redesign Audit Fixes, Performance Pass, Footer Wave Restored
 **What:** A second audit of the redesigned build (axe accessibility engine, Lighthouse, and browser checks at sizes and states not covered the first time), the fixes it led to, and the footer wave.
 

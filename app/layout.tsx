@@ -56,6 +56,7 @@ const structuredData = {
   image: `${site.url}/og.png`,
   description: site.description,
   email: site.emails.sales,
+  telephone: site.phone.e164,
   address: {
     '@type': 'PostalAddress',
     addressLocality: site.city,

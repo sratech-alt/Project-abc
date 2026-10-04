@@ -124,6 +124,15 @@ describe('links', () => {
     }
   });
 
+  it('the phone number is international, and the link form matches what is displayed', () => {
+    expect(site.phone.e164).toMatch(/^\+\d{8,15}$/);
+    expect(site.phone.display.replace(/[^+\d]/g, '')).toBe(site.phone.e164);
+  });
+
+  it('the page title fits in a search result', () => {
+    expect(site.title.length).toBeLessThanOrEqual(60);
+  });
+
   it('contact addresses look like email addresses', () => {
     for (const address of Object.values(site.emails)) expect(address).toMatch(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/);
   });

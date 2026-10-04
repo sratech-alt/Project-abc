@@ -1,4 +1,4 @@
-import { ArrowUp, Mail, MapPin } from 'lucide-react';
+import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react';
 import Image from 'next/image';
 import { FooterWave } from '@/components/FooterWave';
 import { SocialIcon } from '@/components/ui/SocialIcon';
@@ -61,6 +61,15 @@ export function Footer() {
                   <span>
                     <span className="sr-only">General: </span>
                     {site.emails.general}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${site.phone.e164}`} className={`${linkClass} flex items-start gap-2.5`}>
+                  <Phone className="mt-1 size-4 shrink-0 text-accent" aria-hidden="true" />
+                  <span>
+                    <span className="sr-only">Phone: </span>
+                    {site.phone.display}
                   </span>
                 </a>
               </li>
