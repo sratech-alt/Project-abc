@@ -3,5 +3,8 @@ node_modules/
 out/
 next-env.d.ts
 *.tsbuildinfo
-.env*.local
+# Environment files hold keys and must never be committed. Only the example (names, no values) is tracked.
+.env
+.env.*
+!.env.example
 .DS_Store
