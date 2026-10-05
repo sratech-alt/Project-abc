@@ -68,10 +68,7 @@ export function CodeTerminal() {
       onFocusCapture={() => setAutoplay(false)}
     >
       {/* Ambient glow behind the window */}
-      <div
-        aria-hidden="true"
-        className="glow -inset-x-10 -top-10 -bottom-16 [--glow-color:var(--color-iris)] [--glow-opacity:0.22]"
-      />
+      <div aria-hidden="true" className="glow -inset-x-10 -top-10 -bottom-16 [--glow-color:var(--color-iris)] [--glow-opacity:0.22]" />
 
       <div className="relative overflow-hidden rounded-2xl border border-line-strong/70 bg-raised/90 shadow-[0_30px_90px_-40px_var(--color-accent)]">
         {/* Title bar */}
@@ -113,13 +110,7 @@ export function CodeTerminal() {
         </div>
 
         {/* Code */}
-        <div
-          id="code-panel"
-          role="tabpanel"
-          aria-labelledby={`code-tab-${active.id}`}
-          tabIndex={0}
-          className="overflow-x-auto py-4"
-        >
+        <div id="code-panel" role="tabpanel" aria-labelledby={`code-tab-${active.id}`} tabIndex={0} className="overflow-x-auto py-4">
           <pre
             className="w-max min-w-full font-mono text-[0.78rem] sm:text-[0.8125rem]"
             style={{ lineHeight: LINE_HEIGHT_EM, minHeight: `${MAX_LINES * LINE_HEIGHT_EM}em` }}
@@ -143,7 +134,10 @@ export function CodeTerminal() {
                           </span>
                         ))}
                     {lineIndex === lines.length - 1 ? (
-                      <span className="ml-0.5 inline-block h-[1.05em] w-[0.5em] translate-y-[0.2em] animate-blink bg-accent" aria-hidden="true" />
+                      <span
+                        className="ml-0.5 inline-block h-[1.05em] w-[0.5em] translate-y-[0.2em] animate-blink bg-accent"
+                        aria-hidden="true"
+                      />
                     ) : null}
                   </span>
                 </span>

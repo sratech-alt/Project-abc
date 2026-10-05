@@ -71,16 +71,24 @@ export default async function JobPage({ params }: { params: Promise<Params> }) {
 
         <div className="container-page">
           <div className="mx-auto max-w-3xl">
-            <a href="/careers" className="flex w-fit items-center gap-2 py-1.5 text-sm font-medium text-muted transition-colors hover:text-accent">
+            <a
+              href="/careers"
+              className="flex w-fit items-center gap-2 py-1.5 text-sm font-medium text-muted transition-colors hover:text-accent"
+            >
               <ArrowLeft className="size-4" aria-hidden="true" />
               All open roles
             </a>
 
             {job.department ? <p className="eyebrow mt-7 flex">{job.department}</p> : null}
-            <h1 className="mt-4 text-[clamp(1.9rem,7vw,2.5rem)] leading-[1.1] font-extrabold tracking-[-0.03em] sm:text-5xl">{job.title}</h1>
+            <h1 className="mt-4 text-[clamp(1.9rem,7vw,2.5rem)] leading-[1.1] font-extrabold tracking-[-0.03em] sm:text-5xl">
+              {job.title}
+            </h1>
             <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">{job.summary}</p>
 
-            <ul className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-line/90 bg-line/90 sm:grid-cols-2" aria-label="Role details">
+            <ul
+              className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-line/90 bg-line/90 sm:grid-cols-2"
+              aria-label="Role details"
+            >
               {facts.map(({ icon: Icon, label, value }) => (
                 <li key={label} className="flex items-center gap-3.5 bg-raised/90 px-4 py-4 sm:px-5">
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent">
@@ -106,7 +114,10 @@ export default async function JobPage({ params }: { params: Promise<Params> }) {
             <h2 className="text-xl font-semibold tracking-tight">How to apply</h2>
             <p className="mt-2 text-[0.95rem] leading-relaxed [overflow-wrap:anywhere] text-muted">
               Email your CV and a few lines about work you’re proud of to{' '}
-              <a href={applyHref(job)} className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+              <a
+                href={applyHref(job)}
+                className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+              >
                 {job.applyEmail}
               </a>
               . We read every application.

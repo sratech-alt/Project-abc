@@ -15,15 +15,21 @@ describe('renderMarkdown', () => {
     expect(html).toContain('&lt;script&gt;alert(1)&lt;/script&gt;');
   });
 
-  it.each(['javascript:alert(1)', 'JAVASCRIPT:alert(1)', 'data:text/html,<b>x</b>', 'vbscript:x'])('drops the address of an unsafe link (%s)', (href) => {
-    const html = renderMarkdown(`[click me](${href})`);
-    expect(html).not.toContain('href=');
-    expect(html).toContain('click me');
-  });
+  it.each(['javascript:alert(1)', 'JAVASCRIPT:alert(1)', 'data:text/html,<b>x</b>', 'vbscript:x'])(
+    'drops the address of an unsafe link (%s)',
+    (href) => {
+      const html = renderMarkdown(`[click me](${href})`);
+      expect(html).not.toContain('href=');
+      expect(html).toContain('click me');
+    },
+  );
 
-  it.each(['https://example.com/a', 'http://example.com', 'mailto:a@b.co', 'tel:+9779764397139', '/#contact', '#section'])('keeps a safe link (%s)', (href) => {
-    expect(renderMarkdown(`[link](${href})`)).toContain(`href="${href}"`);
-  });
+  it.each(['https://example.com/a', 'http://example.com', 'mailto:a@b.co', 'tel:+9779764397139', '/#contact', '#section'])(
+    'keeps a safe link (%s)',
+    (href) => {
+      expect(renderMarkdown(`[link](${href})`)).toContain(`href="${href}"`);
+    },
+  );
 
   it('opens external links in a new tab without leaking the opener, and internal links in place', () => {
     expect(renderMarkdown('[out](https://example.com)')).toContain('target="_blank" rel="noopener noreferrer"');
@@ -31,7 +37,9 @@ describe('renderMarkdown', () => {
   });
 
   it('only allows images from https or the site itself', () => {
-    expect(renderMarkdown('![A chart](https://cdn.example.com/chart.png)')).toContain('<img src="https://cdn.example.com/chart.png" alt="A chart" loading="lazy"');
+    expect(renderMarkdown('![A chart](https://cdn.example.com/chart.png)')).toContain(
+      '<img src="https://cdn.example.com/chart.png" alt="A chart" loading="lazy"',
+    );
     expect(renderMarkdown('![x](http://insecure.example.com/a.png)')).not.toContain('<img');
     expect(renderMarkdown('![x](javascript:alert(1))')).not.toContain('<img');
   });
@@ -63,7 +71,9 @@ describe('renderMarkdown', () => {
 
 describe('plainText', () => {
   it('strips formatting, links, images, code fences and HTML', () => {
-    const text = plainText('# Title\n\nSome **bold** and _italic_ with a [link](https://x.y) and `code`.\n\n```js\nignored();\n```\n\n- item\n\n<b>tag</b>');
+    const text = plainText(
+      '# Title\n\nSome **bold** and _italic_ with a [link](https://x.y) and `code`.\n\n```js\nignored();\n```\n\n- item\n\n<b>tag</b>',
+    );
     expect(text).toBe('Title Some bold and italic with a link and code. item tag');
   });
 });

@@ -96,9 +96,15 @@ Write it as a server component with its copy inline. If the copy is a placeholde
 - Decorative graphics get `aria-hidden="true"`; meaningful images get real `alt` text; icon-only controls get an `aria-label`.
 - Status messages go in an `aria-live` region next to the control that triggered them.
 
+## Formatting and linting
+
+- Prettier decides formatting — don't hand-format. Run `npm run format` before committing (settings in `.prettierrc.json`: single quotes, 140 columns, trailing commas). The governance docs and the generated `supabase/seed.sql` are left alone (`.prettierignore`).
+- `npm run lint` must report nothing. If a rule is wrong for this project, turn it off in `eslint.config.mjs` with a comment saying why — don't scatter `eslint-disable` lines.
+- TypeScript is pinned to 6.x because the lint tooling does not support TypeScript 7 yet. Don't upgrade it without checking `npm run lint` still runs.
+
 ## When you're done
 
-- Run `npm run typecheck`, `npm test` and `npm run build`.
+- Run `npm run format`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run test:e2e` (which builds first).
 - Run through `check.md`, then the manual checklist in `test.md`.
 - Log the change in `document.md`.
 - If the change altered a standard or convention (not just added content), log it in `audit.md` too.

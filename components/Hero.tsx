@@ -29,12 +29,13 @@ export function Hero() {
             id="hero-title"
             className="mt-6 animate-rise text-[clamp(2rem,9.4vw,2.6rem)] leading-[1.06] font-extrabold tracking-[-0.035em] [animation-delay:80ms] sm:text-6xl lg:text-[3.1rem] xl:text-[4rem]"
           >
-            Engineering <span className="whitespace-nowrap">High-Performance</span> Digital Products <span className="text-gradient">That Scale.</span>
+            Engineering <span className="whitespace-nowrap">High-Performance</span> Digital Products{' '}
+            <span className="text-gradient">That Scale.</span>
           </h1>
 
           <p className="mt-6 max-w-xl animate-rise text-base leading-relaxed text-muted [animation-delay:80ms] sm:text-lg">
-            We design, build and run full-stack web apps, mobile apps and custom software — one team covering system
-            architecture, UI/UX, production deployment and scaling.
+            We design, build and run full-stack web apps, mobile apps and custom software — one team covering system architecture, UI/UX,
+            production deployment and scaling.
           </p>
 
           <div className="mt-9 flex animate-fade-up flex-col gap-3 [animation-delay:240ms] sm:flex-row">

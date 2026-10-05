@@ -29,9 +29,7 @@ function Node({ icon: Icon, label, active = false }: { icon: LucideIcon; label: 
       <div
         className={cn(
           'flex size-10 items-center justify-center rounded-xl border bg-panel',
-          active
-            ? 'border-accent/60 text-accent shadow-[0_0_22px_-6px_var(--color-accent)]'
-            : 'border-line-strong text-muted',
+          active ? 'border-accent/60 text-accent shadow-[0_0_22px_-6px_var(--color-accent)]' : 'border-line-strong text-muted',
         )}
       >
         <Icon className="size-[1.1rem]" />
@@ -240,9 +238,7 @@ function CanvasVisual() {
       </div>
       <div className="absolute right-9 bottom-7 flex items-start transition-transform duration-500 ease-out group-hover:-translate-x-5 group-hover:-translate-y-3">
         <MousePointer2 className="size-4 fill-iris-soft text-iris-soft" />
-        <span className="mt-3 rounded-md bg-iris-soft px-1.5 font-mono text-[0.625rem] leading-4 font-semibold text-canvas">
-          Designer
-        </span>
+        <span className="mt-3 rounded-md bg-iris-soft px-1.5 font-mono text-[0.625rem] leading-4 font-semibold text-canvas">Designer</span>
       </div>
     </>
   );
@@ -365,10 +361,7 @@ function UptimeVisual() {
             <span className="w-[4.5rem] shrink-0 font-mono text-xs text-muted">{monitor.name}</span>
             <span className="flex h-5 min-w-0 flex-1 gap-[3px]">
               {Array.from({ length: TICKS }, (_, tick) => (
-                <span
-                  key={tick}
-                  className={cn('min-w-0 flex-1 rounded-full', tick === monitor.warnAt ? 'bg-warn' : 'bg-ok/75')}
-                />
+                <span key={tick} className={cn('min-w-0 flex-1 rounded-full', tick === monitor.warnAt ? 'bg-warn' : 'bg-ok/75')} />
               ))}
             </span>
           </div>
@@ -394,10 +387,7 @@ const VISUALS: Record<ServiceVisual, () => ReactNode> = {
 export function ServiceIllustration({ kind, className }: { kind: ServiceVisual; className?: string }) {
   const Visual = VISUALS[kind];
   return (
-    <div
-      aria-hidden="true"
-      className={cn('relative overflow-hidden rounded-xl border border-line/80 bg-canvas/70', className)}
-    >
+    <div aria-hidden="true" className={cn('relative overflow-hidden rounded-xl border border-line/80 bg-canvas/70', className)}>
       <div className="bg-dots absolute inset-0 opacity-40" />
       <Visual />
     </div>

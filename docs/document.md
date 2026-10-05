@@ -54,6 +54,20 @@ If someone with no context on this project read only this file top to bottom, th
 
 ## Change Log
 
+### 2026-10-05 — ESLint, Prettier and a Playwright Browser Suite
+**What:** Second part of the owner's "do all" request.
+
+- _ESLint_ with the Next.js rule sets (`eslint.config.mjs`); the whole project lints clean. One rule is switched off on purpose: the site navigates with ordinary links.
+- _Prettier_ (`.prettierrc.json`), applied once across the code. TypeScript is pinned to 6.x because the lint tooling does not yet support TypeScript 7.
+- _Browser tests_ in `e2e/` (Playwright with the axe accessibility engine), run with `npm run test:e2e` against the built site: 60 tests covering layout overflow at five widths, accessibility, navigation and anchors, the phone menu, the code window, filters, card links, reduced motion, no-JavaScript, and the contact form. No test ever sends a real message. `scripts/serve-out.mjs` serves `out/` the way the host does.
+- _Fix found by the new tests:_ pressing Send on an empty form within 2.5 seconds of the page loading showed a generic "couldn't send" error, because the anti-bot speed check ran before the field checks. Fields are now checked first, so the visitor is told what is missing.
+- _Fix found by a unit test:_ blog topic addresses mangled accented letters ("Résumé" became `re-sume`); they are now folded to plain letters (`resume`).
+
+`npm audit` reports a high-severity advisory in `braces`, reached only through the lint tooling (`eslint-config-next`); nothing in the built site depends on it (`npm audit --omit=dev` is clean).
+**Why:** Owner instruction to complete all remaining work; the browser checks used during the redesign were throwaway scripts that nobody else could rerun.
+**Files touched:** new `eslint.config.mjs`, `.prettierrc.json`, `.prettierignore`, `playwright.config.ts`, `e2e/*`, `scripts/serve-out.mjs`; changed `lib/validation.ts`, `lib/blog.ts` and their tests, `package.json`, `.gitignore`; formatting-only changes across `app/`, `components/`, `lib/`, `scripts/`; docs.
+**Related:** audit.md — 2026-10-05 "Scope revised…" (items 5 and 6); test.md — browser coverage section, 146 unit tests.
+
 ### 2026-10-05 — Catalog in Supabase, Detail Pages, Blog Extras, Privacy Page, Stale-Content Fix
 **What:** First part of the owner's "do all" request.
 

@@ -115,7 +115,11 @@ export function Projects({ projects }: { projects: Project[] }) {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <StoreLinks project={project} />
-                    <a href={`/projects/${project.id}`} className="btn btn-glass h-10 px-4 text-sm" aria-label={`View case study: ${project.title}`}>
+                    <a
+                      href={`/projects/${project.id}`}
+                      className="btn btn-glass h-10 px-4 text-sm"
+                      aria-label={`View case study: ${project.title}`}
+                    >
                       View case study
                       <ArrowUpRight className="size-4" aria-hidden="true" />
                     </a>

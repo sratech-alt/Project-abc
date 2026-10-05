@@ -10,14 +10,12 @@ export function About() {
           <SectionHeading id="about-title" eyebrow="About Sabiora" title="A full-stack software development company in Kathmandu, Nepal." />
           <div className="mt-6 max-w-xl space-y-5 text-base leading-relaxed text-muted sm:text-lg">
             <p>
-              <strong className="font-semibold text-fg">Sabiora Technologies</strong> is a software development company
-              based in Kathmandu, Nepal. We turn business requirements into reliable, scalable digital products for
-              startups and organizations.
+              <strong className="font-semibold text-fg">Sabiora Technologies</strong> is a software development company based in Kathmandu,
+              Nepal. We turn business requirements into reliable, scalable digital products for startups and organizations.
             </p>
             <p>
               Backend, frontend and data layer are built by the same people — with{' '}
-              <strong className="font-semibold text-fg">production-grade architecture from day one</strong>, not just
-              prototypes.
+              <strong className="font-semibold text-fg">production-grade architecture from day one</strong>, not just prototypes.
             </p>
           </div>
         </Reveal>
@@ -34,7 +32,10 @@ export function About() {
             </div>
             <dl className="divide-y divide-line/70">
               {aboutFacts.map((fact) => (
-                <div key={fact.label} className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 px-5 py-3.5 sm:grid-cols-[7.5rem_minmax(0,1fr)]">
+                <div
+                  key={fact.label}
+                  className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 px-5 py-3.5 sm:grid-cols-[7.5rem_minmax(0,1fr)]"
+                >
                   <dt className="font-mono text-xs leading-6 tracking-wide text-faint uppercase">{fact.label}</dt>
                   <dd className="text-[0.95rem] leading-6 font-medium text-fg">{fact.value}</dd>
                 </div>

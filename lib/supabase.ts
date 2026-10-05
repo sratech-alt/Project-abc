@@ -36,17 +36,21 @@ const directGet: Transport = (input, init) =>
   new Promise<Response>((resolve, reject) => {
     const url = new URL(String(input));
     const client = url.protocol === 'http:' ? http : https;
-    const request = client.request(url, { method: 'GET', headers: init?.headers as Record<string, string>, timeout: TIMEOUT_MS }, (response) => {
-      const chunks: Buffer[] = [];
-      response.on('data', (chunk: Buffer) => chunks.push(chunk));
-      response.on('error', reject);
-      response.on('end', () => {
-        const status = response.statusCode ?? 502;
-        // A Response can't be built with a status outside 200–599, or with a body on 204/304.
-        const safeStatus = status >= 200 && status <= 599 && status !== 204 && status !== 304 ? status : 502;
-        resolve(new Response(Buffer.concat(chunks), { status: safeStatus }));
-      });
-    });
+    const request = client.request(
+      url,
+      { method: 'GET', headers: init?.headers as Record<string, string>, timeout: TIMEOUT_MS },
+      (response) => {
+        const chunks: Buffer[] = [];
+        response.on('data', (chunk: Buffer) => chunks.push(chunk));
+        response.on('error', reject);
+        response.on('end', () => {
+          const status = response.statusCode ?? 502;
+          // A Response can't be built with a status outside 200–599, or with a body on 204/304.
+          const safeStatus = status >= 200 && status <= 599 && status !== 204 && status !== 304 ? status : 502;
+          resolve(new Response(Buffer.concat(chunks), { status: safeStatus }));
+        });
+      },
+    );
     request.on('timeout', () => request.destroy(new Error(`no answer within ${TIMEOUT_MS / 1000}s`)));
     request.on('error', reject);
     request.end();

@@ -15,13 +15,15 @@ This is a static marketing site, so "testing" means small automated checks for t
 | Markdown rendering (`lib/markdown.ts`)                          | Automated: raw HTML escaped, unsafe links/images dropped, headings, code, tables     |
 | Blog and careers pages with real content                        | Manual, after publishing a row                                                       |
 | EmailJS delivery itself                                         | Manual (needs the live service; never send test messages from automated runs)        |
-| Layout, responsiveness, visual spacing                          | Manual, cross-device/browser                                                         |
-| Animation, reduced motion, no-JavaScript fallback               | Manual                                                                               |
-| Accessibility (contrast, alt text, keyboard nav)                | Manual checklist, plus a Lighthouse/axe pass                                         |
+| Layout overflow, navigation, interactions, the form, a11y rules | Automated in a real browser: `npm run test:e2e` (Playwright + axe)                   |
+| Visual spacing, how it looks and feels                          | Manual, cross-device/browser                                                         |
+| Performance                                                     | Manual: a Lighthouse pass                                                            |
 
 ## Automated testing setup
 
-- Runner: Vitest. Run with `npm test`. Config: `vitest.config.mts`.
+- Unit tests: Vitest. Run with `npm test`. Config: `vitest.config.mts`.
+- Browser tests: Playwright, in `e2e/`. Run with `npm run test:e2e`, which builds the site and tests the real `out/` folder (`npm run test:e2e:only` skips the build). They use the Chrome installed on the machine; on one without Chrome, run `npx playwright install chromium` and remove `channel` from `playwright.config.ts`.
+- The browser tests never send a contact-form message: every request to EmailJS is intercepted and answered inside the test.
 - Test files live alongside their source: `lib/validation.test.ts` next to `lib/validation.ts`, etc.
 - Logic that needs testing belongs in `lib/` as pure functions, so tests need no browser or DOM.
 - `npm run typecheck` and `npm run build` are part of "the tests passing".
@@ -36,6 +38,11 @@ This is a static marketing site, so "testing" means small automated checks for t
 - `lib/catalog.test.ts` — the grid repair (`normalizeSpans`) always produces full rows; row-to-service/project/stack mapping with safe fallbacks; unsafe project links dropped; code defaults used while tables are missing or empty, database used once it has rows; `supabase/seed.sql` matches `lib/data.ts` and never overwrites.
 - `lib/blog.test.ts` — tag slugs (including accents), topic counts, pagination with no post lost or repeated, RSS output and escaping, the quarterly availability line.
 - `lib/markdown.test.ts` — raw HTML shown as text, `javascript:`/`data:` links and non-https images dropped, external links open safely, `#` becomes `<h2>`, code blocks and tables are keyboard-scrollable.
+
+## Current browser coverage (`e2e/`)
+
+- `pages.spec.ts` — for the home page, two service pages, two project pages, blog, careers and privacy: no sideways scrolling at 320, 375, 768, 1024 and 1280px; no axe accessibility violations on desktop and phone; exactly one `h1`, a title and a description; no console errors; no image without alt text or dimensions; no dead `#` link or missing anchor target. Also: every internal link on the home page resolves; every published job and post has a working page; an unknown address shows the 404 page with a link home; `robots.txt`, `sitemap.xml` and the RSS feed are served.
+- `home.spec.ts` — header links land their section exactly under the fixed header and mark it current; deep links do the same; header links work from another page; the phone menu opens, keeps focus out of the page behind it and closes on Escape; skip link and visible focus ring; code window tabs by click and arrow key; tech-stack filter; service and project cards open their pages and link back; everything appears under reduced motion and the ticker stops; no looping animation runs on the main thread; content is readable with JavaScript off; the form blocks empty and malformed input, refuses automated browsers, sends the right fields and confirms next to the button, and reports a failed send with the sales email.
 
 ## Manual test checklist (run before any release/handoff)
 
@@ -73,4 +80,4 @@ This is a static marketing site, so "testing" means small automated checks for t
 
 ## Definition of "tested"
 
-A feature isn't done until it passes the automated tests, the build, and every relevant line of the manual checklist above.
+A feature isn't done until it passes the unit tests, the build, the browser tests, and every relevant line of the manual checklist above. The manual checklist still matters: the browser tests check that things work and fit, not that they look right.

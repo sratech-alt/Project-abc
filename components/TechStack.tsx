@@ -21,7 +21,10 @@ function Monogram({ abbr, active = true }: { abbr: string; active?: boolean }) {
 }
 
 export function TechStack({ stack }: { stack: StackCategory[] }) {
-  const allTechs = useMemo(() => stack.flatMap((category) => category.techs.map((tech) => ({ ...tech, categoryId: category.id }))), [stack]);
+  const allTechs = useMemo(
+    () => stack.flatMap((category) => category.techs.map((tech) => ({ ...tech, categoryId: category.id }))),
+    [stack],
+  );
   const [activeId, setActiveId] = useState(stack[0].id);
   const active = stack.find((category) => category.id === activeId) ?? stack[0];
 
@@ -45,7 +48,10 @@ export function TechStack({ stack }: { stack: StackCategory[] }) {
                 aria-hidden={copy === 1 ? 'true' : undefined}
                 className="mr-3 flex items-center gap-2.5 rounded-full border border-line/90 bg-panel/60 py-1.5 pr-4 pl-1.5 text-sm font-medium whitespace-nowrap text-fg"
               >
-                <span className="flex size-7 items-center justify-center rounded-full bg-accent/10 font-mono text-[0.6875rem] font-semibold text-accent" aria-hidden="true">
+                <span
+                  className="flex size-7 items-center justify-center rounded-full bg-accent/10 font-mono text-[0.6875rem] font-semibold text-accent"
+                  aria-hidden="true"
+                >
                   {tech.abbr}
                 </span>
                 {tech.name}
@@ -102,7 +108,12 @@ export function TechStack({ stack }: { stack: StackCategory[] }) {
                   >
                     <Monogram abbr={tech.abbr} active={lit} />
                     <span className="min-w-0">
-                      <span className={cn('block text-sm leading-snug font-semibold transition-colors duration-300', lit ? 'text-fg' : 'text-muted')}>
+                      <span
+                        className={cn(
+                          'block text-sm leading-snug font-semibold transition-colors duration-300',
+                          lit ? 'text-fg' : 'text-muted',
+                        )}
+                      >
                         {tech.name}
                       </span>
                       <span className="mt-0.5 block text-xs leading-snug text-faint">{tech.use}</span>

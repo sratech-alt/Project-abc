@@ -61,7 +61,10 @@ export default async function ServicePage({ params }: { params: Promise<Params> 
         </div>
 
         <div className="container-page">
-          <a href="/#services" className="flex w-fit items-center gap-2 py-1.5 text-sm font-medium text-muted transition-colors hover:text-accent">
+          <a
+            href="/#services"
+            className="flex w-fit items-center gap-2 py-1.5 text-sm font-medium text-muted transition-colors hover:text-accent"
+          >
             <ArrowLeft className="size-4" aria-hidden="true" />
             All services
           </a>

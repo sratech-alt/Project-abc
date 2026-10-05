@@ -36,10 +36,10 @@ let lastTransport = vi.fn();
 /** Makes the Supabase client answer like Supabase's Data API for the given tables; anything else "doesn't exist yet". */
 function stubDatabase(tables: Record<string, unknown[]>) {
   lastTransport = vi.fn(async (input: URL | string) => {
-      const table = new URL(String(input)).pathname.split('/').pop() ?? '';
-      return table in tables
-        ? new Response(JSON.stringify(tables[table]), { status: 200 })
-        : new Response(JSON.stringify({ code: 'PGRST205', message: 'missing' }), { status: 404 });
+    const table = new URL(String(input)).pathname.split('/').pop() ?? '';
+    return table in tables
+      ? new Response(JSON.stringify(tables[table]), { status: 200 })
+      : new Response(JSON.stringify({ code: 'PGRST205', message: 'missing' }), { status: 404 });
   });
   setTransport(lastTransport as unknown as typeof fetch);
 }
@@ -89,7 +89,15 @@ describe('toPost', () => {
   });
 
   it('fills the gaps when optional columns are empty', () => {
-    const post = toPost({ ...postRow, excerpt: '  ', cover_image_url: null, author_name: null, tags: null, updated_at: null, content_md: 'x '.repeat(200) });
+    const post = toPost({
+      ...postRow,
+      excerpt: '  ',
+      cover_image_url: null,
+      author_name: null,
+      tags: null,
+      updated_at: null,
+      content_md: 'x '.repeat(200),
+    });
     expect(post.excerpt.endsWith('…')).toBe(true);
     expect(post.excerpt.length).toBeLessThanOrEqual(158);
     expect(post.coverImage).toBeNull();
@@ -102,12 +110,25 @@ describe('toPost', () => {
 describe('toJob', () => {
   it('maps a database row to a job and falls back to the general contact address', () => {
     const job = toJob(jobRow);
-    expect(job).toMatchObject({ slug: 'backend-engineer', employmentType: 'FULL_TIME', remote: true, applyEmail: site.emails.general, closesAt: null });
+    expect(job).toMatchObject({
+      slug: 'backend-engineer',
+      employmentType: 'FULL_TIME',
+      remote: true,
+      applyEmail: site.emails.general,
+      closesAt: null,
+    });
     expect(applyHref(job)).toBe(`mailto:${site.emails.general}?subject=Application%3A%20Backend%20Engineer`);
   });
 
   it('uses the row’s own apply address when it has one, and safe defaults for odd values', () => {
-    const job = toJob({ ...jobRow, apply_email: 'jobs@example.com', employment_type: 'NOT_A_TYPE', location: null, summary: null, remote: null });
+    const job = toJob({
+      ...jobRow,
+      apply_email: 'jobs@example.com',
+      employment_type: 'NOT_A_TYPE',
+      location: null,
+      summary: null,
+      remote: null,
+    });
     expect(job.applyEmail).toBe('jobs@example.com');
     expect(job.employmentType).toBe('FULL_TIME');
     expect(job.location).toBe(`${site.city}, ${site.country}`);

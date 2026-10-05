@@ -7,11 +7,7 @@ import { cn } from '@/lib/cn';
 import { emailjsConfig, site } from '@/lib/site';
 import { validateContact, type ContactField } from '@/lib/validation';
 
-type Status =
-  | { kind: 'idle' }
-  | { kind: 'sending' }
-  | { kind: 'success' }
-  | { kind: 'error'; message: string };
+type Status = { kind: 'idle' } | { kind: 'sending' } | { kind: 'success' } | { kind: 'error'; message: string };
 
 const FALLBACK = `Please try again, or email us directly at ${site.emails.sales}.`;
 
@@ -191,8 +187,8 @@ export function Contact() {
                   Ready to Build Something <span className="text-gradient">Extraordinary?</span>
                 </h2>
                 <p className="mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg">
-                  Have an idea, a business problem, or an existing system that needs improving? Tell us about it and
-                  let’s talk about how technology can help your business grow.
+                  Have an idea, a business problem, or an existing system that needs improving? Tell us about it and let’s talk about how
+                  technology can help your business grow.
                 </p>
 
                 <ul className="mt-8 space-y-3">
@@ -315,7 +311,10 @@ export function Contact() {
 
                 <p className="mt-4 text-sm leading-relaxed text-faint">
                   We use these details only to reply to your enquiry. See our{' '}
-                  <a href="/privacy" className="font-medium text-muted underline decoration-line-strong underline-offset-4 transition-colors hover:text-accent">
+                  <a
+                    href="/privacy"
+                    className="font-medium text-muted underline decoration-line-strong underline-offset-4 transition-colors hover:text-accent"
+                  >
                     privacy page
                   </a>
                   .

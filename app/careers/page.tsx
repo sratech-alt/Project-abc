@@ -26,7 +26,10 @@ function JobRow({ job }: { job: Job }) {
         {job.department ? <p className="font-mono text-xs tracking-wider text-faint uppercase">{job.department}</p> : null}
         <h2 className="mt-1.5 text-xl leading-snug font-semibold tracking-tight">
           {/* The ::after overlay makes the whole row the link. */}
-          <a href={`/careers/${job.slug}`} className="transition-colors after:absolute after:inset-0 after:rounded-2xl group-hover:text-accent">
+          <a
+            href={`/careers/${job.slug}`}
+            className="transition-colors after:absolute after:inset-0 after:rounded-2xl group-hover:text-accent"
+          >
             {job.title}
           </a>
         </h2>
@@ -40,7 +43,10 @@ function JobRow({ job }: { job: Job }) {
           {job.remote ? <li className="chip">Remote possible</li> : null}
         </ul>
       </div>
-      <p className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-fg transition-colors group-hover:text-accent" aria-hidden="true">
+      <p
+        className="flex shrink-0 items-center gap-1.5 text-sm font-semibold text-fg transition-colors group-hover:text-accent"
+        aria-hidden="true"
+      >
         View role
         <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </p>
@@ -71,10 +77,13 @@ export default async function CareersPage() {
             <div className="card max-w-2xl p-6 sm:p-8">
               <h2 className="text-xl font-semibold tracking-tight">No open roles right now.</h2>
               <p className="mt-2.5 text-[0.95rem] leading-relaxed text-muted">
-                We don’t have a position advertised at the moment. If you think you’d be a good fit anyway, write to us
-                and tell us what you’d like to work on.
+                We don’t have a position advertised at the moment. If you think you’d be a good fit anyway, write to us and tell us what
+                you’d like to work on.
               </p>
-              <a href={`mailto:${site.emails.general}?subject=${encodeURIComponent('Working at Sabiora')}`} className="btn btn-glass mt-6 h-11 px-5 text-sm">
+              <a
+                href={`mailto:${site.emails.general}?subject=${encodeURIComponent('Working at Sabiora')}`}
+                className="btn btn-glass mt-6 h-11 px-5 text-sm"
+              >
                 {site.emails.general}
                 <ArrowUpRight className="size-4" aria-hidden="true" />
               </a>

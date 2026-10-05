@@ -6,7 +6,7 @@ Read this file first. It combines everything in `/docs` into one map — the ind
 
 **Sabiora** — the marketing website for Sabiora Technologies: a scroll-navigation home page plus service, case-study, blog, careers and privacy pages. Built with Next.js (App Router), React, TypeScript and Tailwind CSS v4, and exported as a static site (`npm run build` → `out/`). Mobile-first, dark-only, no server. Posts, jobs, services, projects and the tech stack live in a Supabase database that is read at build time (`supabase/schema.sql`, `lib/content.ts`, `lib/catalog.ts`); `lib/data.ts` holds the rest of the home-page content plus the defaults used while a catalog table is empty. Every colour is a design token in `app/globals.css`; Tailwind's default palette is switched off. The contact form sends through EmailJS. The stack changed on 2026-10-04 — see `audit.md`.
 
-Quick start: `npm install`, then `npm run dev`. Before finishing any change: `npm run typecheck && npm test && npm run build`.
+Quick start: `npm install`, then `npm run dev`. Before finishing any change: `npm run format && npm run lint && npm run typecheck && npm test && npm run test:e2e` (the last one builds the site and runs the browser tests).
 
 ## The Doc Set, In Order Of Use
 

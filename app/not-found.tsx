@@ -24,8 +24,7 @@ export default function NotFound() {
           This page <span className="text-gradient">doesn’t exist.</span>
         </h1>
         <p className="mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg">
-          The address may be mistyped, or the page may have moved. Everything {site.name} publishes lives on the
-          homepage.
+          The address may be mistyped, or the page may have moved. Everything {site.name} publishes lives on the homepage.
         </p>
         <a href="/" className="btn btn-primary mt-9 h-13 px-7 text-base">
           <ArrowLeft className="size-5" aria-hidden="true" />

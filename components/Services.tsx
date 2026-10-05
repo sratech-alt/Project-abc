@@ -87,7 +87,10 @@ function ServiceCard({ service }: { service: Service }) {
           aria-label={`${service.title}: what's included`}
         >
           What’s included
-          <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+          <ArrowUpRight
+            className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            aria-hidden="true"
+          />
         </a>
       </div>
     </article>
@@ -99,15 +102,12 @@ export function Services({ services }: { services: Service[] }) {
 
   return (
     <section id="services" aria-labelledby="services-title" className="relative py-16 sm:py-20 lg:py-24">
-      <div
-        aria-hidden="true"
-        className="glow top-24 left-1/2 h-[36rem] w-[min(70rem,100%)] -translate-x-1/2 [--glow-opacity:0.07]"
-      />
+      <div aria-hidden="true" className="glow top-24 left-1/2 h-[36rem] w-[min(70rem,100%)] -translate-x-1/2 [--glow-opacity:0.07]" />
       <div className="container-page relative">
         <Reveal>
           <SectionHeading id="services-title" eyebrow="Services" title="Everything a digital product needs, under one roof.">
-            From first concept and UI/UX design to development, deployment and ongoing support — technology that solves
-            real business problems.
+            From first concept and UI/UX design to development, deployment and ongoing support — technology that solves real business
+            problems.
           </SectionHeading>
         </Reveal>
 

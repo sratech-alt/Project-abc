@@ -177,10 +177,7 @@ export function Navbar({ pageLinks = [], availability = '' }: { pageLinks?: Page
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className={cn(
-              'h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line/70 bg-canvas/90',
-              wide ? 'xl:hidden' : 'lg:hidden',
-            )}
+            className={cn('h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line/70 bg-canvas/90', wide ? 'xl:hidden' : 'lg:hidden')}
           >
             <nav aria-label="Mobile" className="container-page flex flex-col pt-2 pb-8">
               <ul>

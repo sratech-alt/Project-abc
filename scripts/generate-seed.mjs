@@ -86,4 +86,6 @@ for (const category of stack) {
 lines.push("notify pgrst, 'reload schema';", '');
 
 await writeFile(path.join(root, 'supabase', 'seed.sql'), lines.join('\n'));
-console.log(`supabase/seed.sql written: ${services.length} services, ${projects.length} projects, ${stack.length} categories, ${order / 10} technologies`);
+console.log(
+  `supabase/seed.sql written: ${services.length} services, ${projects.length} projects, ${stack.length} categories, ${order / 10} technologies`,
+);

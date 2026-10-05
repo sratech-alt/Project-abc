@@ -28,15 +28,7 @@ export const aboutFacts: { label: string; value: string }[] = [
 
 /* ------------------------------------------------------------------ Services (bento grid) */
 
-export type ServiceVisual =
-  | 'phones'
-  | 'browser'
-  | 'checkout'
-  | 'pipeline'
-  | 'canvas'
-  | 'api'
-  | 'dashboard'
-  | 'uptime';
+export type ServiceVisual = 'phones' | 'browser' | 'checkout' | 'pipeline' | 'canvas' | 'api' | 'dashboard' | 'uptime';
 
 export type Service = {
   id: string;
@@ -57,8 +49,7 @@ export const services: Service[] = [
   {
     id: 'mobile-app',
     title: 'Mobile App Development',
-    blurb:
-      'Android and iOS apps that feel native, stay reliable and are built to scale — for businesses, startups and organizations.',
+    blurb: 'Android and iOS apps that feel native, stay reliable and are built to scale — for businesses, startups and organizations.',
     features: ['Android & iOS', 'Cross-platform', 'Business & enterprise apps', 'Booking & on-demand apps'],
     details: [
       'Android & iOS applications',
@@ -112,8 +103,7 @@ export const services: Service[] = [
   {
     id: 'cloud',
     title: 'Cloud & DevOps',
-    blurb:
-      'Containerized deployments and automated pipelines on dependable cloud infrastructure, so shipping is routine instead of risky.',
+    blurb: 'Containerized deployments and automated pipelines on dependable cloud infrastructure, so shipping is routine instead of risky.',
     features: ['Docker & containers', 'CI/CD pipelines', 'Deployment automation', 'Monitoring & backups'],
     details: [
       'Cloud application deployment',
@@ -184,8 +174,7 @@ export const services: Service[] = [
   {
     id: 'maintenance',
     title: 'Maintenance & Scaling',
-    blurb:
-      'Launch is only the beginning. We keep your product secure, fast and up to date — and help it grow with your business.',
+    blurb: 'Launch is only the beginning. We keep your product secure, fast and up to date — and help it grow with your business.',
     features: ['Security updates', 'Performance tuning', 'Feature enhancements', 'Technical consulting', 'Modernization'],
     details: [
       'Application & site maintenance',
@@ -339,12 +328,7 @@ export const projects: Project[] = [
     description:
       'Snap receipts, let AI organize the details, and keep your expenses in one place. Built with privacy and offline use in mind.',
     highlight: 'Live on iOS & Android',
-    highlights: [
-      'Snap a receipt to capture an expense',
-      'AI organizes the details',
-      'Built with privacy in mind',
-      'Works offline',
-    ],
+    highlights: ['Snap a receipt to capture an expense', 'AI organizes the details', 'Built with privacy in mind', 'Works offline'],
     image: { src: '/images/projects/aora.webp', width: 640, height: 1391 },
     tags: ['Flutter'],
     client: 'Sample Project',
@@ -361,8 +345,7 @@ export const projects: Project[] = [
     category: 'Mobile Application',
     platform: 'mobile',
     industry: ['Wellbeing', 'Mobile'],
-    description:
-      'A simple focus app built around one physical habit: flip your phone face down and step away from the screen.',
+    description: 'A simple focus app built around one physical habit: flip your phone face down and step away from the screen.',
     highlight: 'Live on the App Store',
     highlights: ['One physical habit: flip your phone face down', 'Step away from the screen and focus'],
     image: { src: '/images/projects/unvoid.webp', width: 640, height: 1391 },

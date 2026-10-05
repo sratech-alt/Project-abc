@@ -18,9 +18,7 @@ export type ContactInput = {
 export type ContactData = { name: string; email: string; subject: string; message: string };
 
 export type ContactResult =
-  | { ok: true; data: ContactData }
-  | { ok: false; reason: 'invalid'; field: ContactField; message: string }
-  | { ok: false; reason: 'spam' };
+  { ok: true; data: ContactData } | { ok: false; reason: 'invalid'; field: ContactField; message: string } | { ok: false; reason: 'spam' };
 
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export const MIN_FILL_TIME_MS = 2500;
@@ -29,7 +27,6 @@ export const DEFAULT_SUBJECT = 'General Inquiry';
 
 export function validateContact(input: ContactInput): ContactResult {
   if ((input.website ?? '').trim() !== '') return { ok: false, reason: 'spam' };
-  if (input.elapsedMs !== undefined && input.elapsedMs < MIN_FILL_TIME_MS) return { ok: false, reason: 'spam' };
 
   const name = input.name.trim();
   const email = input.email.trim();
@@ -43,6 +40,10 @@ export function validateContact(input: ContactInput): ContactResult {
   if (message.length < MIN_MESSAGE_LENGTH) {
     return { ok: false, reason: 'invalid', field: 'message', message: 'Please add a few words about your project.' };
   }
+
+  // Checked last, so someone who presses Send on an unfinished form is told what is missing
+  // rather than being mistaken for a bot.
+  if (input.elapsedMs !== undefined && input.elapsedMs < MIN_FILL_TIME_MS) return { ok: false, reason: 'spam' };
 
   return { ok: true, data: { name, email, subject: (input.subject ?? '').trim() || DEFAULT_SUBJECT, message } };
 }

@@ -22,7 +22,9 @@ function PostCard({ post }: { post: Post }) {
           <div aria-hidden="true" className="absolute inset-0">
             <div className="bg-dots absolute inset-0 opacity-60" />
             <div className="glow top-1/2 left-1/2 size-[130%] -translate-x-1/2 -translate-y-1/2 [--glow-color:var(--color-iris)] [--glow-opacity:0.28]" />
-            <span className="absolute bottom-4 left-5 font-mono text-xs tracking-[0.18em] text-faint uppercase">{post.tags[0] ?? 'Article'}</span>
+            <span className="absolute bottom-4 left-5 font-mono text-xs tracking-[0.18em] text-faint uppercase">
+              {post.tags[0] ?? 'Article'}
+            </span>
           </div>
         )}
       </div>
@@ -33,7 +35,10 @@ function PostCard({ post }: { post: Post }) {
         </p>
         <h2 className="mt-2.5 text-xl leading-snug font-semibold tracking-tight">
           {/* The ::after overlay makes the whole card the link. */}
-          <a href={`/blog/${post.slug}`} className="transition-colors after:absolute after:inset-0 after:rounded-2xl group-hover:text-accent">
+          <a
+            href={`/blog/${post.slug}`}
+            className="transition-colors after:absolute after:inset-0 after:rounded-2xl group-hover:text-accent"
+          >
             {post.title}
           </a>
         </h2>
@@ -47,7 +52,10 @@ function PostCard({ post }: { post: Post }) {
             ))}
           </ul>
         ) : null}
-        <p className="mt-auto flex items-center gap-1.5 pt-6 text-sm font-semibold text-fg transition-colors group-hover:text-accent" aria-hidden="true">
+        <p
+          className="mt-auto flex items-center gap-1.5 pt-6 text-sm font-semibold text-fg transition-colors group-hover:text-accent"
+          aria-hidden="true"
+        >
           Read article
           <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </p>
@@ -72,7 +80,11 @@ export function TagNav({ tags, activeSlug }: { tags: Tag[]; activeSlug?: string 
         </li>
         {tags.map((tag) => (
           <li key={tag.slug}>
-            <a href={`/blog/tag/${tag.slug}`} aria-current={tag.slug === activeSlug ? 'page' : undefined} className={cn(chip, tag.slug === activeSlug ? active : idle)}>
+            <a
+              href={`/blog/tag/${tag.slug}`}
+              aria-current={tag.slug === activeSlug ? 'page' : undefined}
+              className={cn(chip, tag.slug === activeSlug ? active : idle)}
+            >
               {tag.label}
               <span className="font-mono text-xs text-faint">{tag.count}</span>
             </a>

@@ -12,7 +12,12 @@ A site built with Next.js (App Router), React and TypeScript, and exported to st
 | `npm run dev`       | Local development server with hot reload                                  |
 | `npm run build`     | Type-check and build the static site into `out/`                          |
 | `npm run typecheck` | TypeScript only                                                           |
+| `npm run lint`      | ESLint                                                                    |
+| `npm run format`    | Prettier — rewrites files in the house style (`format:check` only reports) |
 | `npm test`          | Unit tests (Vitest)                                                       |
+| `npm run test:e2e`  | Builds the site, then runs the browser tests (Playwright) against it      |
+| `npm run preview`   | Serves the built `out/` folder at http://127.0.0.1:4173                   |
+| `npm run seed:generate` | Regenerates `supabase/seed.sql` from the defaults in `lib/data.ts`    |
 | `npm run images`    | Regenerate the published images in `public/` from the originals in `assets/` |
 
 ## File Structure
@@ -62,6 +67,9 @@ A site built with Next.js (App Router), React and TypeScript, and exported to st
 ├── public/               # Deployed as-is: optimized images, favicons, og.png, search-engine verification files
 ├── assets/               # ORIGINAL images. Never deployed. Source for `npm run images`
 ├── scripts/optimize-images.mjs
+├── scripts/serve-out.mjs           # Serves out/ like the real host (used by the browser tests and `npm run preview`)
+├── e2e/                  # Browser tests (Playwright): pages.spec.ts, home.spec.ts, helpers.ts
+├── playwright.config.ts  eslint.config.mjs  .prettierrc.json
 ├── netlify.toml          # Build command, publish dir, cache/security headers
 ├── next.config.mjs       # output: 'export'
 └── docs/                 # This governance file set

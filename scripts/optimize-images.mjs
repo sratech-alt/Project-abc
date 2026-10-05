@@ -22,8 +22,18 @@ const webp = [
   { from: 'unvoid.jpeg', to: 'images/projects/unvoid.webp', resize: { width: 640 }, quality: 82 },
   { from: 'logo-mark-white.png', to: 'images/logo-mark.webp', resize: { height: 160 }, quality: 92 },
   { from: 'logo-full-white.png', to: 'images/logo-full.webp', resize: { width: 560 }, quality: 92 },
-  { from: 'Co-Founder.jpeg', to: 'images/team/rupesh-dulal.webp', resize: { width: 480, height: 480, fit: 'cover', position: 'top' }, quality: 82 },
-  { from: 'Co-Founder3.jpeg', to: 'images/team/biman-lakhey.webp', resize: { width: 480, height: 480, fit: 'cover', position: 'top' }, quality: 82 },
+  {
+    from: 'Co-Founder.jpeg',
+    to: 'images/team/rupesh-dulal.webp',
+    resize: { width: 480, height: 480, fit: 'cover', position: 'top' },
+    quality: 82,
+  },
+  {
+    from: 'Co-Founder3.jpeg',
+    to: 'images/team/biman-lakhey.webp',
+    resize: { width: 480, height: 480, fit: 'cover', position: 'top' },
+    quality: 82,
+  },
 ];
 
 const png = [
@@ -34,7 +44,9 @@ const png = [
 async function report(file) {
   const meta = await sharp(out(file)).metadata();
   const { size } = await stat(out(file));
-  console.log(`${file.padEnd(52)} ${String(meta.width).padStart(4)}x${String(meta.height).padEnd(4)} ${(size / 1024).toFixed(1).padStart(7)} KB`);
+  console.log(
+    `${file.padEnd(52)} ${String(meta.width).padStart(4)}x${String(meta.height).padEnd(4)} ${(size / 1024).toFixed(1).padStart(7)} KB`,
+  );
 }
 
 for (const job of webp) {

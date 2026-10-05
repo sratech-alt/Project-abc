@@ -52,7 +52,8 @@ Run through this before marking any change complete. This checks _conformance_ t
 
 - [ ] Does this change break any existing section's layout, spacing, or responsiveness?
 - [ ] No horizontal scroll at 320, 375, 768, 1024 and 1280px?
-- [ ] `npm run typecheck`, `npm test` and `npm run build` all pass?
+- [ ] `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run build` all pass?
+- [ ] `npm run test:e2e` passes, if the change touches layout, navigation, a page or the form?
 
 ## Outcome
 

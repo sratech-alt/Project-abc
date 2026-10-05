@@ -8,7 +8,13 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "images": "node scripts/optimize-images.mjs",
-    "seed:generate": "node --experimental-strip-types scripts/generate-seed.mjs"
+    "seed:generate": "node --experimental-strip-types scripts/generate-seed.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:e2e": "npm run build && playwright test",
+    "test:e2e:only": "playwright test",
+    "preview": "node scripts/serve-out.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -20,14 +26,19 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22.20.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.8",
     "postcss": "^8.5.28",
+    "prettier": "^3.9.9",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^5.0.3"
   }
 }

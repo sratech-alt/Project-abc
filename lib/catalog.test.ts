@@ -11,17 +11,26 @@ let lastTransport = vi.fn();
 /** Makes the Supabase client answer like Supabase's Data API for the given tables; anything else "doesn't exist yet". */
 function stubDatabase(tables: Record<string, unknown[]>) {
   lastTransport = vi.fn(async (input: URL | string) => {
-      const table = new URL(String(input)).pathname.split('/').pop() ?? '';
-      return table in tables
-        ? new Response(JSON.stringify(tables[table]), { status: 200 })
-        : new Response(JSON.stringify({ code: 'PGRST205', message: 'missing' }), { status: 404 });
+    const table = new URL(String(input)).pathname.split('/').pop() ?? '';
+    return table in tables
+      ? new Response(JSON.stringify(tables[table]), { status: 200 })
+      : new Response(JSON.stringify({ code: 'PGRST205', message: 'missing' }), { status: 404 });
   });
   setTransport(lastTransport as unknown as typeof fetch);
 }
 
 afterEach(() => setTransport());
 
-const serviceRow = { id: 'data-engineering', title: ' Data Engineering ', blurb: 'Pipelines.', features: ['ETL', ' '], details: ['Warehousing'], body_md: '', visual: 'api', span: 2 };
+const serviceRow = {
+  id: 'data-engineering',
+  title: ' Data Engineering ',
+  blurb: 'Pipelines.',
+  features: ['ETL', ' '],
+  details: ['Warehousing'],
+  body_md: '',
+  visual: 'api',
+  span: 2,
+};
 
 const projectRow = {
   slug: 'new-project',
@@ -60,12 +69,30 @@ describe('normalizeSpans', () => {
 
   it.each([
     [[1], [3]],
-    [[1, 1], [1, 2]],
-    [[2, 2], [3, 3]],
-    [[1, 3], [3, 3]],
-    [[1, 1, 2, 1], [1, 2, 2, 1]],
-    [[2, 1, 1], [2, 1, 3]],
-    [[9, 0], [3, 3]],
+    [
+      [1, 1],
+      [1, 2],
+    ],
+    [
+      [2, 2],
+      [3, 3],
+    ],
+    [
+      [1, 3],
+      [3, 3],
+    ],
+    [
+      [1, 1, 2, 1],
+      [1, 2, 2, 1],
+    ],
+    [
+      [2, 1, 1],
+      [2, 1, 3],
+    ],
+    [
+      [9, 0],
+      [3, 3],
+    ],
   ])('repairs %j into %j', (input, expected) => {
     const result = normalizeSpans(input.map((span) => ({ span })));
     expect(spans(result)).toEqual(expected);
@@ -88,7 +115,16 @@ describe('normalizeSpans', () => {
 
 describe('toService', () => {
   it('maps a row, tidying text and empty list entries', () => {
-    expect(toService(serviceRow)).toEqual({ id: 'data-engineering', title: 'Data Engineering', blurb: 'Pipelines.', features: ['ETL'], details: ['Warehousing'], body: undefined, visual: 'api', span: 2 });
+    expect(toService(serviceRow)).toEqual({
+      id: 'data-engineering',
+      title: 'Data Engineering',
+      blurb: 'Pipelines.',
+      features: ['ETL'],
+      details: ['Warehousing'],
+      body: undefined,
+      visual: 'api',
+      span: 2,
+    });
   });
 
   it('falls back to safe values for an unknown illustration or span', () => {
@@ -105,9 +141,16 @@ describe('toService', () => {
 
 describe('toLinks', () => {
   it('keeps well-formed https links and drops everything else', () => {
-    expect(toLinks([{ label: ' App Store ', url: 'https://apps.apple.com/x' }, { label: 'Bad', url: 'javascript:alert(1)' }, { label: '', url: 'https://x.y' }, { url: 'https://x.y' }, 'nope', null])).toEqual([
-      { label: 'App Store', url: 'https://apps.apple.com/x' },
-    ]);
+    expect(
+      toLinks([
+        { label: ' App Store ', url: 'https://apps.apple.com/x' },
+        { label: 'Bad', url: 'javascript:alert(1)' },
+        { label: '', url: 'https://x.y' },
+        { url: 'https://x.y' },
+        'nope',
+        null,
+      ]),
+    ).toEqual([{ label: 'App Store', url: 'https://apps.apple.com/x' }]);
     expect(toLinks('not an array')).toEqual([]);
     expect(toLinks(null)).toEqual([]);
   });
@@ -135,7 +178,16 @@ describe('toProject', () => {
   });
 
   it('copes with missing optional columns', () => {
-    const project = toProject({ ...projectRow, platform: 'tablet', image_width: null, image_height: null, links: null, featured: null, body_md: null, tags: null });
+    const project = toProject({
+      ...projectRow,
+      platform: 'tablet',
+      image_width: null,
+      image_height: null,
+      links: null,
+      featured: null,
+      body_md: null,
+      tags: null,
+    });
     expect(project.platform).toBe('web');
     expect(project.image.width).toBeGreaterThan(0);
     expect(project.image.height).toBeGreaterThan(0);
@@ -159,7 +211,15 @@ describe('toStack', () => {
       ],
     );
     expect(result).toEqual([
-      { id: 'backend', label: 'Backend', summary: 'Services.', techs: [{ name: 'Go', abbr: 'Go', use: 'APIs' }, { name: 'Rust', abbr: 'Ru', use: '' }] },
+      {
+        id: 'backend',
+        label: 'Backend',
+        summary: 'Services.',
+        techs: [
+          { name: 'Go', abbr: 'Go', use: 'APIs' },
+          { name: 'Rust', abbr: 'Ru', use: '' },
+        ],
+      },
     ]);
   });
 });
@@ -209,8 +269,10 @@ describe('supabase/seed.sql', () => {
   const seed = readFileSync(path.resolve(__dirname, '..', 'supabase', 'seed.sql'), 'utf8');
 
   it('is in step with the defaults in lib/data.ts (run "npm run seed:generate" if this fails)', () => {
-    for (const service of defaultServices) expect(seed, service.id).toContain(`values ('${service.id}', '${service.title.replace(/'/g, "''")}'`);
-    for (const project of defaultProjects) expect(seed, project.id).toContain(`values ('${project.id}', '${project.title.replace(/'/g, "''")}'`);
+    for (const service of defaultServices)
+      expect(seed, service.id).toContain(`values ('${service.id}', '${service.title.replace(/'/g, "''")}'`);
+    for (const project of defaultProjects)
+      expect(seed, project.id).toContain(`values ('${project.id}', '${project.title.replace(/'/g, "''")}'`);
     for (const category of defaultStack) {
       for (const tech of category.techs) expect(seed, tech.name).toContain(`values ('${tech.name}', '${tech.abbr}'`);
     }

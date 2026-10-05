@@ -147,7 +147,8 @@ describe('theming convention', () => {
   });
 
   it('components do not use Tailwind default palette classes', () => {
-    const palette = /\b(?:bg|text|border|from|via|to|ring|fill|stroke|shadow)-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/;
+    const palette =
+      /\b(?:bg|text|border|from|via|to|ring|fill|stroke|shadow)-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/;
     for (const source of sources) {
       expect(source.code.match(palette)?.[0], `${source.file} uses a default palette class`).toBeUndefined();
     }

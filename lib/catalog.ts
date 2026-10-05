@@ -119,7 +119,8 @@ export function toProject(row: ProjectRow): Project {
 /** Projects in display order. */
 export const getProjects = oncePerBuild(async (): Promise<Project[]> => {
   const rows = await selectRows<ProjectRow>('projects', {
-    select: 'slug,title,category,platform,industry,description,highlight,highlights,body_md,image_url,image_width,image_height,tags,client,year,featured,links',
+    select:
+      'slug,title,category,platform,industry,description,highlight,highlights,body_md,image_url,image_width,image_height,tags,client,year,featured,links',
     published: 'eq.true',
     order: 'sort_order.asc,title.asc',
   });
@@ -141,7 +142,11 @@ export function toStack(categories: CategoryRow[], technologies: TechnologyRow[]
       summary: (category.summary ?? '').trim(),
       techs: technologies
         .filter((tech) => tech.category_id === category.id)
-        .map((tech) => ({ name: tech.name.trim(), abbr: (tech.abbr ?? '').trim() || tech.name.trim().slice(0, 2), use: (tech.purpose ?? '').trim() })),
+        .map((tech) => ({
+          name: tech.name.trim(),
+          abbr: (tech.abbr ?? '').trim() || tech.name.trim().slice(0, 2),
+          use: (tech.purpose ?? '').trim(),
+        })),
     }))
     .filter((category) => category.techs.length > 0);
 }
@@ -152,6 +157,9 @@ export const getStack = oncePerBuild(async (): Promise<StackCategory[]> => {
     selectRows<CategoryRow>('tech_categories', { select: 'id,label,summary', order: 'sort_order.asc,label.asc' }),
     selectRows<TechnologyRow>('technologies', { select: 'name,abbr,purpose,category_id', order: 'sort_order.asc,name.asc' }),
   ]);
-  const fromDatabase = toStack(categories.filter((category) => isValidSlug(category.id)), technologies);
+  const fromDatabase = toStack(
+    categories.filter((category) => isValidSlug(category.id)),
+    technologies,
+  );
   return fromDatabase.length > 0 ? fromDatabase : defaultStack;
 });

@@ -11,13 +11,15 @@ export const POSTS_PER_PAGE = 9;
 
 /** "Event-Driven Systems" → "event-driven-systems". Used in the address /blog/tag/<slug>. */
 export function tagSlug(tag: string): string {
-  return tag
-    .toLowerCase()
-    // Split accented letters into letter + accent, then drop the accents: "é" → "e".
-    .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+  return (
+    tag
+      .toLowerCase()
+      // Split accented letters into letter + accent, then drop the accents: "é" → "e".
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  );
 }
 
 export type Tag = { slug: string; label: string; count: number };

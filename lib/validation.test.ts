@@ -57,6 +57,15 @@ describe('validateContact', () => {
     expect(validateContact({ ...valid, elapsedMs: MIN_FILL_TIME_MS }).ok).toBe(true);
   });
 
+  it('reports a missing field before the timing check, so a quick empty submit gets a useful message', () => {
+    expect(validateContact({ name: '', email: '', message: '', elapsedMs: 0 })).toMatchObject({
+      ok: false,
+      reason: 'invalid',
+      field: 'name',
+    });
+    expect(validateContact({ ...valid, email: 'nope', elapsedMs: 0 })).toMatchObject({ ok: false, reason: 'invalid', field: 'email' });
+  });
+
   it('skips the timing check when no timing is supplied', () => {
     expect(validateContact({ ...valid, elapsedMs: undefined }).ok).toBe(true);
   });

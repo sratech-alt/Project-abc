@@ -25,7 +25,8 @@ const pageNumber = (value: string) => (/^[1-9]\d*$/.test(value) ? Number(value) 
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const page = pageNumber((await params).page);
-  if (page < 2 || postsOnPage(await getPosts(), page).length === 0) return { title: `Page not found — ${site.name}`, robots: { index: false } };
+  if (page < 2 || postsOnPage(await getPosts(), page).length === 0)
+    return { title: `Page not found — ${site.name}`, robots: { index: false } };
   return {
     title: `Blog, page ${page} — ${site.name}`,
     description: `More engineering notes from ${site.name} (page ${page}).`,

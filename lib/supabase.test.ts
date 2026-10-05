@@ -4,7 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { supabaseConfig } from './site';
 import { ContentUnavailableError, selectRows, setTransport } from './supabase';
 
-const json = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+const json = (status: number, body: unknown) =>
+  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
 /** A stand-in for the network that gives each queued answer in turn (a thrown answer simulates a network failure). */
 function answers(...queue: Array<() => Response>) {

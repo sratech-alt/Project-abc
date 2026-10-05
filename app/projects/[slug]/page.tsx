@@ -62,7 +62,10 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
         </div>
 
         <div className="container-page">
-          <a href="/#projects" className="flex w-fit items-center gap-2 py-1.5 text-sm font-medium text-muted transition-colors hover:text-accent">
+          <a
+            href="/#projects"
+            className="flex w-fit items-center gap-2 py-1.5 text-sm font-medium text-muted transition-colors hover:text-accent"
+          >
             <ArrowLeft className="size-4" aria-hidden="true" />
             All projects
           </a>
@@ -72,7 +75,9 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
               <p className="font-mono text-xs tracking-wider text-faint uppercase">
                 {[project.category, project.year].filter(Boolean).join(' · ')}
               </p>
-              <h1 className="mt-4 text-[clamp(1.9rem,7.5vw,2.5rem)] leading-[1.1] font-extrabold tracking-[-0.03em] sm:text-5xl">{project.title}</h1>
+              <h1 className="mt-4 text-[clamp(1.9rem,7.5vw,2.5rem)] leading-[1.1] font-extrabold tracking-[-0.03em] sm:text-5xl">
+                {project.title}
+              </h1>
 
               <ul className="mt-6 flex flex-wrap gap-2">
                 {project.highlight ? (
@@ -127,7 +132,11 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-line-strong/70 lg:sticky lg:top-28">
-              <ProjectPreview project={project} priority className={project.platform === 'mobile' ? 'aspect-[4/5] sm:aspect-[16/14]' : undefined} />
+              <ProjectPreview
+                project={project}
+                priority
+                className={project.platform === 'mobile' ? 'aspect-[4/5] sm:aspect-[16/14]' : undefined}
+              />
             </div>
           </div>
 
@@ -148,7 +157,9 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
                     >
                       <span className="min-w-0">
                         <span className="block font-mono text-xs tracking-wider text-faint uppercase">{other.category}</span>
-                        <span className="mt-1 block text-[0.95rem] leading-snug font-semibold text-fg transition-colors group-hover:text-accent">{other.title}</span>
+                        <span className="mt-1 block text-[0.95rem] leading-snug font-semibold text-fg transition-colors group-hover:text-accent">
+                          {other.title}
+                        </span>
                       </span>
                       <ArrowUpRight className="size-4 shrink-0 text-faint transition-colors group-hover:text-accent" aria-hidden="true" />
                     </a>

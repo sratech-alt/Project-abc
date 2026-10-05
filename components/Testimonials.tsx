@@ -40,13 +40,17 @@ export function Testimonials() {
                     <Quote className="size-7 text-accent/40" aria-hidden="true" />
                   </div>
 
-                  <blockquote className="mt-5 flex-1 text-base leading-relaxed text-fg sm:text-[1.05rem]">
-                    “{item.quote}”
-                  </blockquote>
+                  <blockquote className="mt-5 flex-1 text-base leading-relaxed text-fg sm:text-[1.05rem]">“{item.quote}”</blockquote>
 
                   <figcaption className="mt-6 flex items-center gap-3.5 border-t border-line/80 pt-5">
                     {item.avatar ? (
-                      <Image src={item.avatar} alt="" width={44} height={44} className="size-11 rounded-full border border-line-strong object-cover" />
+                      <Image
+                        src={item.avatar}
+                        alt=""
+                        width={44}
+                        height={44}
+                        className="size-11 rounded-full border border-line-strong object-cover"
+                      />
                     ) : (
                       <span
                         aria-hidden="true"
