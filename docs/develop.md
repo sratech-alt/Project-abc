@@ -11,8 +11,9 @@ How to build any new feature or change for this project so it stays consistent w
 
 ## Editing content (no code changes)
 
-- Projects, services, tech stack, "why us" reasons, testimonials, team, socials, hero metrics → `lib/data.ts`.
-- Company name, emails, address, nav links, the availability line next to the logo → `lib/site.ts`.
+- "Why us" reasons, testimonials, team, socials, hero metrics, about facts → `lib/data.ts`. (Services, projects and the tech stack are edited in Supabase; `lib/data.ts` only holds their defaults.)
+- Company name, emails, phone, address, nav links → `lib/site.ts`. The availability line next to the logo updates itself each quarter; set `site.availability` there to override or hide it.
+- The privacy page → `app/privacy/page.tsx`. It must describe what the site really does: update it (and its date) in the same change as anything that alters what is collected or shared.
 - The code shown in the hero window → `lib/code-samples.ts`.
 - A new or changed image → put the original in `assets/`, add it to `scripts/optimize-images.mjs`, run `npm run images`, and record the printed width/height in `lib/data.ts`.
 
@@ -27,12 +28,23 @@ How to build any new feature or change for this project so it stays consistent w
 
 Markdown notes: start section headings at `##`. Raw HTML is not supported and will be shown as text. Images must be `https://` URLs.
 
+## Editing services, projects or the tech stack (no code changes)
+
+These live in the Supabase tables `services`, `projects`, `tech_categories` and `technologies`. Edit rows in the Table Editor, then rebuild the site.
+
+- **First time only:** run `supabase/schema.sql`, then `supabase/seed.sql`, in the SQL editor. Until a table has rows the site shows the defaults from `lib/data.ts`.
+- **Services:** `id` is the address (`/services/<id>`). `features` are the chips on the home card; `details` is the "What's included" list on the service page; `body_md` is optional longer text. `visual` picks an illustration by name (`phones`, `browser`, `checkout`, `pipeline`, `canvas`, `api`, `dashboard`, `uptime`) — a new illustration needs code in `components/services/visuals.tsx`. `span` is the card width (1–3); the site fixes rows that don't add up. `sort_order` sets the order.
+- **Projects:** `slug` is the address (`/projects/<slug>`). `image_url` is a site path (`/images/...`) or a full `https://` address, e.g. a file in the `media` bucket; fill in `image_width` and `image_height` with the image's real size. `platform` (`web` or `mobile`) decides the frame. `highlight` is one **factual** line. `links` is JSON: `[{"label": "App Store", "url": "https://..."}]`. The first three `featured` projects get the large cards.
+- **Tech stack:** a technology belongs to a category through `category_id`.
+- Turn `published` off to hide a service or project without deleting it.
+- If you change the defaults in `lib/data.ts`, run `npm run seed:generate` so `supabase/seed.sql` matches (a unit test checks this).
+
 ## Changing the database
 
 1. Log the change in `audit.md` first if it adds a table or a new kind of content.
 2. Edit `supabase/schema.sql` — keep it re-runnable (`create table if not exists`, `drop policy if exists`). Every table must enable Row Level Security and allow only `select` of published rows to `anon`.
 3. Run the file in the Supabase SQL editor.
-4. Add the loader and row-to-type mapping in `lib/content.ts`, with tests in `lib/content.test.ts`.
+4. Add the loader and row-to-type mapping in `lib/content.ts` or `lib/catalog.ts`, with tests beside it. Read through `selectRows()` only — never call `fetch` for build-time content (Next.js would cache the answer between builds).
 
 ## Adding a new content-driven section
 

@@ -16,6 +16,8 @@ Work outward from the symptom to the layer responsible, using `architecture.md` 
 - A colour or class that "does nothing" → it is probably not a design token. Only tokens declared in `@theme` generate utilities (see `architecture.md` — Theming).
 - Content missing/wrong → check the relevant array in `lib/data.ts` (or `lib/site.ts`) first, then the component that maps it.
 - A section missing entirely → check its guard: Testimonials renders nothing until an entry has `verified: true`.
+- Content changed in Supabase but the site still shows the old version after a rebuild → check the build log shows the build actually ran (not a skipped/cached deploy). Content must be read through `selectRows()`; anything read with `fetch` is cached by Next.js between builds (`audit.md` — 2026-10-05).
+- A service, project or technology edited in Supabase but the site shows the old default → the table has no published rows, so the defaults in `lib/data.ts` are being used. Run `supabase/seed.sql`, or publish a row.
 - A post or job not showing → in Supabase, is `published` on, is the date in the past (and `closes_at` not passed)? Has the site been rebuilt since? Is the slug lowercase-with-hyphens (rows with a bad slug are skipped, with a `[content]` warning in the build log)?
 - "Blog"/"Careers" missing from the navigation → expected when there is no published content of that kind.
 - Build fails with `ContentUnavailableError` → Supabase was unreachable or refused the key after several tries. Check the project is not paused, then re-run the deploy. The live site is unaffected: the previous deploy stays up.

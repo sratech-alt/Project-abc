@@ -22,10 +22,11 @@ type NavItem = { key: string; href: string; label: string; sectionId?: string };
 
 /**
  * `pageLinks` are the content pages that currently have something to show (Blog, Careers).
+ * `availability` is the status line beside the logo (empty hides it).
  * Section links are written as `/#section` so they work from every page; on the home page the
  * browser treats them as an ordinary in-page jump.
  */
-export function Navbar({ pageLinks = [] }: { pageLinks?: PageLink[] }) {
+export function Navbar({ pageLinks = [], availability = '' }: { pageLinks?: PageLink[]; availability?: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -111,7 +112,7 @@ export function Navbar({ pageLinks = [] }: { pageLinks?: PageLink[] }) {
               <span className="text-[1.05rem] font-bold tracking-tight whitespace-nowrap">
                 Sabiora <span className="font-semibold text-muted">Technologies</span>
               </span>
-              {site.availability ? (
+              {availability ? (
                 <span
                   className={cn(
                     'mt-0.5 hidden items-center gap-1.5 font-mono text-xs whitespace-nowrap text-muted',
@@ -119,7 +120,7 @@ export function Navbar({ pageLinks = [] }: { pageLinks?: PageLink[] }) {
                   )}
                 >
                   <StatusDot />
-                  {site.availability}
+                  {availability}
                 </span>
               ) : null}
             </span>
@@ -200,10 +201,10 @@ export function Navbar({ pageLinks = [] }: { pageLinks?: PageLink[] }) {
                   </li>
                 ))}
               </ul>
-              {site.availability ? (
+              {availability ? (
                 <p className="mt-5 flex items-center gap-2 font-mono text-xs text-muted">
                   <StatusDot />
-                  {site.availability}
+                  {availability}
                 </p>
               ) : null}
               <a href="/#contact" onClick={() => setOpen(false)} className="btn btn-primary mt-5 h-12 px-6 text-base">

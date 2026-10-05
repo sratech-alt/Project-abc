@@ -26,11 +26,21 @@ export const site = {
     sales: 'sales@sabioratechnologies.com',
     general: 'contact@sabioratechnologies.com',
   },
-  /** Shown next to the logo. Update it each quarter, or set to '' to hide the status dot. */
-  availability: 'Available for Q4 projects',
+  /**
+   * The status line next to the logo. 'auto' writes "Available for Qn projects" from the date the
+   * site was built, so it never goes stale. Put your own text here to override it, or '' to hide it.
+   */
+  availability: 'auto' as string,
   /** Browser UI colour. Must mirror --color-canvas in app/globals.css (meta tags can't read CSS variables). */
   themeColor: '#0b0f17',
 } as const;
+
+/** The status line to show: the override from `site.availability`, or the current quarter when it is 'auto'. */
+export function availabilityLabel(now: Date = new Date()): string {
+  if (site.availability !== 'auto') return site.availability;
+  const quarter = Math.floor(now.getUTCMonth() / 3) + 1;
+  return `Available for Q${quarter} projects`;
+}
 
 /** Header, mobile menu and footer links. Each id must match a <section id> on the page. */
 export const navLinks = [

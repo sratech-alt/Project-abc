@@ -102,6 +102,144 @@ create policy "Public can read open jobs"
 
 grant select on public.jobs to anon, authenticated;
 
+-- ------------------------------------------------------------------ services
+
+-- The services shown on the home page and at /services/<id>.
+-- While this table is empty the site uses the defaults in lib/data.ts; run supabase/seed.sql to load them.
+create table if not exists public.services (
+  -- Becomes the address: /services/<id>. Lowercase letters, numbers and single hyphens only.
+  id          text primary key check (id ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+  title       text not null check (length(trim(title)) > 0),
+  -- One or two sentences under the title.
+  blurb       text not null default '',
+  -- Short labels shown as chips on the home-page card (three or four is plenty).
+  features    text[] not null default '{}',
+  -- The full "what's included" list on the service's own page.
+  details     text[] not null default '{}',
+  -- Optional longer description for the service page, in Markdown.
+  body_md     text not null default '',
+  -- Which illustration the card uses. They are drawn in code, so only these names exist.
+  visual      text not null default 'dashboard'
+              check (visual in ('phones', 'browser', 'checkout', 'pipeline', 'canvas', 'api', 'dashboard', 'uptime')),
+  -- How many of the three desktop columns the card takes. The site widens cards if a row would have a hole.
+  span        smallint not null default 1 check (span between 1 and 3),
+  -- Lower numbers come first.
+  sort_order  integer not null default 0,
+  published   boolean not null default true,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
+drop trigger if exists services_set_updated_at on public.services;
+create trigger services_set_updated_at
+  before update on public.services
+  for each row execute function public.set_updated_at();
+
+alter table public.services enable row level security;
+
+drop policy if exists "Public can read published services" on public.services;
+create policy "Public can read published services"
+  on public.services for select
+  to anon, authenticated
+  using (published);
+
+grant select on public.services to anon, authenticated;
+
+-- ------------------------------------------------------------------ projects
+
+-- The projects shown on the home page and at /projects/<slug>.
+-- While this table is empty the site uses the defaults in lib/data.ts; run supabase/seed.sql to load them.
+create table if not exists public.projects (
+  -- Becomes the address: /projects/<slug>.
+  slug          text primary key check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+  title         text not null check (length(trim(title)) > 0),
+  -- e.g. "Web Application", "Mobile Application".
+  category      text not null default '',
+  -- 'web' shows the image in a browser frame; 'mobile' shows it as a portrait poster.
+  platform      text not null default 'web' check (platform in ('web', 'mobile')),
+  industry      text[] not null default '{}',
+  description   text not null default '',
+  -- One factual line for the badge on the card. Never an invented metric.
+  highlight     text not null default '',
+  -- The "what we built" bullet points.
+  highlights    text[] not null default '{}',
+  -- Optional longer write-up for the project page, in Markdown.
+  body_md       text not null default '',
+  -- A path on the site (/images/...) or a full https:// address, e.g. a file in the "media" bucket.
+  image_url     text not null check (image_url ~ '^(https://|/)'),
+  -- The image's real size in pixels, so the page can reserve space for it.
+  image_width   integer check (image_width > 0),
+  image_height  integer check (image_height > 0),
+  -- Technologies used.
+  tags          text[] not null default '{}',
+  client        text not null default '',
+  year          text not null default '',
+  -- The first three featured projects get full cards on the home page.
+  featured      boolean not null default false,
+  -- Store or external links: [{"label": "App Store", "url": "https://..."}]
+  links         jsonb not null default '[]'::jsonb check (jsonb_typeof(links) = 'array'),
+  sort_order    integer not null default 0,
+  published     boolean not null default true,
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
+);
+
+drop trigger if exists projects_set_updated_at on public.projects;
+create trigger projects_set_updated_at
+  before update on public.projects
+  for each row execute function public.set_updated_at();
+
+alter table public.projects enable row level security;
+
+drop policy if exists "Public can read published projects" on public.projects;
+create policy "Public can read published projects"
+  on public.projects for select
+  to anon, authenticated
+  using (published);
+
+grant select on public.projects to anon, authenticated;
+
+-- ------------------------------------------------------------------ tech stack
+
+-- The layers in the Tech Stack section (Backend, Frontend, ...), and the technologies in each.
+-- While these tables are empty the site uses the defaults in lib/data.ts; run supabase/seed.sql to load them.
+create table if not exists public.tech_categories (
+  id          text primary key check (id ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+  label       text not null check (length(trim(label)) > 0),
+  -- The sentence shown when the category is selected.
+  summary     text not null default '',
+  sort_order  integer not null default 0
+);
+
+create table if not exists public.technologies (
+  name         text primary key check (length(trim(name)) > 0),
+  -- Two letters shown in the badge, e.g. "Pg".
+  abbr         text not null default '',
+  -- What we use it for, e.g. "Event streaming".
+  purpose      text not null default '',
+  category_id  text not null references public.tech_categories (id) on update cascade on delete cascade,
+  sort_order   integer not null default 0
+);
+
+create index if not exists technologies_category_idx on public.technologies (category_id);
+
+alter table public.tech_categories enable row level security;
+alter table public.technologies enable row level security;
+
+drop policy if exists "Public can read tech categories" on public.tech_categories;
+create policy "Public can read tech categories"
+  on public.tech_categories for select
+  to anon, authenticated
+  using (true);
+
+drop policy if exists "Public can read technologies" on public.technologies;
+create policy "Public can read technologies"
+  on public.technologies for select
+  to anon, authenticated
+  using (true);
+
+grant select on public.tech_categories, public.technologies to anon, authenticated;
+
 -- ------------------------------------------------------------------ images
 
 -- A public bucket for cover images. Upload in Dashboard → Storage → media, then copy the

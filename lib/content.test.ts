@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { applyHref, formatDate, getJobs, getPageLinks, getPosts, isValidSlug, readingMinutes, toJob, toPost } from './content';
 import { site } from './site';
 import { EMPTY_ROUTE, withPlaceholder } from './static-params';
+import { setTransport } from './supabase';
 
 const postRow = {
   slug: 'release-checklist',
@@ -30,21 +31,21 @@ const jobRow = {
   closes_at: null,
 };
 
-/** Makes `fetch` answer like Supabase's Data API for the given tables; anything else "doesn't exist yet". */
+let lastTransport = vi.fn();
+
+/** Makes the Supabase client answer like Supabase's Data API for the given tables; anything else "doesn't exist yet". */
 function stubDatabase(tables: Record<string, unknown[]>) {
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(async (input: URL | string) => {
+  lastTransport = vi.fn(async (input: URL | string) => {
       const table = new URL(String(input)).pathname.split('/').pop() ?? '';
       return table in tables
         ? new Response(JSON.stringify(tables[table]), { status: 200 })
         : new Response(JSON.stringify({ code: 'PGRST205', message: 'missing' }), { status: 404 });
-    }),
-  );
+  });
+  setTransport(lastTransport as unknown as typeof fetch);
 }
 
 afterEach(() => {
-  vi.unstubAllGlobals();
+  setTransport();
   vi.restoreAllMocks();
 });
 
@@ -128,7 +129,7 @@ describe('loading content', () => {
   it('asks only for published rows, newest first', async () => {
     stubDatabase({ posts: [], jobs: [] });
     await getPosts();
-    const url = new URL(String((fetch as unknown as ReturnType<typeof vi.fn>).mock.calls[0][0]));
+    const url = new URL(String(lastTransport.mock.calls[0][0]));
     expect(url.searchParams.get('published')).toBe('eq.true');
     expect(url.searchParams.get('order')).toBe('published_at.desc');
   });

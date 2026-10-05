@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Prose } from '@/components/Prose';
 import { SiteShell } from '@/components/SiteShell';
+import { tagSlug } from '@/lib/blog';
 import { formatDate, getPost, getPosts } from '@/lib/content';
 import { EMPTY_ROUTE, withPlaceholder } from '@/lib/static-params';
 import { site } from '@/lib/site';
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return {
     title: `${post.title} — ${site.name}`,
     description: post.excerpt,
-    alternates: { canonical: url },
+    alternates: { canonical: url, types: { 'application/rss+xml': '/blog/feed.xml' } },
     openGraph: {
       type: 'article',
       url,
@@ -78,8 +79,10 @@ export default async function PostPage({ params }: { params: Promise<Params> }) 
             {post.tags.length > 0 ? (
               <ul className="mt-7 flex flex-wrap gap-2" aria-label="Topics">
                 {post.tags.map((tag) => (
-                  <li key={tag} className="chip">
-                    {tag}
+                  <li key={tag}>
+                    <a href={`/blog/tag/${tagSlug(tag)}`} className="chip transition-colors hover:border-accent/60 hover:text-fg">
+                      {tag}
+                    </a>
                   </li>
                 ))}
               </ul>

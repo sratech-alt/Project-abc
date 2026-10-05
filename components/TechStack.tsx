@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { cn } from '@/lib/cn';
-import { stack } from '@/lib/data';
-
-const allTechs = stack.flatMap((category) => category.techs.map((tech) => ({ ...tech, categoryId: category.id })));
+import type { StackCategory } from '@/lib/data';
 
 function Monogram({ abbr, active = true }: { abbr: string; active?: boolean }) {
   return (
@@ -22,7 +20,8 @@ function Monogram({ abbr, active = true }: { abbr: string; active?: boolean }) {
   );
 }
 
-export function TechStack() {
+export function TechStack({ stack }: { stack: StackCategory[] }) {
+  const allTechs = useMemo(() => stack.flatMap((category) => category.techs.map((tech) => ({ ...tech, categoryId: category.id }))), [stack]);
   const [activeId, setActiveId] = useState(stack[0].id);
   const active = stack.find((category) => category.id === activeId) ?? stack[0];
 

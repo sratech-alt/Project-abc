@@ -42,7 +42,12 @@ export type Service = {
   id: string;
   title: string;
   blurb: string;
+  /** Short labels shown as chips on the home-page card. */
   features: string[];
+  /** The full list of what the service covers, shown on its own page. */
+  details: string[];
+  /** Optional longer description for the service page, in Markdown. */
+  body?: string;
   visual: ServiceVisual;
   /** Columns the card spans in the 3-column desktop grid. */
   span: 1 | 2 | 3;
@@ -55,6 +60,16 @@ export const services: Service[] = [
     blurb:
       'Android and iOS apps that feel native, stay reliable and are built to scale — for businesses, startups and organizations.',
     features: ['Android & iOS', 'Cross-platform', 'Business & enterprise apps', 'Booking & on-demand apps'],
+    details: [
+      'Android & iOS applications',
+      'Cross-platform mobile apps',
+      'Enterprise & business apps',
+      'E-commerce & marketplace apps',
+      'Booking & appointment apps',
+      'On-demand service apps',
+      'API & third-party integrations',
+      'Maintenance & support',
+    ],
     visual: 'phones',
     span: 2,
   },
@@ -63,6 +78,16 @@ export const services: Service[] = [
     title: 'Website Development',
     blurb: 'Fast, responsive, search-friendly websites that give your business a credible digital presence.',
     features: ['React / Next.js', 'Landing pages', 'CMS & WordPress', 'Redesigns'],
+    details: [
+      'Business & corporate sites',
+      'Custom websites & landing pages',
+      'E-commerce & WordPress sites',
+      'Booking & reservation sites',
+      'Educational & institutional sites',
+      'Content management systems',
+      'Redesign & modernization',
+      'Maintenance & security',
+    ],
     visual: 'browser',
     span: 1,
   },
@@ -71,6 +96,16 @@ export const services: Service[] = [
     title: 'E-Commerce Solutions',
     blurb: 'Secure online stores — catalogue, cart, checkout and payments, wired into delivery and reporting.',
     features: ['Online stores', 'Payment gateways', 'Orders & delivery'],
+    details: [
+      'Online store development',
+      'Product & inventory management',
+      'Shopping cart & checkout',
+      'Payment gateway integration',
+      'Order & customer accounts',
+      'Delivery integrations',
+      'Notifications & communication',
+      'E-commerce admin & reporting',
+    ],
     visual: 'checkout',
     span: 1,
   },
@@ -80,6 +115,16 @@ export const services: Service[] = [
     blurb:
       'Containerized deployments and automated pipelines on dependable cloud infrastructure, so shipping is routine instead of risky.',
     features: ['Docker & containers', 'CI/CD pipelines', 'Deployment automation', 'Monitoring & backups'],
+    details: [
+      'Cloud application deployment',
+      'Server & infrastructure configuration',
+      'Docker & containerization',
+      'CI/CD pipeline setup',
+      'Deployment automation',
+      'Domain & SSL configuration',
+      'Infrastructure management',
+      'Monitoring, backups & support',
+    ],
     visual: 'pipeline',
     span: 2,
   },
@@ -88,6 +133,15 @@ export const services: Service[] = [
     title: 'UI/UX Design',
     blurb: 'Clear, consistent interfaces — from user flows and wireframes to prototypes and design systems.',
     features: ['User flows', 'Prototypes', 'Design systems'],
+    details: [
+      'UI design & UX planning',
+      'User flows & wireframes',
+      'Interactive prototypes',
+      'Mobile application design',
+      'Website design',
+      'Design systems',
+      'Responsive interface design',
+    ],
     visual: 'canvas',
     span: 1,
   },
@@ -96,6 +150,16 @@ export const services: Service[] = [
     title: 'API & System Integration',
     blurb: 'APIs and integrations that let your apps, platforms and third-party services talk securely.',
     features: ['REST APIs', 'Auth & authorization', 'Payments, SMS & email'],
+    details: [
+      'REST API development',
+      'Third-party API integration',
+      'Payment gateway integration',
+      'Authentication & authorization',
+      'SMS & email integrations',
+      'Cloud service integration',
+      'Business system integration',
+      'Data & service integrations',
+    ],
     visual: 'api',
     span: 1,
   },
@@ -104,6 +168,16 @@ export const services: Service[] = [
     title: 'Web Apps & Custom Software',
     blurb: 'Software shaped around how your business actually works — its processes, users and requirements.',
     features: ['CRM & HR systems', 'Inventory & booking', 'Dashboards & SaaS'],
+    details: [
+      'Business management systems',
+      'CRM & HR management systems',
+      'Inventory management systems',
+      'Booking & reservation platforms',
+      'Dashboards & admin portals',
+      'SaaS applications',
+      'Workflow & business automation',
+      'Custom internal business tools',
+    ],
     visual: 'dashboard',
     span: 1,
   },
@@ -113,6 +187,16 @@ export const services: Service[] = [
     blurb:
       'Launch is only the beginning. We keep your product secure, fast and up to date — and help it grow with your business.',
     features: ['Security updates', 'Performance tuning', 'Feature enhancements', 'Technical consulting', 'Modernization'],
+    details: [
+      'Application & site maintenance',
+      'Bug fixing & troubleshooting',
+      'Security updates',
+      'Performance improvements',
+      'Feature enhancements',
+      'Infrastructure support',
+      'Technical consultation',
+      'System modernization',
+    ],
     visual: 'uptime',
     span: 3,
   },
@@ -191,6 +275,8 @@ export type Project = {
   highlight: string;
   /** Bullet points for the case-study dialog. */
   highlights: string[];
+  /** Optional longer write-up for the project page, in Markdown. */
+  body?: string;
   image: { src: string; width: number; height: number };
   tags: string[];
   client: string;

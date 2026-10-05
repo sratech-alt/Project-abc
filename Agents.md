@@ -4,7 +4,7 @@ Read this file first. It combines everything in `/docs` into one map — the ind
 
 ## Project Summary
 
-**Sabiora** — the marketing website for Sabiora Technologies: a scroll-navigation home page plus blog and careers pages. Built with Next.js (App Router), React, TypeScript and Tailwind CSS v4, and exported as a static site (`npm run build` → `out/`). Mobile-first, dark-only, no server. Home-page content (projects, services, tech stack, team, testimonials, social links) is driven by typed arrays in `lib/data.ts`; blog posts and job listings live in a Supabase database that is read at build time (`supabase/schema.sql`, `lib/content.ts`). Every colour is a design token in `app/globals.css`; Tailwind's default palette is switched off. The contact form sends through EmailJS. The stack changed on 2026-10-04 — see `audit.md`.
+**Sabiora** — the marketing website for Sabiora Technologies: a scroll-navigation home page plus service, case-study, blog, careers and privacy pages. Built with Next.js (App Router), React, TypeScript and Tailwind CSS v4, and exported as a static site (`npm run build` → `out/`). Mobile-first, dark-only, no server. Posts, jobs, services, projects and the tech stack live in a Supabase database that is read at build time (`supabase/schema.sql`, `lib/content.ts`, `lib/catalog.ts`); `lib/data.ts` holds the rest of the home-page content plus the defaults used while a catalog table is empty. Every colour is a design token in `app/globals.css`; Tailwind's default palette is switched off. The contact form sends through EmailJS. The stack changed on 2026-10-04 — see `audit.md`.
 
 Quick start: `npm install`, then `npm run dev`. Before finishing any change: `npm run typecheck && npm test && npm run build`.
 
@@ -42,12 +42,14 @@ Quick start: `npm install`, then `npm run dev`. Before finishing any change: `np
 
 ## Core Constraints (from scope.md — always true unless formally revised)
 
-- Pages: the home page (scroll navigation), `/blog`, `/blog/[slug]`, `/careers`, `/careers/[slug]`. New routes need an `audit.md` entry
+- Pages: the home page (scroll navigation), `/services/[id]`, `/projects/[slug]`, `/blog` (+ `/blog/[slug]`, `/blog/tag/[tag]`, `/blog/page/[n]`, `/blog/feed.xml`), `/careers`, `/careers/[slug]`, `/privacy`. New routes need an `audit.md` entry
 - Next.js + React + TypeScript, statically exported — it must always build to plain files in `out/` with no server
-- Supabase is read at build time only, with the public key only, through `lib/content.ts`. The site never writes to it. No secret key or database password in the repo, ever
+- Supabase is read at build time only, with the public key only, through `lib/content.ts` and `lib/catalog.ts`. The site never writes to it. No secret key or database password in the repo, ever
+- Build-time content is never read with `fetch` (Next.js caches it between builds) — only through `selectRows()` in `lib/supabase.ts`
 - Database changes go in `supabase/schema.sql`; every table has Row Level Security with a published-rows-only read policy
 - Mobile-first responsive design; no horizontal scroll from 320px up
-- Home-page repeatable content is array-driven from `lib/data.ts` (`projects`, `services`, `stack`, `reasons`, `team`, `testimonials`, `socials`); posts and jobs come from Supabase
+- Repeatable content is data-driven: posts, jobs, services, projects and the tech stack from Supabase; `reasons`, `team`, `testimonials`, `socials`, `metrics` from `lib/data.ts`. Services, projects and the stack fall back to defaults in `lib/data.ts` when their table is empty
+- The privacy page must stay true: update `app/privacy/page.tsx` whenever what the site collects or shares changes
 - Section links are written `/#section` so they work from every page
 - All colors are design tokens in `app/globals.css` — never hardcoded hex values or default-palette classes (unit-tested)
 - Dark theme only — no light theme, no toggle

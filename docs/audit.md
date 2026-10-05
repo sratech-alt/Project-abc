@@ -108,4 +108,33 @@ Still out of scope: request-time rendering, user accounts or logins on the site,
 **Supersedes:** The "single page, no routing", "no backend" and "no blog / CMS" constraints from 2026-08-23 and the 2026-10-04 redesign entry.
 **Impact:** `scope.md`, `architecture.md`, `develop.md`, `check.md`, `test.md`, `debug.md`, `Agents.md`; new `supabase/schema.sql`, `lib/supabase.ts`, `lib/content.ts`, `lib/markdown.ts`, `app/blog/*`, `app/careers/*`; `Navbar`/`Footer` links become `/#section` so they work from every page; `app/sitemap.ts` lists the new pages. Publishing content needs a rebuild: a Netlify build hook called by a Supabase database webhook (set up in the two dashboards).
 
+### 2026-10-05 — Scope revised: all home-page content in Supabase, detail pages, blog extras, privacy page, lint and browser tests
+
+**Changed:** Owner instruction to complete the remaining work in one pass. Six scope changes:
+
+1. _Projects, services and tech stack move to Supabase._ New tables `projects`, `services`, `tech_categories`, `technologies`, read at build time like `posts` and `jobs`. The arrays in `lib/data.ts` stay as **defaults**: if a table is missing or has no published rows, the site uses them, so the home page can never lose a section. `supabase/seed.sql` loads the current content into the tables.
+2. _Detail pages._ New routes `/services/[id]` and `/projects/[slug]`. The case-study dialog on the home page is replaced by links to the project pages.
+3. _Blog extras._ New routes `/blog/tag/[tag]`, `/blog/page/[page]` and `/blog/feed.xml` (RSS).
+4. _Privacy page._ New route `/privacy`, describing only what the site actually does with data.
+5. _Lint and format._ New dev dependencies: ESLint (with `eslint-config-next`) and Prettier.
+6. _Browser tests in the repo._ New dev dependencies: `@playwright/test` and `@axe-core/playwright`. They run against the built site with the locally installed Chrome.
+
+New standards:
+
+- **Database content has code defaults.** Any section that must never be empty (services, projects, tech stack) falls back to `lib/data.ts`. Blog and careers have no defaults: empty means empty.
+- **The bento grid repairs itself.** Service `span` values now come from the database and may not tile three columns; `normalizeSpans()` widens cards so no row has a hole.
+- **Availability is computed.** The "Available for Qn projects" line is derived from the build date instead of being typed in.
+- **Formatting is Prettier's job.** `npm run format` before committing; `npm run lint` must pass.
+- **`npm run test:e2e`** builds the site and runs the browser suite. It is part of "tested" for any change that touches layout, navigation or the form.
+**Reason:** Owner request ("do all") after reviewing the list of remaining work.
+**Supersedes:** In the 2026-10-04 Supabase entry: "Still out of scope: ... moving `projects`/`services`/`stack` to the database". In the 2026-10-04 redesign entry: "Case-study details shown in an on-page dialog (no separate pages)".
+**Impact:** `supabase/schema.sql`, `supabase/seed.sql`, `lib/content.ts`, `lib/data.ts`, `lib/layout.ts`, `app/services/*`, `app/projects/*`, `app/blog/*`, `app/privacy/*`, `components/Projects.tsx`, `components/Services.tsx`, `components/TechStack.tsx`, `e2e/*`, lint/format/test config; `scope.md`, `architecture.md`, `develop.md`, `check.md`, `test.md`, `Agents.md`.
+
+### 2026-10-05 — Database reads must not go through `fetch`
+
+**Changed:** `lib/supabase.ts` now reads Supabase with Node's own HTTP client. Using `fetch` for build-time content is not allowed.
+**Reason:** Bug found while testing pagination. Next.js wraps `fetch` and stores successful responses in `.next/cache/fetch-cache`, which survives between builds (hosts keep that folder). A later build reused the stored answer instead of asking the database, so newly published or removed content did not appear. The standard that was missing: "a rebuild always shows the database as it is now". Disabling the cache per request (`cache: 'no-store'`) is not possible in a static export — the build rejects it — so the fix is to stay outside the wrapped `fetch` altogether.
+**Supersedes:** In the 2026-10-04 Supabase entry: "`lib/supabase.ts` calls Supabase's Data API with `fetch`".
+**Impact:** `lib/supabase.ts`, `lib/supabase.test.ts` (a test starts a local server, changes its answer between two reads, and asserts that `fetch` is never called); `architecture.md`, `develop.md`, `debug.md`.
+
 <!-- Add new entries above this line. Convention: chronological, most recent at the bottom. -->

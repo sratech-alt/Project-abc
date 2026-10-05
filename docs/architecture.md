@@ -22,8 +22,12 @@ A site built with Next.js (App Router), React and TypeScript, and exported to st
 ├── app/
 │   ├── layout.tsx        # <html>, fonts, metadata/SEO, structured data, global providers
 │   ├── page.tsx          # The home page — lists the sections in scroll order
+│   ├── services/[id]/page.tsx                      # One page per service
+│   ├── projects/[slug]/page.tsx                    # One case-study page per project
 │   ├── blog/page.tsx, blog/[slug]/page.tsx         # Article list and one page per published post
+│   ├── blog/tag/[tag], blog/page/[page], blog/feed.xml   # Topic pages, later list pages, RSS feed
 │   ├── careers/page.tsx, careers/[slug]/page.tsx   # Open roles and one page per role
+│   ├── privacy/page.tsx                            # What the site does with visitors' information
 │   ├── not-found.tsx     # → /404.html, served by the host for unknown addresses
 │   ├── globals.css       # Design tokens (@theme) + the few styles utilities can't express
 │   ├── robots.ts         # → /robots.txt
@@ -33,6 +37,7 @@ A site built with Next.js (App Router), React and TypeScript, and exported to st
 │   ├── TechStack.tsx  Projects.tsx  WhyUs.tsx  Testimonials.tsx  Contact.tsx  Footer.tsx
 │   ├── FooterWave.tsx              # The layered brand wave that leads into the footer
 │   ├── SiteShell.tsx  PageHeader.tsx  Prose.tsx   # Shared page frame, content-page header, Markdown output
+│   ├── ProjectPreview.tsx  PostList.tsx            # Project image frame + store links; post cards, topic nav, pagination
 │   ├── MotionProvider.tsx          # Framer Motion setup (LazyMotion + reduced motion)
 │   ├── services/visuals.tsx        # CSS-drawn illustrations for the services bento grid
 │   └── ui/                         # Reveal, SectionHeading, SocialIcon, SpotlightTracker
@@ -41,6 +46,9 @@ A site built with Next.js (App Router), React and TypeScript, and exported to st
 │   ├── site.ts           # Company facts, nav links, EmailJS and Supabase config
 │   ├── supabase.ts       # Build-time reader for Supabase's Data API (plain fetch, with retries)
 │   ├── content.ts        # Posts and jobs: loading, mapping rows to types, page links
+│   ├── catalog.ts        # Services, projects, tech stack: loading, with lib/data.ts as the fallback
+│   ├── blog.ts           # Tags, pagination and the RSS feed (pure functions)
+│   ├── layout.ts         # normalizeSpans(): makes the bento grid tile with no holes
 │   ├── markdown.ts       # Markdown → safe HTML
 │   ├── static-params.ts  # Placeholder route for empty content tables
 │   ├── code-samples.ts   # The three files shown in the hero code window
@@ -49,6 +57,8 @@ A site built with Next.js (App Router), React and TypeScript, and exported to st
 │   ├── cn.ts             # Class-name joiner
 │   └── *.test.ts         # Unit tests, next to the code they test
 ├── supabase/schema.sql   # The database: tables, access rules, storage bucket
+├── supabase/seed.sql     # GENERATED from lib/data.ts: starting rows for services, projects, tech stack
+├── scripts/generate-seed.mjs   # Writes seed.sql (`npm run seed:generate`)
 ├── public/               # Deployed as-is: optimized images, favicons, og.png, search-engine verification files
 ├── assets/               # ORIGINAL images. Never deployed. Source for `npm run images`
 ├── scripts/optimize-images.mjs
@@ -64,22 +74,26 @@ Components are server components by default — they render to HTML at build tim
 ## Data Flow
 
 1. `lib/data.ts` is the single source of truth for repeatable content (projects, services, stack, reasons, team, testimonials, socials, metrics). `lib/site.ts` holds one-off facts (name, emails, address, nav links, availability line, EmailJS IDs).
-2. Each section component imports its array and maps it to markup. No section hardcodes repeating content.
-3. The services bento grid derives its layout from each service's `span` (1, 2 or 3 of 3 desktop columns). Spans must tile into full rows — a unit test enforces this.
-4. Projects: the first three `featured: true` entries get full cards; everything else is listed under "Also shipped". `platform: 'web' | 'mobile'` decides how the image is framed (browser frame vs. portrait poster).
+2. `app/page.tsx` loads services, the tech stack and projects through `lib/catalog.ts` and passes them to their sections as props; the other sections import their arrays from `lib/data.ts`. No section hardcodes repeating content.
+3. The services bento grid derives its layout from each service's `span` (1, 2 or 3 of 3 desktop columns), after `normalizeSpans()` has made the rows full. Each card links to `/services/[id]`.
+4. Projects: the first three `featured` entries get full cards; everything else is listed under "Also shipped". `platform: 'web' | 'mobile'` decides how the image is framed (browser frame vs. portrait poster). Each card links to its case-study page at `/projects/[slug]`.
 5. Testimonials: only entries with `verified: true` render; with none, the section is omitted entirely.
 
 ## Content backend (Supabase)
 
-- **What it holds:** `posts` (blog) and `jobs` (careers). The full definition is `supabase/schema.sql`; change the database by editing that file and running it in the Supabase SQL editor. It is safe to re-run.
-- **How the site reads it:** `lib/supabase.ts` calls Supabase's Data API with `fetch` during `npm run build`. There is no Supabase SDK and nothing runs in the visitor's browser. `lib/content.ts` turns rows into `Post` and `Job` objects; pages import only from there.
+- **What it holds:** `posts` (blog), `jobs` (careers), `services`, `projects`, and `tech_categories` + `technologies` (tech stack). The full definition is `supabase/schema.sql`; change the database by editing that file and running it in the Supabase SQL editor. It is safe to re-run.
+- **How the site reads it:** `lib/supabase.ts` calls Supabase's Data API during `npm run build`, using Node's own HTTP client. There is no Supabase SDK and nothing runs in the visitor's browser. `lib/content.ts` (posts, jobs) and `lib/catalog.ts` (services, projects, stack) turn rows into typed objects; pages import only from those two.
+- **Never read content with `fetch`.** Next.js stores `fetch` responses in `.next/cache`, which hosts keep between builds, so a later build would show old content. `cache: 'no-store'` is rejected by a static export. See `audit.md` — 2026-10-05.
+- **Defaults for the catalog:** services, projects and the tech stack must never be empty, so `lib/catalog.ts` falls back to the arrays in `lib/data.ts` when a table is missing or has no published rows. `supabase/seed.sql` (generated from those arrays by `npm run seed:generate`) loads them into the database; it only inserts missing rows and never overwrites edits. Once a table has rows, the database wins.
+- **The services grid repairs itself:** `span` comes from the database, so `normalizeSpans()` in `lib/layout.ts` widens cards where a row of three would otherwise have a hole. Service illustrations are drawn in code; a row picks one by name (`visual`).
 - **Access:** the project URL and publishable key in `lib/site.ts` are public by design. Row Level Security is on for every table, and the only policies allow reading rows that are published (and, for jobs, not yet closed). Nothing can be written with the public key. The secret key and database password are never used and must never be committed.
 - **Editing content:** in the Supabase dashboard's table editor. A row goes live when `published` is true and its date has passed — **and the site has been rebuilt**.
 - **Rebuilds:** content is baked in at build time, so a change appears after the next deploy. A Supabase database webhook calls a Netlify build hook whenever `posts` or `jobs` change. A post scheduled for a future date needs a build after that date.
 - **Failure behaviour:** a table that doesn't exist yet counts as "no content" and the build succeeds. A network error or 5xx is retried; if it persists, or the key is rejected, the build **fails** and Netlify keeps serving the previous deploy. The site never publishes with its content silently missing.
 - **Markdown:** rendered by `lib/markdown.ts` at build time. Raw HTML is escaped, links and images are limited to safe addresses, `#` headings become `<h2>`, and code blocks and tables are keyboard-scrollable.
 - **Navigation follows content:** `getPageLinks()` returns "Blog" and "Careers" only when there is at least one published post or open role. The header, mobile menu, footer and sitemap all use it. With the two extra links the desktop pill navigation starts at 1280px instead of 1024px.
-- **Empty tables and static export:** a static export refuses to build a `[slug]` route with zero pages, so `lib/static-params.ts` pads an empty list with one reserved slug (`_empty`) that renders the 404 page.
+- **Empty tables and static export:** a static export refuses to build a dynamic route with zero pages, so `lib/static-params.ts` pads an empty list with one reserved value (`_empty`) that renders the 404 page. Used by the blog post, tag and list-page routes and the careers route.
+- **Blog extras:** `lib/blog.ts` derives topics from post tags (`/blog/tag/[tag]`), splits the list nine to a page (`/blog/page/[n]`, page 1 being `/blog`), and builds the RSS feed (`/blog/feed.xml`).
 - **Images:** cover images are full `https://` URLs, normally files in the public `media` storage bucket.
 
 ## Theming
@@ -109,6 +123,7 @@ Components are server components by default — they render to HTML at build tim
 - The header highlights the current section with one `IntersectionObserver` in `Navbar.tsx`.
 - While the mobile menu is open, `<main>` and `<footer>` are `inert` and page scrolling is locked; `scrollbar-gutter: stable` on `<html>` stops the layout shifting when scrolling is locked.
 - `navLinks` in `lib/site.ts` drives the header, mobile menu and footer. Every id must match a `<section id>` (unit-tested).
+- The status line beside the logo comes from `availabilityLabel()` in `lib/site.ts`: "Available for Qn projects" for the quarter the site was built in, unless `site.availability` is set to fixed text (or `''` to hide it). It is computed in `SiteShell` and passed down, so the server and browser never disagree.
 
 ## Contact Form Integration
 

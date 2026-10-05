@@ -54,6 +54,22 @@ If someone with no context on this project read only this file top to bottom, th
 
 ## Change Log
 
+### 2026-10-05 — Catalog in Supabase, Detail Pages, Blog Extras, Privacy Page, Stale-Content Fix
+**What:** First part of the owner's "do all" request.
+
+- _Fix — stale content after a rebuild:_ Next.js was saving Supabase responses in `.next/cache` and reusing them on later builds, so newly published content could fail to appear. `lib/supabase.ts` now uses Node's HTTP client, which that cache does not touch. Proven with three consecutive builds against a stand-in database whose content changed each time (12 posts → 2 → 12), cache kept throughout.
+- _Services, projects and the tech stack are now read from Supabase_ (`lib/catalog.ts`; new tables in `supabase/schema.sql`). `lib/data.ts` remains as the fallback when a table is missing or empty, so the home page cannot lose a section. `supabase/seed.sql`, generated from `lib/data.ts` by `npm run seed:generate`, loads the current content. `normalizeSpans()` keeps the services grid free of holes whatever spans the database holds.
+- _Detail pages:_ `/services/[id]` (the full "what's included" list from the original site, the service illustration, links to other services) and `/projects/[slug]` (case study, stack, store links, more work). The home-page case-study dialog is gone; cards link to the pages, and `Projects` is now a server component with no client JavaScript.
+- _Blog extras:_ topic pages (`/blog/tag/[tag]`), pagination nine to a page (`/blog/page/[n]`), an RSS feed (`/blog/feed.xml`).
+- _Privacy page_ (`/privacy`), linked from the footer and the contact form. It states only what the site does: what the form sends, that EmailJS and Netlify process it, no analytics or tracking cookies.
+- _Availability line_ is now computed from the build date ("Available for Qn projects"), so it cannot go stale.
+- Sitemap lists the new pages; each has its own metadata and structured data (`Service`, `CreativeWork`).
+
+_Needs the owner:_ run the updated `supabase/schema.sql` and then `supabase/seed.sql` to move services, projects and the stack into the database (until then the site uses the code defaults and looks the same); review the wording of the privacy page.
+**Why:** Owner instruction to complete all remaining work.
+**Files touched:** new `lib/catalog.ts`, `lib/blog.ts`, `lib/layout.ts` and tests, `supabase/seed.sql`, `scripts/generate-seed.mjs`, `app/services/[id]`, `app/projects/[slug]`, `app/blog/tag/[tag]`, `app/blog/page/[page]`, `app/blog/feed.xml`, `app/privacy`, `components/ProjectPreview.tsx`, `components/PostList.tsx`; changed `lib/supabase.ts`, `lib/content.ts`, `lib/data.ts`, `lib/site.ts`, `lib/static-params.ts`, `supabase/schema.sql`, `app/page.tsx`, `app/sitemap.ts`, `components/Projects.tsx`, `components/Services.tsx`, `components/TechStack.tsx`, `components/Navbar.tsx`, `components/SiteShell.tsx`, `components/Footer.tsx`, `components/Contact.tsx`; docs.
+**Related:** audit.md — 2026-10-05 "Scope revised: all home-page content in Supabase…" and "Database reads must not go through `fetch`"; test.md — 47 new unit tests (145 total).
+
 ### 2026-10-04 — Supabase Content Backend, Blog and Careers Pages
 **What:** Added a Supabase project as a build-time content source and four new routes. (1) `supabase/schema.sql` defines `posts` and `jobs` with Row Level Security (public read of published rows only), an `updated_at` trigger and a public `media` storage bucket. (2) `lib/supabase.ts` reads the Data API with plain `fetch` (no SDK), retrying momentary failures; `lib/content.ts` maps rows to `Post`/`Job` and decides which page links exist; `lib/markdown.ts` renders Markdown with raw HTML escaped and unsafe links dropped (new dependency: `marked`, build-time only). (3) Pages `/blog`, `/blog/[slug]`, `/careers`, `/careers/[slug]`, with per-page metadata, `BlogPosting` and `JobPosting` structured data, and friendly empty states. Careers applications are a `mailto:` link per role. (4) `SiteShell` now frames every page; header, mobile menu and footer links became `/#section` so they work from sub-pages, and "Blog"/"Careers" appear in navigation and the sitemap only when there is published content. With those links present the desktop pill navigation starts at 1280px. Empty list pages are marked `noindex`.
 

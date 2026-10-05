@@ -1,5 +1,6 @@
 import {
   Activity,
+  ArrowUpRight,
   Cloud,
   Globe,
   LayoutDashboard,
@@ -13,7 +14,7 @@ import { ServiceIllustration } from '@/components/services/visuals';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { cn } from '@/lib/cn';
-import { services, type Service, type ServiceVisual } from '@/lib/data';
+import type { Service, ServiceVisual } from '@/lib/data';
 
 const ICONS: Record<ServiceVisual, LucideIcon> = {
   phones: Smartphone,
@@ -79,12 +80,21 @@ function ServiceCard({ service }: { service: Service }) {
             </li>
           ))}
         </ul>
+        {/* The ::after overlay makes the whole card a link to the service page. */}
+        <a
+          href={`/services/${service.id}`}
+          className="mt-5 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-fg transition-colors after:absolute after:inset-0 after:rounded-2xl hover:text-accent group-hover:text-accent"
+          aria-label={`${service.title}: what's included`}
+        >
+          What’s included
+          <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+        </a>
       </div>
     </article>
   );
 }
 
-export function Services() {
+export function Services({ services }: { services: Service[] }) {
   const fullOnTablet = tabletFullWidth(services);
 
   return (

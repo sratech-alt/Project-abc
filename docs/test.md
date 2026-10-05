@@ -31,8 +31,10 @@ This is a static marketing site, so "testing" means small automated checks for t
 - `lib/validation.test.ts` — accepted submission, trimming, default subject, each missing field, malformed emails, short message, honeypot, too-fast submission.
 - `lib/data.test.ts` — unique ids; no empty entries; project/team images exist in `public/`; mobile projects are portrait and web projects landscape; outbound links are https; at least one featured project; services tile the 3-column grid with no holes; verified testimonials are complete; every nav link has a matching section id; no `href="#"`; no raw hex colours or default-palette classes in components.
 - `lib/highlight.test.ts` — tokenizing is lossless for every code sample; token types for Java, TypeScript and YAML.
-- `lib/supabase.test.ts` — sends the public key and query; a missing table means "no content"; momentary 5xx and network failures are retried; persistent ones and 4xx fail the build; the configured key is never a secret key.
+- `lib/supabase.test.ts` — sends the public key and query; a missing table means "no content"; momentary 5xx and network failures are retried; persistent ones and 4xx fail the build; the configured key is never a secret key; **the real client never calls `fetch`** and re-reads the database every time (tested against a local server).
 - `lib/content.test.ts` — slug rules, reading time, UTC date formatting, row-to-post and row-to-job mapping with fallbacks, bad-slug rows skipped, only published rows requested, page links appear only with content, placeholder route for empty tables.
+- `lib/catalog.test.ts` — the grid repair (`normalizeSpans`) always produces full rows; row-to-service/project/stack mapping with safe fallbacks; unsafe project links dropped; code defaults used while tables are missing or empty, database used once it has rows; `supabase/seed.sql` matches `lib/data.ts` and never overwrites.
+- `lib/blog.test.ts` — tag slugs (including accents), topic counts, pagination with no post lost or repeated, RSS output and escaping, the quarterly availability line.
 - `lib/markdown.test.ts` — raw HTML shown as text, `javascript:`/`data:` links and non-https images dropped, external links open safely, `#` becomes `<h2>`, code blocks and tables are keyboard-scrollable.
 
 ## Manual test checklist (run before any release/handoff)
@@ -46,6 +48,9 @@ This is a static marketing site, so "testing" means small automated checks for t
 - [ ] Hero code window: tabs switch by click and arrow keys; long lines scroll inside the window, not the page
 - [ ] Tech stack: each category button highlights its technologies; on phones only the selected category is listed
 - [ ] Projects: "View case study" opens the dialog; Escape, the close button and a backdrop click all close it; focus returns to the card; store links open the right store page
+- [ ] Catalog: change a service title or a project in Supabase, rebuild, and confirm the home page and its detail page both show it; unpublish it and confirm it disappears and the grid still has no holes
+- [ ] Each service card opens `/services/<id>`; each project card opens `/projects/<slug>`; "All services" / "All projects" return to the right home-page section
+- [ ] Blog with more than nine posts: "Older"/"Newer" move between pages; each topic chip lists only its posts; `/blog/feed.xml` loads
 - [ ] Blog: publish a row in Supabase, rebuild, and confirm it appears on `/blog`, opens at `/blog/<slug>`, and that "Blog" appears in the header, footer and `sitemap.xml`; unpublish it and confirm all of that disappears
 - [ ] Careers: the same for a `jobs` row; "Apply by email" opens an email with the role in the subject; a role past its `closes_at` is gone after a rebuild
 - [ ] A post with a code block, a table and a long link reads correctly at 320px with no page-level horizontal scroll

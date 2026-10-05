@@ -118,7 +118,12 @@ export function Footer({ pageLinks = [] }: { pageLinks?: PageLink[] }) {
           <p>
             © {year} {site.name}. All rights reserved.
           </p>
-          <p className="font-mono text-xs">Designed &amp; engineered in {site.address.replace(/\s\d+$/, '')}</p>
+          <p className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            <a href="/privacy" className="py-1.5 text-sm text-muted transition-colors hover:text-accent">
+              Privacy
+            </a>
+            <span className="font-mono text-xs">Designed &amp; engineered in {site.address.replace(/\s\d+$/, '')}</span>
+          </p>
         </div>
       </div>
     </footer>

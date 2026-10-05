@@ -16,7 +16,9 @@ Run through this before marking any change complete. This checks _conformance_ t
 - [ ] Are all colours design tokens — zero raw hex values and zero default-palette classes in components?
 - [ ] Is the responsive approach mobile-first (base classes = phone, breakpoints layer up)?
 - [ ] Does the site still export statically (`npm run build` produces `out/` with no errors)?
-- [ ] Is the database touched only at build time, only through `lib/content.ts`, and only for reading?
+- [ ] Is the database touched only at build time, only through `lib/content.ts` / `lib/catalog.ts`, only for reading, and never with `fetch`?
+- [ ] If the defaults in `lib/data.ts` changed, was `npm run seed:generate` run?
+- [ ] If what the site collects or shares changed, was `app/privacy/page.tsx` updated?
 - [ ] Is any database change in `supabase/schema.sql`, with Row Level Security on and a published-rows-only read policy?
 - [ ] No secret key, database password or `.env` file committed?
 

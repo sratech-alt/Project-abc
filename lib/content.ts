@@ -1,6 +1,7 @@
 /**
  * content.ts — Blog posts and job listings, read from Supabase when the site is built.
- * Pages import from here and never touch the database layer directly.
+ * Pages import from here (and from catalog.ts for services, projects and the tech stack)
+ * and never touch the database layer directly.
  */
 import { plainText } from './markdown';
 import { site } from './site';
@@ -12,7 +13,7 @@ import { selectRows } from './supabase';
  * Remembers a loader's result for the life of the process, so a production build asks Supabase once
  * per table rather than once per page. Not used in development, where edits should show on refresh.
  */
-function oncePerBuild<T>(load: () => Promise<T>): () => Promise<T> {
+export function oncePerBuild<T>(load: () => Promise<T>): () => Promise<T> {
   let pending: Promise<T> | undefined;
   return () => {
     if (process.env.NODE_ENV !== 'production') return load();

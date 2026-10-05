@@ -314,7 +314,11 @@ export function Contact() {
                 </div>
 
                 <p className="mt-4 text-sm leading-relaxed text-faint">
-                  We use these details only to reply to your enquiry. The form is delivered through EmailJS.
+                  We use these details only to reply to your enquiry. See our{' '}
+                  <a href="/privacy" className="font-medium text-muted underline decoration-line-strong underline-offset-4 transition-colors hover:text-accent">
+                    privacy page
+                  </a>
+                  .
                 </p>
               </form>
             </div>
